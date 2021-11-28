@@ -1,3 +1,4 @@
+# VMware
 - name: Install VMware Tools
   block:
   - name: download VMware Tools
@@ -16,6 +17,8 @@
       reboot_timeout: 6000
   when: ansible_virtualization_type == "VMware"
 
+
+# VirtualBox
 - name: Install VirtualBox Tools
   block:
   - name: download VBoxGuestAdditions iso
@@ -33,12 +36,67 @@
       product_id: Oracle VM VirtualBox Guest Additions 6.1.28
       state: present
       arguments: /S
-  - name: reboot
-    win_reboot:
-      pre_reboot_delay: 300
-      reboot_timeout: 6000
   - name: umount
     win_disk_image:
       image_path: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.28.iso"
       state: absent
+  - name: reboot
+    win_reboot:
+      pre_reboot_delay: 300
+      reboot_timeout: 6000
   when: ansible_virtualization_type == "VirtualBox"
+
+
+# QEMU
+# https://access.redhat.com/documentation/en-us/red_hat_virtualization/4.4/html/virtual_machine_management_guide/installing_guest_agents_and_drivers_windows
+
+- name: Install QEMU Tools
+  block:
+  - name: Download virtio-win.iso
+    win_get_url:
+      url: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.190-1/virtio-win.iso
+      force: no
+      dest: "{{ ansible_env.TEMP }}\\virtio-win.iso"
+  - name: Ensure an ISO is mounted
+    win_disk_image:
+      image_path: "{{ ansible_env.TEMP }}\\virtio-win.iso"
+      state: present
+    register: disk_image_out
+  - name: Install qemu-ga
+    win_package:
+      path: '{{ disk_image_out.mount_path }}guest-agent\qemu-ga-x86_64.msi'
+      state: present
+      arguments:
+      - /qn 
+      - /norestart
+  - name: Export Cert from qxldod
+    win_shell: '$cert = (Get-AuthenticodeSignature "{{ disk_image_out.mount_path }}\qxldod\2k19\amd64\qxldod.cat").SignerCertificate; [System.IO.File]::WriteAllBytes("{{ ansible_env.TEMP }}\redhat_qxldod.cer", $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert));'
+  - name: Export Cert from balloon
+    win_shell: '$cert = (Get-AuthenticodeSignature "{{ disk_image_out.mount_path }}\Balloon\2k19\amd64\blnsvr.exe").SignerCertificate; [System.IO.File]::WriteAllBytes("{{ ansible_env.TEMP }}\redhat_balloon.cer", $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert));'
+  - name: Install RH certificate (qxldod) to TrustedPublisher certificate store
+    win_command: 'certutil.exe -f -addstore "TrustedPublisher" {{ ansible_env.TEMP }}\redhat_qxldod.cer'
+  - name: Install RH certificate (Balloon) to TrustedPublisher certificate store
+    win_command: 'certutil.exe -f -addstore "TrustedPublisher" {{ ansible_env.TEMP }}\redhat_balloon.cer'
+  - name: install drivers
+    win_shell: "pnputil.exe /add-driver {{ disk_image_out.mount_path }}{{ item }}\\2k19\\amd64\\*.inf /install"
+    with_items:
+      - "qxldod"
+      - "Balloon"
+      - "viorng"
+      - "vioserial"
+  - win_disk_image:
+      image_path: "{{ ansible_env.TEMP }}\\virtio-win.iso"
+      state: absent
+  - name: Delete previously downloaded iso and the certificates {{ ansible_env.SystemDrive }}\{redhat_balloon.cer,redhat_qxldod.cer}
+    win_file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+      - "{{ ansible_env.TEMP }}\\redhat_balloon.cer"
+      - "{{ ansible_env.TEMP }}\\redhat_qxldod.cer"
+      - "{{ ansible_env.TEMP }}\\virtio-win.iso"
+  - name: reboot
+    win_reboot:
+      pre_reboot_delay: 300
+      reboot_timeout: 6000
+  when: ansible_system_vendor == "QEMU"
