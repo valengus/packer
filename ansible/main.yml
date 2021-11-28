@@ -15,5 +15,5 @@
   tasks:
 
   - include: installVMTools.yml
-  - include: installCumulativeUpdates.yml
+  - include: installWin11CumulativeUpdates.yml
   - include: installUpdates.yml
