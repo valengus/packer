@@ -1,0 +1,20 @@
+- hosts: default
+
+  vars:
+    ansible_winrm_scheme: http
+    ansible_winrm_server_cert_validation: ignore
+    ansible_winrm_connection_timeout: 3600 
+    ansible_winrm_operation_timeout_sec: 3600 
+    ansible_winrm_read_timeout_sec: 3600
+
+    ansible_become_method: runas
+    ansible_become_flags: logon_type=batch
+    ansible_become_user: "{{ ansible_user }}"
+    ansible_become_password: "{{ ansible_password }}"
+
+  tasks:
+
+  - include: installCumulativeUpdates.yml
+  - include: installUpdates.yml
+
+

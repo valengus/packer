@@ -1,0 +1,46 @@
+# install updates
+
+- name: search for Windows updates 
+  win_updates:
+    state: searched
+  register: update_search_result
+
+- name: reboot, if needed
+  win_reboot:
+    pre_reboot_delay: 300
+    reboot_timeout: 6000
+  when: update_search_result.reboot_required
+
+- name: Install Windows Updates
+  win_updates:
+    category_names: 
+      - Application
+      - Connectors
+      - CriticalUpdates
+      - DefinitionUpdates
+      - DeveloperKits
+      - FeaturePacks
+      - Guidance
+      - SecurityUpdates
+      - ServicePacks
+      - Tools
+      - UpdateRollups
+      - Updates
+    reboot: True
+    reboot_timeout: 3600
+
+- name: wait for system to become reachable over WinRM
+  wait_for_connection:
+    delay: 60
+    sleep: 15
+    timeout: 900
+
+
+
+
+
+
+- name: sleep for 900 seconds and continue with play
+  wait_for:
+    timeout: 900
+  delegate_to: localhost

@@ -1,0 +1,18 @@
+- win_file:     
+    path: C:\updates
+    state: directory
+
+- name: download KB5007262
+  win_get_url:
+    url: http://download.windowsupdate.com/c/msdownload/update/software/updt/2021/11/windows10.0-kb5007262-x64_62ef7581564c9b91ab519bf1cc5e37ffeb9f86ca.msu
+    dest: C:\updates\windows10.0-kb5007262-x64_62ef7581564c9b91ab519bf1cc5e37ffeb9f86ca.msu
+
+- name: install KB5007262
+  win_shell: Start-Process -FilePath "wusa.exe" -ArgumentList "C:\updates\windows10.0-kb5007262-x64_62ef7581564c9b91ab519bf1cc5e37ffeb9f86ca.msu /quiet /norestart" -Wait
+  become: yes
+
+- win_reboot:
+
+- win_file:     
+    path: C:\updates
+    state: absent

@@ -1,0 +1,4 @@
+- name: install wget
+  win_chocolatey:
+    name: wget
+    state: present
