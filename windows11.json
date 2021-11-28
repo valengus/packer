@@ -27,7 +27,7 @@
       "cd_files": [
         "scripts/*",
         "unattend/autounattend.xml",
-        "drivers/vmware/pvscsi/*"
+        "drivers/vmware/*"
       ],
       "boot_wait": "10s",
       "format": "ova",
@@ -59,6 +59,34 @@
       "format": "ova",
       "keep_registered": false,
       "skip_export": false
+    },
+    {
+      "type": "qemu",
+      "accelerator": "kvm",
+      "cpus": "2",
+      "memory": "4096",
+      "disk_size": "61440",
+      "floppy_files": [
+        "unattend/autounattend.xml",
+        "scripts/*",
+        "drivers/qemu/*"
+      ],
+      "disk_interface": "virtio",
+      "disk_cache": "writeback",
+      "disk_discard": "ignore",
+      "format": "qcow2",
+      "headless": true,
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "shutdown_command": "E:/packerShutdown.bat",
+      "shutdown_timeout": "15m",
+      "vm_name": "windows11x64_{{timestamp}}",
+      "use_default_display": false,
+      "communicator": "winrm",
+      "winrm_use_ssl": false,
+      "winrm_username": "{{user `winrm_username`}}",
+      "winrm_password": "{{user `winrm_password`}}",
+      "winrm_insecure": "true"
     }
   ],
   "provisioners": [

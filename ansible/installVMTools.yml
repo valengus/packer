@@ -1,63 +1,44 @@
-- hosts: default
-
-  vars:
-    ansible_winrm_scheme: http
-    ansible_winrm_server_cert_validation: ignore
-    ansible_winrm_connection_timeout: 3600 
-    ansible_winrm_operation_timeout_sec: 3600 
-    ansible_winrm_read_timeout_sec: 3600
-
-    ansible_become_method: runas
-    ansible_become_flags: logon_type=batch
-    ansible_become_user: "{{ ansible_user }}"
-    ansible_become_password: "{{ ansible_password }}"
-
-  tasks:
-
-  - name: Install VMware Tools
-    block:
-    - name: download VMware Tools
-      win_get_url:
-        url: https://packages.vmware.com/tools/releases/11.3.5/windows/x64/VMware-tools-11.3.5-18557794-x86_64.exe
-        dest: "{{ ansible_env.TEMP }}\\VMware-tools-11.3.5-18557794-x86_64.exe"
-    - name: install VMware Tools
-      win_package:
-        path: "{{ ansible_env.TEMP }}\\VMware-tools-11.3.5-18557794-x86_64.exe"
-        product_id: VMware Tools
-        arguments: /S /v /qn REBOOT=R ADDLOCAL=ALL
-        state: present
-      notify:
-      - reboot
-    when: ansible_virtualization_type == "VMware"
-
-  - name: Install VirtualBox Tools
-    block:
-    - name: download VBoxGuestAdditions iso
-      win_get_url:
-        url: http://download.virtualbox.org/virtualbox/6.1.28/VBoxGuestAdditions_6.1.28.iso
-        dest: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.28.iso"
-    - name: ensure ISO is mounted
-      win_disk_image:
-        image_path: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.28.iso"
-        state: present
-      register: disk_image_out
-    - name: install VBoxWindowsAdditions
-      win_package:
-        path: '{{ disk_image_out.mount_path }}VBoxWindowsAdditions-amd64.exe'
-        product_id: Oracle VM VirtualBox Guest Additions 6.1.28
-        state: present
-        arguments: /S
-      notify:
-      - reboot
-    - name: umount
-      win_disk_image:
-        image_path: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.28.iso"
-        state: absent
-    when: ansible_virtualization_type == "VirtualBox"
-
-  handlers:
-
+- name: Install VMware Tools
+  block:
+  - name: download VMware Tools
+    win_get_url:
+      url: https://packages.vmware.com/tools/releases/11.3.5/windows/x64/VMware-tools-11.3.5-18557794-x86_64.exe
+      dest: "{{ ansible_env.TEMP }}\\VMware-tools-11.3.5-18557794-x86_64.exe"
+  - name: install VMware Tools
+    win_package:
+      path: "{{ ansible_env.TEMP }}\\VMware-tools-11.3.5-18557794-x86_64.exe"
+      product_id: VMware Tools
+      arguments: /S /v /qn REBOOT=R ADDLOCAL=ALL
+      state: present
   - name: reboot
     win_reboot:
       pre_reboot_delay: 300
       reboot_timeout: 6000
+  when: ansible_virtualization_type == "VMware"
+
+- name: Install VirtualBox Tools
+  block:
+  - name: download VBoxGuestAdditions iso
+    win_get_url:
+      url: http://download.virtualbox.org/virtualbox/6.1.28/VBoxGuestAdditions_6.1.28.iso
+      dest: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.28.iso"
+  - name: ensure ISO is mounted
+    win_disk_image:
+      image_path: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.28.iso"
+      state: present
+    register: disk_image_out
+  - name: install VBoxWindowsAdditions
+    win_package:
+      path: '{{ disk_image_out.mount_path }}VBoxWindowsAdditions-amd64.exe'
+      product_id: Oracle VM VirtualBox Guest Additions 6.1.28
+      state: present
+      arguments: /S
+  - name: reboot
+    win_reboot:
+      pre_reboot_delay: 300
+      reboot_timeout: 6000
+  - name: umount
+    win_disk_image:
+      image_path: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.28.iso"
+      state: absent
+  when: ansible_virtualization_type == "VirtualBox"

@@ -14,7 +14,6 @@
 
   tasks:
 
+  - include: installVMTools.yml
   - include: installCumulativeUpdates.yml
   - include: installUpdates.yml
-
-
