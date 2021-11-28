@@ -4,7 +4,8 @@
     "winrm_password": "password",
     "iso_url": "https://tb.rg-adguard.net/dl.php?go=b1fb62af",
     "iso_checksum": "sha1:9cbbb18b244511bf1d4c68a33fe6ee35d2eda2ae",
-    "cloud_token": "{{env `CLOUD_TOKEN`}}"
+    "cloud_token": "{{env `CLOUD_TOKEN`}}",
+    "version": "formatdate(YYYYMMDD, timestamp())"
   },
   "builders": [
     {
@@ -81,7 +82,7 @@
       "iso_checksum": "{{user `iso_checksum`}}",
       "shutdown_command": "E:/packerShutdown.bat",
       "shutdown_timeout": "15m",
-      "vm_name": "windows11x64_{{timestamp}}",
+      "vm_name": "windows11_{{timestamp}}",
       "use_default_display": false,
       "communicator": "winrm",
       "winrm_use_ssl": false,
@@ -109,7 +110,7 @@
         "type": "vagrant-cloud",
         "box_tag": "valengus/windows11-pro",
         "access_token": "{{user `cloud_token`}}",
-        "version": "1.0.{{timestamp}}"
+        "version": "1.0.0"
       }
     ]
   ]
