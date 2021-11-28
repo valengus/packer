@@ -3,7 +3,8 @@
     "winrm_username": "Admin",
     "winrm_password": "password",
     "iso_url": "https://tb.rg-adguard.net/dl.php?go=b1fb62af",
-    "iso_checksum": "sha1:9cbbb18b244511bf1d4c68a33fe6ee35d2eda2ae"
+    "iso_checksum": "sha1:9cbbb18b244511bf1d4c68a33fe6ee35d2eda2ae",
+    "cloud_token": "{{env `CLOUD_TOKEN`}}"
   },
   "builders": [
     {
@@ -107,7 +108,7 @@
       {
         "type": "vagrant-cloud",
         "box_tag": "valengus/windows11-pro",
-        "access_token": "{{ env `CLOUD_TOKEN`}}",
+        "access_token": "{{user `cloud_token`}}",
         "version": "1.0.{{timestamp}}"
       }
     ]
