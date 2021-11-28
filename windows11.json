@@ -66,7 +66,7 @@
       "cpus": "2",
       "memory": "4096",
       "disk_size": "61440",
-      "floppy_files": [
+      "cd_files": [
         "unattend/autounattend.xml",
         "scripts/*",
         "drivers/qemu/*"
@@ -75,7 +75,7 @@
       "disk_cache": "writeback",
       "disk_discard": "ignore",
       "format": "qcow2",
-      "headless": true,
+      "headless": false,
       "iso_url": "{{user `iso_url`}}",
       "iso_checksum": "{{user `iso_checksum`}}",
       "shutdown_command": "E:/packerShutdown.bat",

@@ -1,2 +1,3 @@
 output-vmware-iso/*
 output-virtualbox-iso/*
+output-qemu/*
