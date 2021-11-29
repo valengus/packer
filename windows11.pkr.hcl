@@ -37,7 +37,7 @@ source "qemu" "windows11" {
   disk_interface      = "virtio"
   disk_size           = "61440"
   format              = "qcow2"
-  headless            = false
+  headless            = true
   iso_checksum        = "${var.iso_checksum}"
   iso_url             = "${var.iso_url}"
   memory              = "4096"
