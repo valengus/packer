@@ -1,23 +1,3 @@
-local "version_description" {
-  type = "string"
-  default = <<EOF
-### Clean and minimal Windows Server 2019 Standard base box for libvirt with :
-
-- chocolatey
-- updates
-- drivers (viostor, netkvm, viorng, vioserial, qxldod, balloon)
-- qemu guest agent
-- winrm enabled
-
-### Login Credentials
-
-Username: Admin
-
-Password: password
-
-EOF
-}
-
 variable "cloud_token" {
   type    = string
   default = "${env("CLOUD_TOKEN")}"
@@ -45,6 +25,22 @@ variable "winrm_username" {
 
 locals {
   packerstarttime = formatdate("YYYYMMDD", timestamp())
+  version_description = <<EOF
+### Clean and minimal Windows Server 2019 Standard base box for libvirt with :
+
+- chocolatey
+- updates
+- drivers (viostor, netkvm, viorng, vioserial, qxldod, balloon)
+- qemu guest agent
+- winrm enabled
+
+### Login Credentials
+
+Username: Admin
+
+Password: password
+
+EOF
 }
 
 source "qemu" "windows11" {
