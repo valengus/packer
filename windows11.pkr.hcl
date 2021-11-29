@@ -1,4 +1,4 @@
-variable "version_description" {
+local "version_description" {
   type = "string"
   default = <<EOF
 ### Clean and minimal Windows Server 2019 Standard base box for libvirt with :
@@ -179,7 +179,7 @@ build {
       access_token        = var.cloud_token
       box_tag             = "valengus/windows-11-pro"
       version             = "1.0.${local.packerstarttime}"
-      version_description = "${var.winrm_username}"
+      version_description = "${local.version_description}"
     }
     
   }
