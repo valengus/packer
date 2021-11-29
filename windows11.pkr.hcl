@@ -32,8 +32,8 @@ locals {
 
 - chocolatey
 - updates
-- drivers (viostor, netkvm, viorng, vioserial, qxldod, balloon)
-- qemu\virtualbox guest agent
+- drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
+- qemu|virtualbox|vmware guest agent
 - winrm enabled over https
 - openssh
 
@@ -64,7 +64,7 @@ source "qemu" "windows11" {
   shutdown_timeout    = "15m"
   use_default_display = false
   vm_name             = "windows11_${local.packerstarttime}"
-  winrm_insecure      = "true"
+  winrm_insecure      = true
   winrm_password      = "${var.winrm_password}"
   winrm_use_ssl       = false
   winrm_username      = "${var.winrm_username}"
@@ -94,9 +94,9 @@ source "virtualbox-iso" "windows11" {
 }
 
 source "vmware-iso" "windows11" {
-  headless             = true
+  headless             = false
   boot_wait            = "10s"
-  cd_files             = ["scripts/*", "unattend/autounattend.xml", "drivers/vmware/*"]
+  cd_files             = ["scripts/*", "unattend/autounattend.xml"]
   communicator         = "winrm"
   cpus                 = 2
   # disk_adapter_type    = "pvscsi"
