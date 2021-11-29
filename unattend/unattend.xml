@@ -36,8 +36,17 @@
 
 				<SynchronousCommand wcm:action="add">
 					<Order>2</Order>
-					<CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1'))"</CommandLine>
+					<CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\ConfigureRemotingForAnsible.ps1"</CommandLine>
 					<Description>allow ansible</Description>
+				</SynchronousCommand>
+
+
+
+
+				<SynchronousCommand wcm:action="add">
+					<Order>3</Order>
+					<CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path "C:\scripts" -Recurse"</CommandLine>
+					<Description>rm script folder</Description>
 				</SynchronousCommand>
 
 			</FirstLogonCommands>

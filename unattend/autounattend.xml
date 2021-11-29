@@ -132,13 +132,13 @@
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
 
-        <!-- <SynchronousCommand wcm:action="add">
-          <Order>8</Order>
-          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "E:\installOpenSSHServer.ps1"</CommandLine>
+        <SynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "E:\InstallOpenSSHServer.ps1"</CommandLine>
           <Description>Install OpenSSH.Server</Description>
         </SynchronousCommand>
 
-        <SynchronousCommand wcm:action="add">
+        <!-- <SynchronousCommand wcm:action="add">
           <Order>9</Order>
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "E:\installUpdates.ps1"</CommandLine>
           <Description>Install Updates</Description>

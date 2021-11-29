@@ -100,18 +100,18 @@ source "vmware-iso" "windows11" {
 
 build {
 
-  sources = ["source.qemu.windows11", "source.virtualbox-iso.windows11", "source.vmware-iso.windows11"]
+  sources = [
+    "source.qemu.windows11", 
+    "source.virtualbox-iso.windows11", 
+    "source.vmware-iso.windows11"
+  ]
 
   provisioner "powershell" {
     inline = ["Start-Sleep -Seconds 60"]
   }
 
-  provisioner "shell-local" {
-    inline = ["env"]
-  }
-
   provisioner "ansible" {
-    playbook_file = "./ansible/main.yml"
+    playbook_file = "ansible/main.yml"
     use_proxy     = false
     user          = "Admin"
   }
@@ -129,12 +129,17 @@ build {
     source      = "unattend/unattend.xml"
   }
 
-  provisioner "powershell" {
-    scripts = [ "scripts/installOpenSSHServer.ps1" ]
+  provisioner "file" {
+    destination = "C:/scripts/ConfigureRemotingForAnsible.ps1"
+    source      = "scripts/ConfigureRemotingForAnsible.ps1"
   }
 
   provisioner "powershell" {
     scripts = [ "scripts/CleanUp.ps1" ]
+  }
+
+  provisioner "powershell" {
+    inline = ["Set-Service -Name sshd -StartupType Automatic"]
   }
 
   post-processors {
