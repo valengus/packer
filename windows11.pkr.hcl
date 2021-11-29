@@ -151,13 +151,13 @@ build {
 
     post-processor "vagrant" {
       compression_level    = 9
-      output               = "windows11-pro-{{.Provider}}.box"
+      output               = "windows-11-pro-{{.Provider}}.box"
       vagrantfile_template = "vagrant/windows11.template"
     }
 
     post-processor "vagrant-cloud" {
       access_token = var.cloud_token
-      box_tag      = "valengus/windows11-pro"
+      box_tag      = "valengus/windows-11-pro"
       version      = "1.0.${local.packerstarttime}"
     }
     
