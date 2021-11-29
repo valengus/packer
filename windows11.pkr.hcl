@@ -27,6 +27,7 @@ locals {
   packerstarttime = formatdate("YYYYMMDD", timestamp())
   version_description = <<EOF
 ### Clean and minimal Windows 11 PRO base box for libvirt with :
+[github](https://github.com/valengus/packer)
 
 - chocolatey
 - updates
