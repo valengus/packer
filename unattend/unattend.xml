@@ -40,9 +40,6 @@
 					<Description>allow ansible</Description>
 				</SynchronousCommand>
 
-
-
-
 				<SynchronousCommand wcm:action="add">
 					<Order>3</Order>
 					<CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path "C:\scripts" -Recurse"</CommandLine>
