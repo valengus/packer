@@ -34,8 +34,3 @@
     delay: 60
     sleep: 15
     timeout: 900
-
-- name: sleep for 900 seconds and continue with play
-  wait_for:
-    timeout: 900
-  delegate_to: localhost

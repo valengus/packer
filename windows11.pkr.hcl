@@ -91,7 +91,7 @@ source "vmware-iso" "windows11" {
   network_adapter_type = "e1000e"
   shutdown_command     = "E:/packerShutdown.bat"
   skip_export          = false
-  vm_name             = "windows11_${local.packerstarttime}"
+  vm_name              = "windows11_${local.packerstarttime}"
   winrm_insecure       = "true"
   winrm_password       = "${var.winrm_password}"
   winrm_use_ssl        = false
