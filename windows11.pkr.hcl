@@ -1,3 +1,23 @@
+variable "version_description" {
+  type = "string"
+  default = <<EOF
+### Clean and minimal Windows Server 2019 Standard base box for libvirt with :
+
+- chocolatey
+- updates
+- drivers (viostor, netkvm, viorng, vioserial, qxldod, balloon)
+- qemu guest agent
+- winrm enabled
+
+### Login Credentials
+
+Username: Admin
+
+Password: password
+
+EOF
+}
+
 variable "cloud_token" {
   type    = string
   default = "${env("CLOUD_TOKEN")}"
@@ -156,9 +176,10 @@ build {
     }
 
     post-processor "vagrant-cloud" {
-      access_token = var.cloud_token
-      box_tag      = "valengus/windows-11-pro"
-      version      = "1.0.${local.packerstarttime}"
+      access_token        = var.cloud_token
+      box_tag             = "valengus/windows-11-pro"
+      version             = "1.0.${local.packerstarttime}"
+      version_description = "${var.winrm_username}"
     }
     
   }
