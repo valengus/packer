@@ -124,9 +124,17 @@ build {
     inline = ["choco install sdelete -y"]
   }
 
-  provisioner "file" {
-    destination = "C:/Windows/Temp/unattend.xml"
-    source      = "unattend/unattend.xml"
+  provisioner "powershell" {
+    inline = [
+      "Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
+      "Dism.exe /online /Cleanup-Image /SPSuperseded",
+      "Optimize-Volume -DriveLetter C -Defrag",
+      "sdelete -z c:",
+    ]
+  }
+
+  provisioner "powershell" {
+    inline = ["Set-Service -Name sshd -StartupType Automatic"]
   }
 
   provisioner "file" {
@@ -134,12 +142,9 @@ build {
     source      = "scripts/ConfigureRemotingForAnsible.ps1"
   }
 
-  provisioner "powershell" {
-    scripts = [ "scripts/CleanUp.ps1" ]
-  }
-
-  provisioner "powershell" {
-    inline = ["Set-Service -Name sshd -StartupType Automatic"]
+  provisioner "file" {
+    destination = "C:/Windows/Temp/unattend.xml"
+    source      = "unattend/unattend.xml"
   }
 
   post-processors {
