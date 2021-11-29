@@ -26,14 +26,16 @@ variable "winrm_username" {
 locals {
   packerstarttime = formatdate("YYYYMMDD", timestamp())
   version_description = <<EOF
-### Clean and minimal Windows 11 PRO base box for libvirt with :
+### Clean Windows 11 PRO box with :
+
 [github](https://github.com/valengus/packer)
 
 - chocolatey
 - updates
 - drivers (viostor, netkvm, viorng, vioserial, qxldod, balloon)
-- qemu guest agent
-- winrm enabled
+- qemu\virtualbox guest agent
+- winrm enabled over https
+- openssh
 
 ### Login Credentials
 
@@ -92,6 +94,7 @@ source "virtualbox-iso" "windows11" {
 }
 
 source "vmware-iso" "windows11" {
+  headless             = true
   boot_wait            = "10s"
   cd_files             = ["scripts/*", "unattend/autounattend.xml", "drivers/vmware/*"]
   communicator         = "winrm"
