@@ -26,6 +26,7 @@ pipeline {
         echo "VAGRANT_PROVIDER: ${VAGRANT_PROVIDER}"
         sh 'packer --version'
         sh 'df -h'
+        sh 'ls -lA'
         sh 'env'
       }
     }
