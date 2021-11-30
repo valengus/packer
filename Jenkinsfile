@@ -1,11 +1,16 @@
 pipeline {
   agent {label 'packer'}
 
+  parameters {
+    choice(name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
+    string(name: 'PACKER_BOX', defaultValue: 'windows-11', description: 'os (file name.pkr.hcl)')
+  }
+
   stages {
 
     stage('Build') {
       steps {
-        echo 'Build'
+        echo '> building $params.PACKER_BOX'
       }
     }
 
