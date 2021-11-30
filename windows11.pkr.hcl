@@ -28,7 +28,7 @@ locals {
   version_description = <<EOF
 ### Clean Windows 11 PRO box with :
 
-[github](https://github.com/valengus/packer)
+source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
 
 - chocolatey
 - updates
@@ -100,7 +100,7 @@ source "vmware-iso" "windows11" {
   cd_files             = ["scripts/*", "unattend/autounattend.xml"]
   communicator         = "winrm"
   cpus                 = 2
-  # disk_adapter_type    = "pvscsi"
+  # disk_adapter_type    = "pvscsi" # drivers in drivers/vmware 
   disk_adapter_type    = "lsisas1068"
   disk_size            = 61440
   disk_type_id         = 0
