@@ -1,9 +1,9 @@
 pipeline {
   agent {label 'packer'}
 
-  options {
-    skipDefaultCheckout()
-  }
+  // options {
+  //   skipDefaultCheckout()
+  // }
 
   parameters {
     choice(name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
