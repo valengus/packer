@@ -71,6 +71,7 @@ source "qemu" "windows11" {
 }
 
 source "virtualbox-iso" "windows11" {
+  headless             = true  
   boot_wait            = "10s"
   cd_files             = ["scripts/*", "unattend/autounattend.xml"]
   communicator         = "winrm"
@@ -94,7 +95,7 @@ source "virtualbox-iso" "windows11" {
 }
 
 source "vmware-iso" "windows11" {
-  headless             = false
+  headless             = true
   boot_wait            = "10s"
   cd_files             = ["scripts/*", "unattend/autounattend.xml"]
   communicator         = "winrm"
