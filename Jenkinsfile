@@ -20,7 +20,7 @@ pipeline {
         script {
           if (PACKER_PROVIDER == 'qemu') { VAGRANT_PROVIDER = 'libvirt' } 
           else if (PACKER_PROVIDER == 'virtualbox-iso') { VAGRANT_PROVIDER = 'virtualbox' } 
-          else if (PACKER_PROVIDER == 'vmware-iso') { VAGRANT_PROVIDER = 'vmware_desktop' }
+          else if (PACKER_PROVIDER == 'vmware-iso') { VAGRANT_PROVIDER = 'vmware' }
         }
         echo "> building $params.PACKER_BOX box for $params.PACKER_PROVIDER provider"
         echo "VAGRANT_PROVIDER: ${VAGRANT_PROVIDER}"
