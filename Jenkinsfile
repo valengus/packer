@@ -24,7 +24,7 @@ pipeline {
     stage('Build') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-        sh "packer build --only=$params.PACKER_BOX\.$params.PACKER_PROVIDER $params.PACKER_PROVIDER\.pkr.hcl"
+        sh "packer build --only=$params.PACKER_BOX'.'$params.PACKER_PROVIDER $params.PACKER_PROVIDER'.'pkr.hcl"
       }
     }
 
