@@ -16,8 +16,8 @@ pipeline {
     stage('Build') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-        echo "> building $params.PACKER_BOX"
-        echo "> for $params.PACKER_PROVIDER"
+        echo ">>> building $params.PACKER_BOX box for $params.PACKER_PROVIDER provider"
+
       }
     }
 
