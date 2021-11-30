@@ -10,6 +10,10 @@ pipeline {
     string(name: 'PACKER_BOX', defaultValue: 'windows-11', description: 'os (file name.pkr.hcl)')
   }
 
+  triggers {
+      pollSCM 'H/5 *  * * *'
+  }
+
   stages {
 
     stage('Build') {
