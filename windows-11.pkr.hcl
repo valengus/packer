@@ -100,7 +100,7 @@ source "vmware-iso" "windows-11" {
   cd_files             = ["scripts/*", "unattend/autounattend.xml", "drivers/vmware"]
   communicator         = "winrm"
   cpus                 = 2
-  disk_adapter_type    = "pvscsi" # drivers in drivers/vmware 
+  disk_adapter_type    = "pvscsi"
   # disk_adapter_type    = "lsisas1068"
   disk_size            = 61440
   disk_type_id         = 5
