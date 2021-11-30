@@ -17,7 +17,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
         echo "> building $params.PACKER_BOX box for $params.PACKER_PROVIDER provider"
-        echo "> packer build --only=$params.PACKER_BOX.$params.PACKER_PROVIDER $params.PACKER_PROVIDER.pkr.hcl"
+        // echo "> packer build --only=$params.PACKER_BOX.$params.PACKER_PROVIDER $params.PACKER_PROVIDER.pkr.hcl"
         sh 'packer --version'
       }
     }
