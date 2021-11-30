@@ -7,7 +7,7 @@ pipeline {
 
   parameters {
     choice(name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
-    string(name: 'PACKER_BOX', defaultValue: 'windows-11', description: '*.pkr.hcl')
+    string(name: 'PACKER_BOX', defaultValue: 'windows-11', description: '*.pkr.hcl file name')
   }
 
   triggers {
