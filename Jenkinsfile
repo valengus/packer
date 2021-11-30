@@ -39,7 +39,7 @@ pipeline {
     stage('Release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-          echo 'release'
+          echo 'Release'
       }
     }
 
