@@ -42,6 +42,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
         echo "VAGRANT_PROVIDER: ${VAGRANT_PROVIDER}"
+        sh "du -hs $params.PACKER_BOX-${VAGRANT_PROVIDER}.box"
         echo 'Test'
       }
     }
