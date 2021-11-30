@@ -14,8 +14,7 @@ pipeline {
   stages {
 
     stage('Info') {
-      // when { expression { return params.RefreshOnly == false } }
-
+      when { expression { return params.RefreshOnly == false } }
       steps {
         script {
           if (PACKER_PROVIDER == 'qemu') { VAGRANT_PROVIDER = 'libvirt' } 

@@ -88,7 +88,7 @@ source "virtualbox-iso" "windows-11-pro" {
   shutdown_command     = "E:/packerShutdown.bat"
   skip_export          = false
   vm_name             = "windows11_${local.packerstarttime}"
-  winrm_insecure       = "true"
+  winrm_insecure       = "true"pkr
   winrm_password       = "${var.winrm_password}"
   winrm_use_ssl        = false
   winrm_username       = "${var.winrm_username}"
