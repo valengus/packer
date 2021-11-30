@@ -46,7 +46,7 @@ Password: password
 EOF
 }
 
-source "qemu" "windows11" {
+source "qemu" "windows-11" {
   accelerator         = "kvm"
   cd_files            = ["unattend/autounattend.xml", "scripts/*", "drivers/qemu/*"]
   communicator        = "winrm"
@@ -70,7 +70,7 @@ source "qemu" "windows11" {
   winrm_username      = "${var.winrm_username}"
 }
 
-source "virtualbox-iso" "windows11" {
+source "virtualbox-iso" "windows-11" {
   headless             = true  
   boot_wait            = "10s"
   cd_files             = ["scripts/*", "unattend/autounattend.xml"]
@@ -94,7 +94,7 @@ source "virtualbox-iso" "windows11" {
   winrm_username       = "${var.winrm_username}"
 }
 
-source "vmware-iso" "windows11" {
+source "vmware-iso" "windows-11" {
   headless             = true
   boot_wait            = "10s"
   cd_files             = ["scripts/*", "unattend/autounattend.xml"]
@@ -123,9 +123,9 @@ source "vmware-iso" "windows11" {
 build {
 
   sources = [
-    "source.qemu.windows11", 
-    "source.virtualbox-iso.windows11", 
-    "source.vmware-iso.windows11"
+    "source.qemu.windows-11", 
+    "source.virtualbox-iso.windows-11", 
+    "source.vmware-iso.windows-11"
   ]
 
   provisioner "powershell" {
@@ -174,15 +174,15 @@ build {
     post-processor "vagrant" {
       compression_level    = 9
       output               = "windows-11-pro-{{.Provider}}.box"
-      vagrantfile_template = "vagrant/windows11.template"
+      vagrantfile_template = "vagrant/windows-11.template"
     }
 
-    post-processor "vagrant-cloud" {
-      access_token        = var.cloud_token
-      box_tag             = "valengus/windows-11-pro"
-      version             = "1.0.${local.packerstarttime}"
-      version_description = "${local.version_description}"
-    }
+    // post-processor "vagrant-cloud" {
+    //   access_token        = var.cloud_token
+    //   box_tag             = "valengus/windows-11-pro"
+    //   version             = "1.0.${local.packerstarttime}"
+    //   version_description = "${local.version_description}"
+    // }
     
   }
 
