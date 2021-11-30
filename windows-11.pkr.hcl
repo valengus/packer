@@ -46,7 +46,7 @@ Password: password
 EOF
 }
 
-source "qemu" "windows-11" {
+source "qemu" "windows-11-pro" {
   accelerator         = "kvm"
   cd_files            = ["unattend/autounattend.xml", "scripts/*", "drivers/qemu/*"]
   communicator        = "winrm"
@@ -70,7 +70,7 @@ source "qemu" "windows-11" {
   winrm_username      = "${var.winrm_username}"
 }
 
-source "virtualbox-iso" "windows-11" {
+source "virtualbox-iso" "windows-11-pro" {
   headless             = true  
   boot_wait            = "10s"
   cd_files             = ["scripts/*", "unattend/autounattend.xml"]
@@ -94,7 +94,7 @@ source "virtualbox-iso" "windows-11" {
   winrm_username       = "${var.winrm_username}"
 }
 
-source "vmware-iso" "windows-11" {
+source "vmware-iso" "windows-11-pro" {
   headless             = true
   boot_wait            = "10s"
   cd_files             = ["scripts/*", "unattend/autounattend.xml", "drivers/vmware"]
@@ -123,9 +123,9 @@ source "vmware-iso" "windows-11" {
 build {
 
   sources = [
-    "source.qemu.windows-11", 
-    "source.virtualbox-iso.windows-11", 
-    "source.vmware-iso.windows-11"
+    "source.qemu.windows-11-pro", 
+    "source.virtualbox-iso.windows-11-pro", 
+    "source.vmware-iso.windows-11-pro"
   ]
 
   provisioner "powershell" {
@@ -174,7 +174,7 @@ build {
     post-processor "vagrant" {
       compression_level    = 9
       output               = "windows-11-pro-{{.Provider}}.box"
-      vagrantfile_template = "vagrant/windows-11.template"
+      vagrantfile_template = "vagrant/windows-11-pro.template"
     }
 
     // post-processor "vagrant-cloud" {
