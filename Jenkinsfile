@@ -18,6 +18,7 @@ pipeline {
       steps {
         echo "> building $params.PACKER_BOX box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
+        sh 'df -h'
       }
     }
 
@@ -46,6 +47,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
           echo 'cleanup'
+          sh 'du -hs .'
       }
     }
 
