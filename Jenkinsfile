@@ -10,7 +10,8 @@ pipeline {
 
     stage('Build') {
       steps {
-        echo '> building $params.PACKER_BOX'
+        echo '> building $params.PACKER_BOX',
+        echo '> for $params.PACKER_PROVIDER',
       }
     }
 
