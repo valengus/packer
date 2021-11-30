@@ -40,6 +40,7 @@ pipeline {
     stage('Test') {
       when { expression { return params.RefreshOnly == false } }
       steps {
+        echo "VAGRANT_PROVIDER: ${VAGRANT_PROVIDER}"
         echo 'Test'
       }
     }
