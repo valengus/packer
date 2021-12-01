@@ -38,7 +38,7 @@ pipeline {
     stage('Test') {
       when { expression { return params.RefreshOnly == false } }
       environment {
-        VAGRANT_DEFAULT_PROVIDER = ${VAGRANT_PROVIDER}
+        VAGRANT_DEFAULT_PROVIDER = VAGRANT_PROVIDER
       }
       steps {
 
