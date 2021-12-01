@@ -40,13 +40,13 @@ pipeline {
 
       steps {
         script {
-          if (PACKER_PROVIDER == 'qemu') { VAGRANT_DEFAULT_PROVIDER = 'libvirt' }
-          else if (PACKER_PROVIDER == 'virtualbox-iso') { VAGRANT_DEFAULT_PROVIDER = 'virtualbox' }
-          else if (PACKER_PROVIDER == 'vmware-iso') { VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop' }
+          if (PACKER_PROVIDER == 'qemu') { env.VAGRANT_DEFAULT_PROVIDER = 'libvirt' }
+          else if (PACKER_PROVIDER == 'virtualbox-iso') { env.VAGRANT_DEFAULT_PROVIDER = 'virtualbox' }
+          else if (PACKER_PROVIDER == 'vmware-iso') { env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop' }
         }
         sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
         // sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
-        sh "export VAGRANT_DEFAULT_PROVIDER=${VAGRANT_DEFAULT_PROVIDER} && env"
+        sh "env"
       }
 
     }
