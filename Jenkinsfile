@@ -55,6 +55,7 @@ pipeline {
         // }
         sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
+        sh "rm -f ./Vagrantfile"
         sh "vagrant init $params.PACKER_BOX-test"
         sh "vagrant up"
       }
