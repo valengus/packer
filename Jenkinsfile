@@ -17,9 +17,18 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
         script {
-          if (PACKER_PROVIDER == 'qemu') { BOX_SUFFIX = 'libvirt' }
-          else if (PACKER_PROVIDER == 'virtualbox-iso') { BOX_SUFFIX = 'virtualbox' }
-          else if (PACKER_PROVIDER == 'vmware-iso') { BOX_SUFFIX = 'vmware' }
+          if (PACKER_PROVIDER == 'qemu') { 
+            BOX_SUFFIX = 'libvirt'
+            env.VAGRANT_DEFAULT_PROVIDER = 'libvirt'
+          }
+          else if (PACKER_PROVIDER == 'virtualbox-iso') { 
+            BOX_SUFFIX = 'virtualbox' 
+            env.VAGRANT_DEFAULT_PROVIDER = 'virtualbox'
+          }
+          else if (PACKER_PROVIDER == 'vmware-iso') { 
+            BOX_SUFFIX = 'vmware'
+            env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
+          }
         }
         echo "> building $params.PACKER_BOX box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
@@ -39,11 +48,11 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
-        script {
-          if (PACKER_PROVIDER == 'qemu') { env.VAGRANT_DEFAULT_PROVIDER = 'libvirt' }
-          else if (PACKER_PROVIDER == 'virtualbox-iso') { env.VAGRANT_DEFAULT_PROVIDER = 'virtualbox' }
-          else if (PACKER_PROVIDER == 'vmware-iso') { env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop' }
-        }
+        // script {
+        //   if (PACKER_PROVIDER == 'qemu') { env.VAGRANT_DEFAULT_PROVIDER = 'libvirt' }
+        //   else if (PACKER_PROVIDER == 'virtualbox-iso') { env.VAGRANT_DEFAULT_PROVIDER = 'virtualbox' }
+        //   else if (PACKER_PROVIDER == 'vmware-iso') { env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop' }
+        // }
         sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant init $params.PACKER_BOX-test"
