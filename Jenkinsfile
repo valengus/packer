@@ -46,6 +46,7 @@ pipeline {
         sh "echo $VAGRANT_DEFAULT_PROVIDER"
         sh "du -hs $params.PACKER_BOX-${VAGRANT_PROVIDER}.box"
         sh "vagrant box add $params.PACKER_BOX-test $params.PACKER_BOX-${VAGRANT_PROVIDER}.box"
+        sh "env"
       }
     }
 
