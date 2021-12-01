@@ -37,13 +37,13 @@ pipeline {
 
     stage('Test') {
       when { expression { return params.RefreshOnly == false } }
-      environment {
-        VAGRANT_DEFAULT_PROVIDER = VAGRANT_PROVIDER
-      }
+      // environment {
+      //   VAGRANT_DEFAULT_PROVIDER = VAGRANT_PROVIDER
+      // }
       steps {
 
         echo "VAGRANT_PROVIDER: ${VAGRANT_PROVIDER}"
-        sh "echo $VAGRANT_DEFAULT_PROVIDER"
+        sh "echo $VAGRANT_PROVIDER"
         sh "du -hs $params.PACKER_BOX-${VAGRANT_PROVIDER}.box"
         sh "vagrant box add $params.PACKER_BOX-test $params.PACKER_BOX-${VAGRANT_PROVIDER}.box"
         sh "env"
