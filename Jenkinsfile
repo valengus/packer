@@ -45,8 +45,9 @@ pipeline {
           else if (PACKER_PROVIDER == 'vmware-iso') { env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop' }
         }
         sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
-        // sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
-        sh "env"
+        sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
+        sh "vagrant init $params.PACKER_BOX-test"
+        sh "vagrant up"
       }
 
     }
