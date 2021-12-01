@@ -28,19 +28,24 @@ pipeline {
       }
     }
 
-    stage('Build') {
-      when { expression { return params.RefreshOnly == false } }
-      steps {
-        sh "packer build --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX $params.PACKER_BOX'.'pkr.hcl"
-      }
-    }
+    // stage('Build') {
+    //   when { expression { return params.RefreshOnly == false } }
+    //   steps {
+    //     sh "packer build --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX $params.PACKER_BOX'.'pkr.hcl"
+    //   }
+    // }
 
     stage('Test') {
       when { expression { return params.RefreshOnly == false } }
+      environment {
+        VAGRANT_DEFAULT_PROVIDER = ${VAGRANT_PROVIDER}
+      }
       steps {
 
         echo "VAGRANT_PROVIDER: ${VAGRANT_PROVIDER}"
+        sh "echo $VAGRANT_DEFAULT_PROVIDER"
         sh "du -hs $params.PACKER_BOX-${VAGRANT_PROVIDER}.box"
+        sh "vagrant box add $params.PACKER_BOX-test $params.PACKER_BOX-${VAGRANT_PROVIDER}.box"
       }
     }
 
