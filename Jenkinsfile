@@ -46,7 +46,7 @@ pipeline {
         }
         sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
         // sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
-        sh "export VAGRANT_DEFAULT_PROVIDER=$params.VAGRANT_DEFAULT_PROVIDER && env"
+        sh "export VAGRANT_DEFAULT_PROVIDER=${VAGRANT_DEFAULT_PROVIDER} && env"
       }
 
     }
