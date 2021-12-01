@@ -8,6 +8,8 @@ Vagrant.configure("2") do |config|
     libvirt.sound_type     = "ich6"
     libvirt.video_type     = "qxl"
 
+    libvirt.qemu_use_session = false
+
     libvirt.channel :type  => 'spicevmc', :target_name => 'com.redhat.spice.0',     :target_type => 'virtio'
     libvirt.channel :type  => 'unix',     :target_name => 'org.qemu.guest_agent.0', :target_type => 'virtio'
     libvirt.random  :model => 'random'
@@ -16,6 +18,7 @@ Vagrant.configure("2") do |config|
     libvirt.hyperv_feature :name => 'synic',   :state => 'on'
     libvirt.hyperv_feature :name => 'vapic',   :state => 'on'
     libvirt.hyperv_feature :name => 'vpindex', :state => 'on'
+    libvirt.cpus   = 2
     libvirt.memory = 4096
   end
 
