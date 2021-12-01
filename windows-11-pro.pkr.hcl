@@ -100,10 +100,10 @@ source "vmware-iso" "windows-11-pro" {
   cd_files             = ["scripts/*", "unattend/autounattend.xml", "drivers/vmware"]
   communicator         = "winrm"
   cpus                 = 2
-  # disk_adapter_type    = "pvscsi"
-  disk_adapter_type    = "lsisas1068"
+  disk_adapter_type    = "pvscsi"
+  # disk_adapter_type    = "lsisas1068"
   disk_size            = 61440
-  disk_type_id         = 1
+  disk_type_id         = 0
   format               = "ova"
   guest_os_type        = "windows9-64"
   iso_checksum         = "${var.iso_checksum}"
