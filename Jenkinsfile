@@ -24,9 +24,8 @@ pipeline {
         echo "> building $params.PACKER_BOX box for $params.PACKER_PROVIDER provider"
         echo "VAGRANT_DEFAULT_PROVIDER: ${VAGRANT_DEFAULT_PROVIDER}"
         sh 'packer --version'
-        sh 'df -h'
-        sh 'ls -lA'
-        sh 'env'
+        sh 'vagrant --version'
+        sh 'ansible --version'
       }
     }
 
