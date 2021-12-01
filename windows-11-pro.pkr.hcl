@@ -102,7 +102,7 @@ source "vmware-iso" "windows-11-pro" {
   cpus                 = 2
   # disk_adapter_type    = "pvscsi"
   disk_adapter_type    = "lsisas1068"
-  skip_compaction      = false
+  skip_compaction      = true
   disk_size            = 61440
   disk_type_id         = 0
   format               = "ova"
@@ -145,6 +145,12 @@ build {
 
   provisioner "powershell" {
     inline = ["choco install sdelete -y"]
+  }
+
+  provisioner "windows-update" {
+    search_criteria = "IsInstalled=0"
+    filters         = [ "exclude:$_.Title -like 'Preview'", "include:$true" ]
+    update_limit    = 25
   }
 
   provisioner "powershell" {
