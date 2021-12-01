@@ -27,7 +27,7 @@ pipeline {
           }
           else if (PACKER_PROVIDER == 'vmware-iso') { 
             BOX_SUFFIX = 'vmware'
-            env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
+            env.VAGRANT_DEFAULT_PROVIDER = 'vmware_workstation'
           }
         }
         echo "> building $params.PACKER_BOX box for $params.PACKER_PROVIDER provider"
