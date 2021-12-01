@@ -104,8 +104,8 @@ source "vmware-iso" "windows-11-pro" {
   disk_adapter_type    = "lsisas1068"
   # skip_compaction      = false
   disk_size            = 61440
-  # disk_type_id         = 1
-  format               = "ova"
+  disk_type_id         = "thin"
+  format               = "vmx"
   guest_os_type        = "windows9-64"
   iso_checksum         = "${var.iso_checksum}"
   iso_url              = "${var.iso_url}"
@@ -154,10 +154,10 @@ build {
   // }
 
   provisioner "powershell" {
-    only   = [
-      "source.qemu.windows-11-pro", 
-      "source.virtualbox-iso.windows-11-pro"
-    ]
+    // only   = [
+    //   "source.qemu.windows-11-pro", 
+    //   "source.virtualbox-iso.windows-11-pro"
+    // ]
     inline = [
       "Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
       "Dism.exe /online /Cleanup-Image /SPSuperseded",
