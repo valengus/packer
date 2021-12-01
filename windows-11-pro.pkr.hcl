@@ -102,7 +102,7 @@ source "vmware-iso" "windows-11-pro" {
   cpus                 = 2
   # disk_adapter_type    = "pvscsi"
   disk_adapter_type    = "lsisas1068"
-  skip_compaction      = true
+  skip_compaction      = false
   disk_size            = 61440
   disk_type_id         = 0
   format               = "ova"
