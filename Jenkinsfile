@@ -16,6 +16,11 @@ pipeline {
     stage('Info') {
       when { expression { return params.RefreshOnly == false } }
       steps {
+        script {
+          if (PACKER_PROVIDER == 'qemu') { VAGRANT_PROVIDER = 'libvirt' } 
+          else if (PACKER_PROVIDER == 'virtualbox-iso') { VAGRANT_PROVIDER = 'virtualbox' } 
+          else if (PACKER_PROVIDER == 'vmware-iso') { VAGRANT_PROVIDER = 'vmware' }
+        }
         echo "> building $params.PACKER_BOX box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
         sh 'vagrant --version'
@@ -33,13 +38,9 @@ pipeline {
     stage('Test') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-        script {
-          if (PACKER_PROVIDER == 'qemu') { VAGRANT_DEFAULT_PROVIDER = 'libvirt' } 
-          else if (PACKER_PROVIDER == 'virtualbox-iso') { VAGRANT_DEFAULT_PROVIDER = 'virtualbox' } 
-          else if (PACKER_PROVIDER == 'vmware-iso') { VAGRANT_DEFAULT_PROVIDER = 'vmware' }
-        }
-        echo "VAGRANT_DEFAULT_PROVIDER: ${VAGRANT_DEFAULT_PROVIDER}"
-        sh "du -hs $params.PACKER_BOX-${VAGRANT_DEFAULT_PROVIDER}.box"
+
+        echo "VAGRANT_PROVIDER: ${VAGRANT_PROVIDER}"
+        sh "du -hs $params.PACKER_BOX-${VAGRANT_PROVIDER}.box"
       }
     }
 
