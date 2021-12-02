@@ -12,13 +12,18 @@ pipeline {
       pollSCM 'H/5 *  * * *'
   }
 
+  environment {
+    
+    CLOUD_TOKEN = "$params.CLOUD_TOKEN"
+  }
+
   stages {
 
     stage('Info') {
       when { expression { return params.RefreshOnly == false } }
       steps {
         script {
-          env.CLOUD_TOKEN = $params.CLOUD_TOKEN
+
           if (PACKER_PROVIDER == 'qemu') { 
             BOX_SUFFIX = 'libvirt'
             env.VAGRANT_DEFAULT_PROVIDER = 'libvirt'
