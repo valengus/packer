@@ -1,0 +1,82 @@
+- name: Remove AppxProvisionedPackage
+  win_shell: |
+    Get-AppxProvisionedPackage -Online | Where { `
+    $_.DisplayName -NotMatch 'Microsoft.StorePurchaseApp' -and `
+    $_.DisplayName -NotMatch 'Microsoft.WindowsStore' -and `
+    $_.DisplayName -NotMatch 'Microsoft.WindowsCalculator' -and`
+    $_.DisplayName -NotMatch 'Microsoft.Windows.Photos' -and`
+    $_.DisplayName -NotMatch 'Microsoft.SecHealthUI' -and`
+    $_.DisplayName -NotMatch 'Microsoft.DesktopAppInstaller' `
+    } | Remove-AppxProvisionedPackage -Online
+    
+- name: Remove AppxPackage
+  win_shell: |
+    Get-AppxPackage -AllUsers | Where-Object { `
+    $_.IsFramework -Match 'False' -and `
+    $_.NonRemovable -Match 'False' -and `
+    $_.Name -NotMatch 'Microsoft.StorePurchaseApp' -and `
+    $_.Name -NotMatch 'Microsoft.WindowsStore' -and `
+    $_.Name -NotMatch 'Microsoft.Windows.Photos' -and `
+    $_.Name -NotMatch 'Microsoft.WindowsCalculator' `
+    } | Remove-AppxPackage -AllUsers
+
+
+- name: "Change {{ item.name }} for HKCU"  
+  win_regedit:
+    path: "{{ item.path }}"
+    name: "{{ item.name }}"
+    data: "{{ item.data }}"
+    type: dword
+    state: present
+  loop:
+    - { path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'ContentDeliveryAllowed', data: '0' }
+    - { path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'OemPreInstalledAppsEnabled', data: '0' }
+    - { path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'PreInstalledAppsEnabled', data: '0' }
+    - { path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'PreInstalledAppsEverEnabled', data: '0' }
+    - { path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SilentInstalledAppsEnabled', data: '0' }
+    - { path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SoftLandingEnabled', data: '0' }
+    - { path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SubscribedContentEnabled', data: '0' }
+    - { path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SystemPaneSuggestionsEnabled', data: '0' }
+
+- name: Remove registry path SuggestedApps for HKCU
+  ansible.windows.win_regedit:
+    path: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps
+    state: absent
+    delete_key: yes
+
+- name: Remove registry path Subscriptions for HKCU
+  ansible.windows.win_regedit:
+    path: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions
+    state: absent
+    delete_key: yes
+
+
+- name: "Change {{ item.name }}for HKLM"
+  win_regedit:
+    path: "{{ item.path }}"
+    name: "{{ item.name }}"
+    data: "{{ item.data }}"
+    type: dword
+    state: present
+    hive: C:\Users\Default\NTUSER.dat
+  loop:
+    - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'ContentDeliveryAllowed', data: '0' }
+    - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'OemPreInstalledAppsEnabled', data: '0' }
+    - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'PreInstalledAppsEnabled', data: '0' }
+    - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'PreInstalledAppsEverEnabled', data: '0' }
+    - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SilentInstalledAppsEnabled', data: '0' }
+    - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SoftLandingEnabled', data: '0' }
+    - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SubscribedContentEnabled', data: '0' }
+    - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SystemPaneSuggestionsEnabled', data: '0' }
+
+- name: Remove registry path SuggestedApps for HKLM
+  ansible.windows.win_regedit:
+    path: HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps
+    state: absent
+    delete_key: yes
+
+- name: Remove registry path Subscriptions for HKLM
+  ansible.windows.win_regedit:
+    path: HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions
+    state: absent
+    delete_key: yes

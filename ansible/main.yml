@@ -16,7 +16,9 @@
 
   - name: Disable Hibernate Mode
     win_command: powercfg -h off
-    changed_when: false
+
+  - include: cloudContent.yml
+  - include: appxPackages.yml
 
   - include: installVMTools.yml
 

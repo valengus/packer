@@ -1,0 +1,27 @@
+- name: Turn off cloud consumer account state content
+  win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows\CloudContent
+    name: DisableConsumerAccountStateContent
+    data: 1
+    type: dword
+
+- name: Turn off cloud optimized content
+  win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows\CloudContent
+    name: DisableCloudOptimizedContent
+    data: 1
+    type: dword
+
+- name: Do not show Windows tips
+  win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows\CloudContent
+    name: DisableSoftLanding
+    data: 1
+    type: dword
+
+- name: Turn off Microsoft consumer experiences
+  win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows\CloudContent
+    name: DisableWindowsConsumerFeatures
+    data: 1
+    type: dword
