@@ -39,7 +39,6 @@ pipeline {
         sh 'packer --version'
         sh 'vagrant --version'
         sh 'ansible --version'
-        sh 'env'
       }
     }
 
