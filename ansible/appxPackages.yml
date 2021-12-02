@@ -39,13 +39,13 @@
     - { path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SystemPaneSuggestionsEnabled', data: '0' }
 
 - name: Remove registry path SuggestedApps for HKCU
-  ansible.windows.win_regedit:
+  win_regedit:
     path: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps
     state: absent
     delete_key: yes
 
 - name: Remove registry path Subscriptions for HKCU
-  ansible.windows.win_regedit:
+  win_regedit:
     path: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions
     state: absent
     delete_key: yes
@@ -70,13 +70,13 @@
     - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SystemPaneSuggestionsEnabled', data: '0' }
 
 - name: Remove registry path SuggestedApps for HKLM
-  ansible.windows.win_regedit:
+  win_regedit:
     path: HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps
     state: absent
     delete_key: yes
 
 - name: Remove registry path Subscriptions for HKLM
-  ansible.windows.win_regedit:
+  win_regedit:
     path: HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions
     state: absent
     delete_key: yes
