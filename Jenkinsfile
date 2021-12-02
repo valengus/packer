@@ -18,6 +18,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
         script {
+          env.CLOUD_TOKEN = $params.CLOUD_TOKEN
           if (PACKER_PROVIDER == 'qemu') { 
             BOX_SUFFIX = 'libvirt'
             env.VAGRANT_DEFAULT_PROVIDER = 'libvirt'
@@ -31,10 +32,11 @@ pipeline {
             env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
           }
         }
-        echo "> building $params.PACKER_BOX box for $params.PACKER_PROVIDER provider"
+        echo "> building CLOUD_TOKEN box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
         sh 'vagrant --version'
         sh 'ansible --version'
+        sh 'env'
       }
     }
 
