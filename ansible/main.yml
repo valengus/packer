@@ -20,7 +20,7 @@
 
   - include: installVMTools.yml
 
-  # - include: installWin11CumulativeUpdates.yml
-  #   when: ansible_os_name == "Microsoft Windows 11 Pro"
+  - include: installWin11CumulativeUpdates.yml
+    when: ansible_os_name == "Microsoft Windows 11 Pro"
 
   - include: installUpdates.yml
