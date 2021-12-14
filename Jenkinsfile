@@ -24,7 +24,6 @@ pipeline {
       steps {
         script {
           echo "Git BRANCH is ${params.BRANCH}"
-          git branch: "${params.BRANCH}", url: 'https://github.com/valengus/packer.git'
 
           if (PACKER_PROVIDER == 'qemu') { 
             BOX_SUFFIX = 'libvirt'
