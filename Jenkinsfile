@@ -2,7 +2,7 @@ pipeline {
   agent {label 'packer'}
 
   parameters {
-    gitParameter (name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'main')
+    gitParameter (name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'origin/main')
     booleanParam (name: 'RefreshOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
     string (name: 'PACKER_BOX', defaultValue: 'windows-11-pro', description: '*.pkr.hcl file name')
