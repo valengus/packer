@@ -17,18 +17,25 @@ pipeline {
     CLOUD_TOKEN = "$params.CLOUD_TOKEN"
   }
 
+  // options {
+  //     skipDefaultCheckout(true)
+  // }
+
   stages {
 
     stage('Checkout') {
-        steps {
-            checkout scm
-        }
+        checkout([
+            $class: 'GitSCM',
+            branches: scm.branches,
+            extensions: scm.extensions + [[$class: "${params.BRANCH}"], [$class: 'WipeWorkspace']],
+            userRemoteConfigs: [[url: 'https://github.com/valengus/packer.git']],
+            doGenerateSubmoduleConfigurations: false
+        ])
     }
 
     stage('Info') {
       // when { expression { return params.RefreshOnly == false } }
       steps {
-        // git branch: "${params.BRANCH}", url: "${env.GIT_URL}"
         script {
           echo "Git BRANCH is ${params.BRANCH}"
           if (PACKER_PROVIDER == 'qemu') {
