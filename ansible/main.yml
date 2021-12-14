@@ -17,10 +17,13 @@
   - name: Disable Hibernate Mode
     win_command: powercfg -h off
 
-  - include: cloudContent.yml
-  - include: appxPackages.yml
-
   - include: installVMTools.yml
+
+  - include: cloudContent.yml
+    when: ansible_os_name == "Microsoft Windows 11 Pro"
+
+  - include: appxPackages.yml
+    when: ansible_os_name == "Microsoft Windows 11 Pro"
 
   - include: installWin11CumulativeUpdates.yml
     when: ansible_os_name == "Microsoft Windows 11 Pro"
