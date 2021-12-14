@@ -69,10 +69,12 @@ pipeline {
 
       steps {
         sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
-        // sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
-        // sh "rm -f ./Vagrantfile"
-        // sh "vagrant init $params.PACKER_BOX-test"
-        // sh "vagrant up"
+        sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
+        sh "rm -f ./Vagrantfile"
+        sh "vagrant init $params.PACKER_BOX-test"
+        sh "vagrant up --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
+        sh "sleep 300"
+        sh "vagrant status"
       }
 
     }
@@ -81,6 +83,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
           echo 'Release'
+          // sh "packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
@@ -88,7 +91,8 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
           echo 'cleanup'
-          sh 'du -hs .'
+          sh 'vagrant destroy -f'
+          sh "vagrant box remove --force $params.PACKER_BOX-test --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
       }
     }
 
