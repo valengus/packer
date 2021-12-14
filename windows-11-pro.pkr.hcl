@@ -57,6 +57,7 @@ source "qemu" "windows-11-pro" {
   disk_size           = "61440"
   format              = "qcow2"
   headless            = true
+  vnc_bind_address    = "0.0.0.0"
   iso_checksum        = "${var.iso_checksum}"
   iso_url             = "${var.iso_url}"
   memory              = "4096"
