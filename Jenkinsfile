@@ -27,6 +27,7 @@ pipeline {
           userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
           branches: [ [name: "${params.BRANCH}"] ]
         ])
+        sh 'ls -l'
       }
     }
 
@@ -53,7 +54,6 @@ pipeline {
         sh 'vagrant --version'
         sh 'ansible --version'
         sh 'env'
-        sh 'ls -l .'
       }
     }
 
