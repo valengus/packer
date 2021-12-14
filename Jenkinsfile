@@ -2,11 +2,11 @@ pipeline {
   agent {label 'packer'}
 
   parameters {
-    gitParameter BRANCH: 'origin/(.*)', defaultValue: 'main', name: 'BRANCH', type: 'PT_BRANCH'
-    booleanParam(name: 'RefreshOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
-    choice(name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
-    string(name: 'PACKER_BOX', defaultValue: 'windows-11-pro', description: '*.pkr.hcl file name')
-    string(name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
+    gitParameter (name: 'BranchName', type: 'PT_BRANCH', defaultValue: 'main')
+    booleanParam (name: 'RefreshOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
+    choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
+    string (name: 'PACKER_BOX', defaultValue: 'windows-11-pro', description: '*.pkr.hcl file name')
+    string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
   }
 
   triggers {
