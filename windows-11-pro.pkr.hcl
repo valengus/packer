@@ -188,12 +188,12 @@ build {
       vagrantfile_template = "vagrant/windows-11-pro.template"
     }
 
-    post-processor "vagrant-cloud" {
-      access_token        = var.cloud_token
-      box_tag             = "valengus/windows-11-pro"
-      version             = "1.0.${local.packerstarttime}"
-      version_description = "${local.version_description}"
-    }
+    // post-processor "vagrant-cloud" {
+    //   access_token        = var.cloud_token
+    //   box_tag             = "valengus/windows-11-pro"
+    //   version             = "1.0.${local.packerstarttime}"
+    //   version_description = "${local.version_description}"
+    // }
     
   }
 
