@@ -22,6 +22,7 @@ pipeline {
     stage('Info') {
       // when { expression { return params.RefreshOnly == false } }
       steps {
+        git branch: "${params.BRANCH}", url: "${env.GIT_URL}"
         script {
           echo "Git BRANCH is ${params.BRANCH}"
 
