@@ -19,6 +19,12 @@ pipeline {
 
   stages {
 
+    stage('Checkout') {
+        steps {
+            checkout scm
+        }
+    }
+
     stage('Info') {
       // when { expression { return params.RefreshOnly == false } }
       steps {
