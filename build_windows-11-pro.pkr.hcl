@@ -57,6 +57,7 @@ source "qemu" "windows-11-pro" {
   disk_size           = "61440"
   format              = "qcow2"
   headless            = true
+  vnc_bind_address    = "0.0.0.0"
   iso_checksum        = "${var.iso_checksum}"
   iso_url             = "${var.iso_url}"
   memory              = "4096"
@@ -188,12 +189,12 @@ build {
       vagrantfile_template = "vagrant/windows-11-pro.template"
     }
 
-    post-processor "vagrant-cloud" {
-      access_token        = var.cloud_token
-      box_tag             = "valengus/windows-11-pro"
-      version             = "1.0.${local.packerstarttime}"
-      version_description = "${local.version_description}"
-    }
+    // post-processor "vagrant-cloud" {
+    //   access_token        = var.cloud_token
+    //   box_tag             = "valengus/windows-11-pro"
+    //   version             = "1.0.${local.packerstarttime}"
+    //   version_description = "${local.version_description}"
+    // }
     
   }
 

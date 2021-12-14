@@ -27,14 +27,13 @@ pipeline {
           userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
           branches: [ [name: "${params.BRANCH}"] ]
         ])
+        sh 'ls -l'
       }
     }
 
     stage('Info') {
-      // when { expression { return params.RefreshOnly == false } }
       steps {
         script {
-          echo "Git BRANCH is ${params.BRANCH}"
           if (PACKER_PROVIDER == 'qemu') {
             BOX_SUFFIX = 'libvirt'
             env.VAGRANT_DEFAULT_PROVIDER = 'libvirt'
@@ -48,19 +47,19 @@ pipeline {
             env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
           }
         }
-        echo "> building CLOUD_TOKEN box for $params.PACKER_PROVIDER provider"
+        echo "Git BRANCH is ${params.BRANCH}"
+        echo "> building box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
         sh 'vagrant --version'
         sh 'ansible --version'
         sh 'env'
-        sh 'ls -l .'
       }
     }
 
     stage('Build') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-        sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX $params.PACKER_BOX'.'pkr.hcl"
+        sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
