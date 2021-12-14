@@ -23,10 +23,9 @@ pipeline {
       steps {
         checkout([
           $class: 'GitSCM',
-          branches: [ [name: "${params.BRANCH}"] ],
-          extensions: scm.extensions + [[$class: "${params.BRANCH}"], [$class: 'WipeWorkspace']],
-          userRemoteConfigs: [[url: 'https://github.com/valengus/packer.git']],
-          doGenerateSubmoduleConfigurations: false
+          doGenerateSubmoduleConfigurations: false,
+          userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
+          branches: [ [name: "${params.BRANCH}"] ]
         ])
       }
     }
