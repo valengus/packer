@@ -17,10 +17,6 @@ pipeline {
     CLOUD_TOKEN = "$params.CLOUD_TOKEN"
   }
 
-  // options {
-  //     skipDefaultCheckout(true)
-  // }
-
   stages {
 
     stage('Checkout') {
