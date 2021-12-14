@@ -43,7 +43,7 @@ pipeline {
         sh 'vagrant --version'
         sh 'ansible --version'
         sh 'env'
-        sh 'ls -l'
+        sh 'ls -l .'
       }
     }
 
