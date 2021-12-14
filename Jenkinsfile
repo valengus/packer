@@ -22,11 +22,10 @@ pipeline {
     stage('Info') {
       // when { expression { return params.RefreshOnly == false } }
       steps {
-        git branch: "${params.BRANCH}", url: "${env.GIT_URL}"
+        // git branch: "${params.BRANCH}", url: "${env.GIT_URL}"
         script {
           echo "Git BRANCH is ${params.BRANCH}"
-
-          if (PACKER_PROVIDER == 'qemu') { 
+          if (PACKER_PROVIDER == 'qemu') {
             BOX_SUFFIX = 'libvirt'
             env.VAGRANT_DEFAULT_PROVIDER = 'libvirt'
           }
