@@ -25,25 +25,6 @@ variable "winrm_username" {
 
 locals {
   packerstarttime = formatdate("YYYYMMDD", timestamp())
-  version_description = <<EOF
-### Clean Windows 11 PRO box with :
-
-source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
-
-- chocolatey
-- updates
-- drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
-- qemu|virtualbox|vmware guest agent
-- winrm enabled over https
-- openssh
-
-### Login Credentials
-
-Username: Admin
-
-Password: password
-
-EOF
 }
 
 source "qemu" "windows-11-pro" {
@@ -148,17 +129,8 @@ build {
     inline = ["choco install sdelete -y"]
   }
 
-  // provisioner "windows-update" {
-  //   search_criteria = "IsInstalled=0"
-  //   filters         = [ "exclude:$_.Title -like 'Preview'", "include:$true" ]
-  //   update_limit    = 25
-  // }
-
   provisioner "powershell" {
-    // only   = [
-    //   "source.qemu.windows-11-pro", 
-    //   "source.virtualbox-iso.windows-11-pro"
-    // ]
+
     inline = [
       "Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
       "Dism.exe /online /Cleanup-Image /SPSuperseded",
@@ -189,13 +161,6 @@ build {
       vagrantfile_template = "vagrant/windows-11-pro.template"
     }
 
-    // post-processor "vagrant-cloud" {
-    //   access_token        = var.cloud_token
-    //   box_tag             = "valengus/windows-11-pro"
-    //   version             = "1.0.${local.packerstarttime}"
-    //   version_description = "${local.version_description}"
-    // }
-    
   }
 
 }

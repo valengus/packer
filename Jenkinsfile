@@ -13,7 +13,6 @@ pipeline {
       pollSCM 'H/5 *  * * *'
   }
 
-
   environment {
     CLOUD_TOKEN = "$params.CLOUD_TOKEN"
   }
@@ -82,8 +81,8 @@ pipeline {
     stage('Release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-          echo 'Release'
-          // sh "packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
+          echo 'Release $params.PACKER_BOX-${BOX_SUFFIX}.box'
+          sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
