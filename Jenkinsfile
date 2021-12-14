@@ -2,7 +2,7 @@ pipeline {
   agent {label 'packer'}
 
   parameters {
-    gitParameter (name: 'BranchName', type: 'PT_BRANCH', defaultValue: 'main')
+    gitParameter (name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'main')
     booleanParam (name: 'RefreshOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
     string (name: 'PACKER_BOX', defaultValue: 'windows-11-pro', description: '*.pkr.hcl file name')
@@ -23,6 +23,9 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
         script {
+          echo "Git BRANCH is ${params.BRANCH}"
+          git branch: "${params.BRANCH}", url: 'https://github.com/valengus/packer.git'
+
           if (PACKER_PROVIDER == 'qemu') { 
             BOX_SUFFIX = 'libvirt'
             env.VAGRANT_DEFAULT_PROVIDER = 'libvirt'
@@ -40,6 +43,7 @@ pipeline {
         sh 'packer --version'
         sh 'vagrant --version'
         sh 'ansible --version'
+        sh 'env'
       }
     }
 
