@@ -14,12 +14,12 @@
 
   tasks:
 
-  - include: installUpdates.yml
-
   - name: Disable Hibernate Mode
     win_command: powercfg -h off
 
   - include: installVMTools.yml
+
+  - include: installUpdates.yml
 
   - include: cloudContent.yml
     when: ansible_os_name == "Microsoft Windows 11 Pro"
