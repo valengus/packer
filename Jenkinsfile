@@ -19,6 +19,12 @@ pipeline {
 
   stages {
 
+    stage('SCM') {
+      steps {
+        git branch: "${params.BRANCH}", url: 'https://github.com/valengus/packer.git'
+      }
+    }
+
     stage('Info') {
       // when { expression { return params.RefreshOnly == false } }
       steps {
