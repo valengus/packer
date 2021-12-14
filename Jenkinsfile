@@ -32,7 +32,6 @@ pipeline {
     }
 
     stage('Info') {
-      // when { expression { return params.RefreshOnly == false } }
       steps {
         script {
           echo "Git BRANCH is ${params.BRANCH}"
