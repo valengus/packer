@@ -34,7 +34,6 @@ pipeline {
     stage('Info') {
       steps {
         script {
-          echo "Git BRANCH is ${params.BRANCH}"
           if (PACKER_PROVIDER == 'qemu') {
             BOX_SUFFIX = 'libvirt'
             env.VAGRANT_DEFAULT_PROVIDER = 'libvirt'
@@ -48,7 +47,8 @@ pipeline {
             env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
           }
         }
-        echo "> building CLOUD_TOKEN box for $params.PACKER_PROVIDER provider"
+        echo "Git BRANCH is ${params.BRANCH}"
+        echo "> building box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
         sh 'vagrant --version'
         sh 'ansible --version'
