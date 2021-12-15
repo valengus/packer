@@ -92,6 +92,7 @@ pipeline {
           echo 'cleanup'
           sh 'vagrant destroy -f'
           sh "vagrant box remove --force $params.PACKER_BOX-test --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
+          sh "rm -f $params.PACKER_BOX-${BOX_SUFFIX}.box"
       }
     }
 
