@@ -85,7 +85,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
           echo 'Release $params.PACKER_BOX-${BOX_SUFFIX}.box'
-          sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
+          // sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
@@ -93,9 +93,9 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
           echo 'cleanup'
-          sh 'vagrant destroy -f'
-          sh "vagrant box remove --force $params.PACKER_BOX-test --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
-          sh "rm -f $params.PACKER_BOX-${BOX_SUFFIX}.box"
+          // sh 'vagrant destroy -f'
+          // sh "vagrant box remove --force $params.PACKER_BOX-test --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
+          // sh "rm -f $params.PACKER_BOX-${BOX_SUFFIX}.box"
       }
     }
 
