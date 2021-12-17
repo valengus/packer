@@ -32,17 +32,6 @@ pipeline {
     //   }
     // }
 
-    stage('Prepare') {
-      steps {
-        git branch: "${params.BRANCH}", url: 'https://github.com/valengus/packer.git'
-        sh 'ls -l'
-        sh 'env'
-      }
-    }
-
-
-
-
     stage('Info') {
       when { expression { return params.RefreshOnly == false } }
 
