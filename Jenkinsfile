@@ -20,17 +20,17 @@ pipeline {
 
   stages {
 
-    stage('Checkout') {
-      steps {
-        checkout([
-          $class: 'GitSCM',
-          doGenerateSubmoduleConfigurations: false,
-          userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
-          branches: [ [name: "${params.BRANCH}"] ]
-        ])
-        sh 'ls -l'
-      }
-    }
+    // stage('Checkout') {
+    //   steps {
+    //     checkout([
+    //       $class: 'GitSCM',
+    //       doGenerateSubmoduleConfigurations: false,
+    //       userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
+    //       branches: [ [name: "${params.BRANCH}"] ]
+    //     ])
+    //     sh 'ls -l'
+    //   }
+    // }
 
     stage('Info') {
       when { expression { return params.RefreshOnly == false } }
