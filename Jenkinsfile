@@ -20,17 +20,28 @@ pipeline {
 
   stages {
 
-    // stage('Checkout') {
-    //   steps {
-    //     checkout([
-    //       $class: 'GitSCM',
-    //       doGenerateSubmoduleConfigurations: false,
-    //       userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
-    //       branches: [ [name: "${params.BRANCH}"] ]
-    //     ])
-    //     sh 'ls -l'
-    //   }
-    // }
+    stage('Checkout') {
+      steps {
+        checkout([
+          $class: 'GitSCM',
+          doGenerateSubmoduleConfigurations: false,
+          userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
+          branches: [ [name: "${params.BRANCH}"] ]
+        ])
+        sh 'ls -l'
+      }
+    }
+
+    stage('Prepeare') {
+      steps {
+        git branch: "${params.BRANCH}", url: 'https://github.com/valengus/packer.git'
+        sh 'ls -l'
+        sh 'env'
+      }
+    }
+
+
+
 
     stage('Info') {
       when { expression { return params.RefreshOnly == false } }
@@ -50,7 +61,7 @@ pipeline {
             env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
           }
         }
-        git branch: "${params.BRANCH}", url: 'https://github.com/valengus/packer.git'
+        
         echo "Git BRANCH is ${params.BRANCH}"
         echo "> building box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
