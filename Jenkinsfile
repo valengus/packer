@@ -50,6 +50,7 @@ pipeline {
             env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
           }
         }
+        git branch: "${params.BRANCH}", url: 'https://github.com/valengus/packer.git'
         echo "Git BRANCH is ${params.BRANCH}"
         echo "> building box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
