@@ -20,19 +20,19 @@ pipeline {
 
   stages {
 
-    stage('Checkout') {
-      steps {
-        checkout([
-          $class: 'GitSCM',
-          doGenerateSubmoduleConfigurations: false,
-          userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
-          branches: [ [name: "${params.BRANCH}"] ]
-        ])
-        sh 'ls -l'
-      }
-    }
+    // stage('Checkout') {
+    //   steps {
+    //     checkout([
+    //       $class: 'GitSCM',
+    //       doGenerateSubmoduleConfigurations: false,
+    //       userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
+    //       branches: [ [name: "${params.BRANCH}"] ]
+    //     ])
+    //     sh 'ls -l'
+    //   }
+    // }
 
-    stage('Prepeare') {
+    stage('Prepare') {
       steps {
         git branch: "${params.BRANCH}", url: 'https://github.com/valengus/packer.git'
         sh 'ls -l'
