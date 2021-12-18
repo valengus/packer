@@ -55,7 +55,7 @@ build {
   provisioner "ansible" {
     playbook_file = "ansible/main.yml"
     use_proxy     = false
-    user          = "Admin"
+    user          = "${local.winrm_username}"
   }
 
   provisioner "powershell" {
