@@ -33,21 +33,18 @@
         </Password>
       </AutoLogon>
 
-			<FirstLogonCommands>
-
-				<SynchronousCommand wcm:action="add">
-					<Order>1</Order>
-					<CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\ConfigureRemotingForAnsible.ps1"</CommandLine>
-					<Description>allow ansible</Description>
-				</SynchronousCommand>
-
-				<SynchronousCommand wcm:action="add">
-					<Order>2</Order>
-					<CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path "C:\scripts" -Recurse"</CommandLine>
-					<Description>rm script folder</Description>
-				</SynchronousCommand>
-
-			</FirstLogonCommands>
+      <FirstLogonCommands>
+        <SynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\ConfigureRemotingForAnsible.ps1"</CommandLine>
+          <Description>allow ansible</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path "C:\scripts" -Recurse"</CommandLine>
+          <Description>rm script folder</Description>
+        </SynchronousCommand>
+      </FirstLogonCommands>
 
     </component>
 
