@@ -152,7 +152,7 @@
 
       <AutoLogon>
         <Enabled>true</Enabled>
-        <LogonCount>0</LogonCount>
+        <LogonCount>1</LogonCount>
         <Username>Administrator</Username>
         <Password>
           <Value>password</Value>
