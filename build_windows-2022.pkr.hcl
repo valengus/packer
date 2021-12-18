@@ -11,7 +11,7 @@ variable "iso_url" {
 locals {
   packerstarttime = formatdate("YYYYMMDD", timestamp())
   name            = "windows-2022"
-  winrm_username  = "Admin"
+  winrm_username  = "Administrator"
   winrm_password  = "password"
 
 }
