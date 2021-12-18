@@ -17,13 +17,13 @@
       <TimeZone>UTC</TimeZone>
 
       <AutoLogon>
+        <Enabled>true</Enabled>
+        <LogonCount>2</LogonCount>
+        <Username>Administrator</Username>
         <Password>
           <Value>password</Value>
           <PlainText>true</PlainText>
         </Password>
-        <Enabled>true</Enabled>
-        <LogonCount>2</LogonCount>
-        <Username>Admin</Username>
       </AutoLogon>
 
 			<FirstLogonCommands>
@@ -39,12 +39,6 @@
 					<CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path "C:\scripts" -Recurse"</CommandLine>
 					<Description>rm script folder</Description>
 				</SynchronousCommand>
-
-				<!-- <SynchronousCommand wcm:action="add">
-					<Order>3</Order>
-					<CommandLine>net user administrator /active:no</CommandLine>
-					<Description>Disabling the Built-in Administrator Account</Description>
-				</SynchronousCommand> -->
 
 			</FirstLogonCommands>
 
