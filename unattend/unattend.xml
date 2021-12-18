@@ -30,21 +30,21 @@
 
 				<SynchronousCommand wcm:action="add">
 					<Order>1</Order>
-					<CommandLine>net user administrator /active:no</CommandLine>
-					<Description>Disabling the Built-in Administrator Account</Description>
-				</SynchronousCommand>
-
-				<SynchronousCommand wcm:action="add">
-					<Order>2</Order>
 					<CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\ConfigureRemotingForAnsible.ps1"</CommandLine>
 					<Description>allow ansible</Description>
 				</SynchronousCommand>
 
 				<SynchronousCommand wcm:action="add">
-					<Order>3</Order>
+					<Order>2</Order>
 					<CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path "C:\scripts" -Recurse"</CommandLine>
 					<Description>rm script folder</Description>
 				</SynchronousCommand>
+
+				<!-- <SynchronousCommand wcm:action="add">
+					<Order>3</Order>
+					<CommandLine>net user administrator /active:no</CommandLine>
+					<Description>Disabling the Built-in Administrator Account</Description>
+				</SynchronousCommand> -->
 
 			</FirstLogonCommands>
 
