@@ -16,6 +16,13 @@
 
       <TimeZone>UTC</TimeZone>
 
+      <UserAccounts>
+        <AdministratorPassword>
+          <Value>password</Value>
+          <PlainText>true</PlainText>
+        </AdministratorPassword>
+      </UserAccounts>
+
       <AutoLogon>
         <Enabled>true</Enabled>
         <LogonCount>2</LogonCount>
