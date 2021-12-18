@@ -48,13 +48,9 @@ build {
     "source.qemu.windows-2022"
   ]
 
-  provisioner "sleep" {
-    duration = "2m"
+  provisioner "powershell" {
+    inline = ["Start-Sleep -Seconds 120"]
   }
-
-  // provisioner "powershell" {
-  //   inline = ["Start-Sleep -Seconds 120"]
-  // }
 
   provisioner "ansible" {
     playbook_file = "ansible/main.yml"
