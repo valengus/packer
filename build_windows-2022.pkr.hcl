@@ -36,8 +36,8 @@ source "qemu" "windows-2022" {
   use_default_display = false
   vm_name             = "windows-2022_${local.packerstarttime}"
   winrm_insecure      = true
-  winrm_password      = "${local.winrm_password}"
   winrm_use_ssl       = false
+  winrm_password      = "${local.winrm_password}"
   winrm_username      = "${local.winrm_username}"
 }
 
