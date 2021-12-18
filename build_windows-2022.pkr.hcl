@@ -95,12 +95,12 @@ build {
     source      = "unattend/unattend.xml"
   }
 
-  # post-processors {
-  #   post-processor "vagrant" {
-  #     compression_level    = 9
-  #     output               = "windows-2022-{{.Provider}}.box"
-  #     vagrantfile_template = "vagrant/windows-2022.template"
-  #   }
-  # }
+  post-processors {
+    post-processor "vagrant" {
+      compression_level    = 9
+      output               = "windows-2022-{{.Provider}}.box"
+      vagrantfile_template = "vagrant/windows.template"
+    }
+  }
 
 }
