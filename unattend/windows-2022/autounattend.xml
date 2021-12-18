@@ -122,7 +122,7 @@
         <SynchronousCommand wcm:action="add">
           <Order>4</Order>
           <CommandLine>cmd.exe /c net user Administrator password</CommandLine>
-          <Description>set Administrators password</Description>
+          <Description>set Administrator password</Description>
         </SynchronousCommand>
 
       </FirstLogonCommands>
