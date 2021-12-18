@@ -82,7 +82,6 @@
           <AcceptEula>true</AcceptEula>
       </UserData>
 
-
     </component>
 
     </settings>
@@ -98,13 +97,6 @@
     </component>
 
     <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
-      <UserAccounts>
-        <AdministratorPassword>
-          <Value>password</Value>
-          <PlainText>true</PlainText>
-        </AdministratorPassword>
-      </UserAccounts>
 
       <FirstLogonCommands>
 
@@ -126,12 +118,6 @@
           <Description>Install OpenSSH.Server</Description>
         </SynchronousCommand>
 
-        <!-- <SynchronousCommand wcm:action="add">
-          <Order>4</Order>
-          <CommandLine>cmd.exe /c net user Administrator password</CommandLine>
-          <Description>set Administrator password</Description>
-        </SynchronousCommand> -->
-
       </FirstLogonCommands>
 
     </component>
@@ -141,6 +127,13 @@
   <settings pass="auditSystem">
 
     <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="wow64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+      <UserAccounts>
+        <AdministratorPassword>
+          <Value>password</Value>
+          <PlainText>true</PlainText>
+        </AdministratorPassword>
+      </UserAccounts>
 
       <AutoLogon>
         <Enabled>true</Enabled>
