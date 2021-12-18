@@ -27,8 +27,7 @@ source "qemu" "windows-2022" {
   disk_interface      = "virtio"
   disk_size           = "61440"
   format              = "qcow2"
-  headless            = false
-  # headless            = true
+  headless            = true
   vnc_bind_address    = "0.0.0.0"
   iso_checksum        = "${var.iso_checksum}"
   iso_url             = "${var.iso_url}"
