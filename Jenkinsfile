@@ -60,12 +60,12 @@ pipeline {
       }
     }
 
-    stage('Build') {
-      when { expression { return params.RefreshOnly == false } }
-      steps {
-        sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
-      }
-    }
+    // stage('Build') {
+    //   when { expression { return params.RefreshOnly == false } }
+    //   steps {
+    //     sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
+    //   }
+    // }
 
     stage('Test') {
       when { expression { return params.RefreshOnly == false } }
@@ -88,7 +88,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
           echo 'Release $params.PACKER_BOX-${BOX_SUFFIX}.box'
-          // sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
+          sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
