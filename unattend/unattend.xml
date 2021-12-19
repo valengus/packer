@@ -9,7 +9,7 @@
       <RunSynchronous>
           <RunSynchronousCommand wcm:action="add">
               <Order>1</Order>
-              <Path>net user administrator password /active:yes /expires:never</Path>
+              <Path>cmd.exe /c net user administrator password /active:yes /expires:never /logonpasswordchg:no</Path>
           </RunSynchronousCommand>
       </RunSynchronous>
 
