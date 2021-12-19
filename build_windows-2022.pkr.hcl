@@ -101,6 +101,13 @@ build {
       output               = "windows-2022-{{.Provider}}.box"
       vagrantfile_template = "vagrant/windows.template"
     }
+    
+    post-processor "vagrant-cloud" {
+      access_token        = "${var.cloud_token}"
+      box_tag             = "valengus/windows-2022"
+      version             = "1.0.${local.packerstarttime}"
+      version_description = "${local.version_description}"
+    }
   }
 
 }

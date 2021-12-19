@@ -88,8 +88,8 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
           echo "Release $params.PACKER_BOX-${BOX_SUFFIX}.box"
-          sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
-          sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
+          // sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
+          // sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
