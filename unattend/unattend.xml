@@ -2,22 +2,20 @@
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
 
 
-  <settings pass="specialize">
+  <!-- <settings pass="specialize">
 
     <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
 
       <RunSynchronous>
-
           <RunSynchronousCommand wcm:action="add">
               <Order>1</Order>
               <Path>net user administrator password /active:yes /expires:never</Path>
           </RunSynchronousCommand>
-
       </RunSynchronous>
 
     </component>
 
-  </settings>
+  </settings> -->
 
 
 
@@ -36,12 +34,12 @@
 
       <TimeZone>UTC</TimeZone>
 
-      <!-- <UserAccounts>
+      <UserAccounts>
         <AdministratorPassword>
           <Value>password</Value>
           <PlainText>true</PlainText>
         </AdministratorPassword>
-      </UserAccounts> -->
+      </UserAccounts>
 
       <AutoLogon>
         <Enabled>true</Enabled>
