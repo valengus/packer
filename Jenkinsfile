@@ -20,15 +20,15 @@ pipeline {
 
   stages {
 
-    stage('Checkout') {
+    stage('Prepare') {
       steps {
+        cleanWs()
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
           userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
           branches: [ [name: "${params.BRANCH}"] ]
         ])
-        sh 'ls -l'
       }
     }
 
