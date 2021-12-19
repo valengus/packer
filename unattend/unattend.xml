@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
 
+
+  </settings>
+
+    <settings pass="specialize">
+
+        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
+            
+            <RunSynchronous>
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>1</Order>
+                    <Path>net user administrator password /active:yes /expires:never</Path>
+                </RunSynchronousCommand>
+            </RunSynchronous>
+
+        </component>
+
+    </settings>
+
+
+
   <settings pass="oobeSystem">
 
     <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
@@ -47,24 +67,5 @@
       </FirstLogonCommands>
 
     </component>
-
-  </settings>
-
-  <!-- <settings pass="specialize">
-
-      <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-          
-          <RunSynchronous>
-              <RunSynchronousCommand wcm:action="add">
-                  <Order>1</Order>
-                  <Path>powershell -NoLogo -Command "Invoke-WebRequest -Uri http://www.cloudbase.it/downloads/CloudbaseInitSetup_Beta.msi -OutFile C:\Windows\Temp\CloudbaseInitSetup_Beta.msi"</Path>
-                  <Description>Set Administrator password</Description>
-              </RunSynchronousCommand>
-          </RunSynchronous>
-
-      </component>
-
-  </settings> -->
-
 
 </unattend>
