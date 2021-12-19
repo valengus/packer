@@ -8,6 +8,11 @@ variable "iso_url" {
   default = "https://software-download.microsoft.com/download/sg/20348.169.210806-2348.fe_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
 }
 
+variable "cloud_token" {
+  type    = string
+  default = "${env("CLOUD_TOKEN")}"
+}
+
 locals {
   packerstarttime     = formatdate("YYYYMMDD", timestamp())
   name                = "windows-2022"
