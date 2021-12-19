@@ -8,50 +8,25 @@ variable "release_box" {
   default = "${env("RELEASE_BOX")}"
 }
 
-variable "version_description" {
-  type    = string
-  default = <<EOF
-### Windows Server 2022 SERVERSTANDARD box with :
-
-source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
-
-- chocolatey
-- updates
-- drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
-- qemu|virtualbox|vmware guest agent
-- winrm enabled over https
-- openssh
-
-### Login Credentials
-
-Username: Admin
-
-Password: password
-EOF
-}
-
-
-
 locals {
   packerstarttime     = formatdate("YYYYMMDD", timestamp())
-  version_description = <<EOF
-### Windows Server 2022 SERVERSTANDARD box with :
+  version_description = <<-EOF
+    ### Windows Server 2022 SERVERSTANDARD box with :
+    source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
 
-source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
+    - chocolatey
+    - updates
+    - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
+    - qemu|virtualbox|vmware guest agent
+    - winrm enabled over https
+    - openssh
 
-- chocolatey
-- updates
-- drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
-- qemu|virtualbox|vmware guest agent
-- winrm enabled over https
-- openssh
+    ### Login Credentials
 
-### Login Credentials
+    Username: Admin
 
-Username: Admin
-
-Password: password
-EOF
+    Password: password
+    EOF
 
 }
 
