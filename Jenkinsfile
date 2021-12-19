@@ -71,11 +71,11 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
-        sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant box remove $params.PACKER_BOX-test || true"
         sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
-        sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "rm -f ./Vagrantfile"
+
+        sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant init $params.PACKER_BOX-test"
         sh "vagrant up --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
         sh "sleep 300"
@@ -87,7 +87,8 @@ pipeline {
     stage('Release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-          echo 'Release $params.PACKER_BOX-${BOX_SUFFIX}.box'
+          echo "Release $params.PACKER_BOX-${BOX_SUFFIX}.box"
+          sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
           sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
