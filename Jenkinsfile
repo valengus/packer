@@ -60,12 +60,12 @@ pipeline {
       }
     }
 
-    stage('Build') {
-      when { expression { return params.RefreshOnly == false } }
-      steps {
-        sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
-      }
-    }
+    // stage('Build') {
+    //   when { expression { return params.RefreshOnly == false } }
+    //   steps {
+    //     sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
+    //   }
+    // }
 
     stage('Test') {
       when { expression { return params.RefreshOnly == false } }
