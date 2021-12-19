@@ -9,25 +9,26 @@ variable "release_box" {
 }
 
 locals {
-  packerstarttime = formatdate("YYYYMMDD", timestamp())
-  version_description = <<-EOF
-  ### Windows Server 2022 SERVERSTANDARD box with :
+  packerstarttime     = formatdate("YYYYMMDD", timestamp())
+  version_description = <<EOF
+### Windows Server 2022 SERVERSTANDARD box with :
 
-  source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
+source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
 
-  - chocolatey
-  - updates
-  - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
-  - qemu|virtualbox|vmware guest agent
-  - winrm enabled over https
-  - openssh
+- chocolatey
+- updates
+- drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
+- qemu|virtualbox|vmware guest agent
+- winrm enabled over https
+- openssh
 
-  ### Login Credentials
+### Login Credentials
 
-  Username: Admin
+Username: Admin
 
-  Password: password
-  EOF
+Password: password
+EOF
+
 }
 
 source "null" "from_file" {
@@ -48,7 +49,7 @@ build {
     }
 
     post-processor "vagrant-cloud" {
-      access_token = "${var.cloud_token}"
+      access_token        = "${var.cloud_token}"
       box_tag             = "valengus/windows-2022"
       version             = "1.0.${local.packerstarttime}"
       version_description = "${local.version_description}"
