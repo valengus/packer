@@ -72,6 +72,8 @@ pipeline {
 
       steps {
         sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
+        sh "vagrant box remove $params.PACKER_BOX-test || true"
+        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "rm -f ./Vagrantfile"
         sh "vagrant init $params.PACKER_BOX-test"
