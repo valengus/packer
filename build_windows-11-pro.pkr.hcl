@@ -25,6 +25,25 @@ variable "winrm_username" {
 
 locals {
   packerstarttime = formatdate("YYYYMMDD", timestamp())
+  version_description = <<-EOF
+    ### Windows 11 PRO box with :
+
+    source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
+
+    - chocolatey
+    - updates
+    - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
+    - qemu|virtualbox|vmware guest agent
+    - winrm enabled over https
+    - openssh
+
+    ### Login Credentials
+
+    Username: Admin
+
+    Password: password
+
+    EOF
 }
 
 source "qemu" "windows-11-pro" {
@@ -42,7 +61,7 @@ source "qemu" "windows-11-pro" {
   iso_checksum        = "${var.iso_checksum}"
   iso_url             = "${var.iso_url}"
   memory              = "4096"
-  shutdown_command     = "E:/packerShutdown.bat"
+  shutdown_command     = "C:/Windows/Temp/packerShutdown.bat"
   shutdown_timeout    = "15m"
   use_default_display = false
   vm_name             = "windows11_${local.packerstarttime}"
@@ -67,7 +86,7 @@ source "virtualbox-iso" "windows-11-pro" {
   keep_registered      = false
   memory               = 4096
   post_shutdown_delay  = "5m"
-  shutdown_command     = "E:/packerShutdown.bat"
+  shutdown_command     = "C:/Windows/Temp/packerShutdown.bat"
   skip_export          = false
   vm_name              = "windows11_${local.packerstarttime}"
   winrm_insecure       = "true"
@@ -94,7 +113,7 @@ source "vmware-iso" "windows-11-pro" {
   keep_registered      = false
   memory               = 4096
   network_adapter_type = "e1000e"
-  shutdown_command     = "E:/packerShutdown.bat"
+  shutdown_command     = "C:/Windows/Temp/packerShutdown.bat"
   skip_export          = false
   vm_name              = "windows11_${local.packerstarttime}"
   winrm_insecure       = "true"
@@ -149,6 +168,11 @@ build {
   }
 
   provisioner "file" {
+    destination = "C:/Windows/Temp/packerShutdown.bat"
+    source      = "scripts/packerShutdown.bat"
+  }
+
+  provisioner "file" {
     destination = "C:/Windows/Temp/unattend.xml"
     source      = "unattend/unattend.xml"
   }
@@ -159,6 +183,14 @@ build {
       compression_level    = 9
       output               = "windows-11-pro-{{.Provider}}.box"
       vagrantfile_template = "vagrant/windows-11-pro.template"
+    }
+
+    post-processor "vagrant-cloud" {
+      access_token = "${var.cloud_token}"
+      box_tag             = "valengus/windows-11-pro"
+      version             = "1.0.${local.packerstarttime}"
+      version_description = "${local.version_description}"
+      no_release          = true
     }
 
   }
