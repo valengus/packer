@@ -9,10 +9,27 @@ variable "iso_url" {
 }
 
 locals {
-  packerstarttime = formatdate("YYYYMMDD", timestamp())
-  name            = "windows-2022"
-  winrm_username  = "Administrator"
-  winrm_password  = "password"
+  packerstarttime     = formatdate("YYYYMMDD", timestamp())
+  name                = "windows-2022"
+  winrm_username      = "Administrator"
+  winrm_password      = "password"
+  version_description = <<-EOF
+  ### Windows Server 2022 SERVERSTANDARD box with :
+  source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
+
+  - chocolatey
+  - updates
+  - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
+  - qemu|virtualbox|vmware guest agent
+  - winrm enabled over https
+  - openssh
+
+  ### Login Credentials
+
+  Username: Admin
+
+  Password: password
+  EOF
 }
 
 source "qemu" "windows-2022" {
@@ -39,7 +56,6 @@ source "qemu" "windows-2022" {
   winrm_password      = "${local.winrm_password}"
   winrm_username      = "${local.winrm_username}"
 }
-
 
 build {
 
@@ -96,6 +112,7 @@ build {
   }
 
   post-processors {
+
     post-processor "vagrant" {
       compression_level    = 9
       output               = "windows-2022-{{.Provider}}.box"
@@ -107,6 +124,7 @@ build {
       box_tag             = "valengus/windows-2022"
       version             = "1.0.${local.packerstarttime}"
       version_description = "${local.version_description}"
+      no_release          = true
     }
   }
 
