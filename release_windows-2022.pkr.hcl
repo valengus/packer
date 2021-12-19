@@ -38,10 +38,6 @@ source "null" "from_file" {
 build {
   sources = ["source.null.from_file"]
 
-  // post-processor "shell-local" {
-  //   inline = ["echo Doing stuff..."]
-  // }
-
   post-processors {
 
     post-processor "artifice" {
@@ -52,7 +48,7 @@ build {
       access_token        = "${var.cloud_token}"
       box_tag             = "valengus/windows-2022"
       version             = "1.0.${local.packerstarttime}"
-      version_description = "${local.version_description}"
+      # version_description = "${local.version_description}"
     }
 
   }
