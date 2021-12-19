@@ -52,30 +52,30 @@ build {
     inline = ["Start-Sleep -Seconds 120"]
   }
 
-  // provisioner "ansible" {
-  //   playbook_file = "ansible/main.yml"
-  //   use_proxy     = false
-  //   user          = "${local.winrm_username}"
-  // }
+  provisioner "ansible" {
+    playbook_file = "ansible/main.yml"
+    use_proxy     = false
+    user          = "${local.winrm_username}"
+  }
 
-  // provisioner "powershell" {
-  //   inline = ["Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"]
-  // }
+  provisioner "powershell" {
+    inline = ["Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"]
+  }
 
-  // provisioner "powershell" {
-  //   inline = ["choco install sdelete -y"]
-  // }
+  provisioner "powershell" {
+    inline = ["choco install sdelete -y"]
+  }
 
-  // provisioner "powershell" {
+  provisioner "powershell" {
 
-  //   inline = [
-  //     "Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
-  //     "Dism.exe /online /Cleanup-Image /SPSuperseded",
-  //     "Get-WindowsFeature | ? { $_.InstallState -eq 'Available' } | Uninstall-WindowsFeature -Remove",
-  //     "Optimize-Volume -DriveLetter C -Defrag",
-  //     "sdelete -z c:",
-  //   ]
-  // }
+    inline = [
+      "Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
+      "Dism.exe /online /Cleanup-Image /SPSuperseded",
+      "Get-WindowsFeature | ? { $_.InstallState -eq 'Available' } | Uninstall-WindowsFeature -Remove",
+      "Optimize-Volume -DriveLetter C -Defrag",
+      "sdelete -z c:",
+    ]
+  }
 
   provisioner "powershell" {
     inline = ["Set-Service -Name sshd -StartupType Automatic"]
