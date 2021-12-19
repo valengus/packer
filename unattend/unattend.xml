@@ -2,7 +2,7 @@
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
 
 
-  </settings>
+
 
     <settings pass="specialize">
 
@@ -67,5 +67,7 @@
       </FirstLogonCommands>
 
     </component>
+
+  </settings>
 
 </unattend>
