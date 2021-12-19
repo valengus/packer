@@ -22,7 +22,7 @@ pipeline {
 
     stage('Prepare') {
       steps {
-        cleanWs()
+        // cleanWs()
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
