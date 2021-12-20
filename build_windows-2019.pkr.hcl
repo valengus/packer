@@ -72,11 +72,11 @@ build {
     inline = ["Start-Sleep -Seconds 120"]
   }
 
-  // provisioner "ansible" {
-  //   playbook_file = "ansible/main.yml"
-  //   use_proxy     = false
-  //   user          = "${local.winrm_username}"
-  // }
+  provisioner "ansible" {
+    playbook_file = "ansible/main.yml"
+    use_proxy     = false
+    user          = "${local.winrm_username}"
+  }
 
   provisioner "powershell" {
     inline = ["Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"]
