@@ -16,7 +16,7 @@ variable "cloud_token" {
 locals {
   packerstarttime     = formatdate("YYYYMMDD", timestamp())
   name                = "windows-2019"
-  winrm_username      = "Admin"
+  winrm_username      = "Administrator"
   winrm_password      = "password"
   version_description = <<-EOF
   ### Windows Server 2019 SERVERSTANDARD box with :
@@ -31,7 +31,7 @@ locals {
 
   ### Login Credentials
 
-  Username: Admin
+  Username: Administrator
 
   Password: password
   EOF
