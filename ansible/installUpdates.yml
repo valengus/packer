@@ -5,7 +5,11 @@
     state: searched
   register: update_search_result
 
-- name: reboot, if needed
+- name: show updates to install
+  debug:
+    msg: "{{ update_search_result.updates }}"
+
+- name: pre reboot, if needed
   win_reboot:
     pre_reboot_delay: 300
     reboot_timeout: 6000

@@ -63,7 +63,8 @@ pipeline {
     stage('Build') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-        sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
+        echo "Building $params.PACKER_BOX "
+        // sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
@@ -72,7 +73,7 @@ pipeline {
 
       steps {
         sh "vagrant box remove $params.PACKER_BOX-test || true"
-        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
+        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-.*-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
         sh "rm -f ./Vagrantfile"
 
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
