@@ -28,6 +28,11 @@
       - Updates
     reboot: True
     reboot_timeout: 3600
+  register: update_result
+
+- name: show update_result
+  debug:
+    msg: "{{ update_result }}"
 
 - name: wait for system to become reachable over WinRM
   wait_for_connection:
