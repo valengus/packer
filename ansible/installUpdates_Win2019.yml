@@ -1,18 +1,5 @@
 # install updates
 
-- name: search for Windows updates 
-  win_updates:
-    state: searched
-  register: update_search_result
-
-- name: reboot, if needed
-  win_reboot:
-    pre_reboot_delay: 300
-    reboot_timeout: 6000
-  when: update_search_result.reboot_required
-
-
-
 - name: Install KB5007406
   win_updates:
     accept_list:
@@ -22,39 +9,3 @@
   win_reboot:
     pre_reboot_delay: 300
     reboot_timeout: 6000
-
-
-
-- name: Install Windows Updates
-  win_updates:
-    category_names: 
-      - Application
-      - Connectors
-      - CriticalUpdates
-      - DefinitionUpdates
-      - DeveloperKits
-      - FeaturePacks
-      - Guidance
-      - SecurityUpdates
-      - ServicePacks
-      - Tools
-      - UpdateRollups
-      - Updates
-    reboot: True
-    reboot_timeout: 3600
-  register: update_result
-
-- name: show update_result
-  debug:
-    msg: "{{ update_result }}"
-
-- name: reboot
-  win_reboot:
-    pre_reboot_delay: 300
-    reboot_timeout: 6000
-
-- name: wait for system to become reachable over WinRM
-  wait_for_connection:
-    delay: 60
-    sleep: 15
-    timeout: 900

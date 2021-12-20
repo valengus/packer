@@ -27,6 +27,8 @@
 
 
   - include: installUpdates.yml
+  - include: installUpdates.yml
+
 
   - include: installVMTools.yml
 
