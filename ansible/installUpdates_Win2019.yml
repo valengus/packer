@@ -11,6 +11,20 @@
     reboot_timeout: 6000
   when: update_search_result.reboot_required
 
+
+
+- name: Install KB5007406
+  win_updates:
+    accept_list:
+    - KB5007406 # Update for Removal of Adobe Flash Player for Windows Server 2019 for x64-based systems (KB4577586)
+
+- name: reboot
+  win_reboot:
+    pre_reboot_delay: 300
+    reboot_timeout: 6000
+
+
+
 - name: Install Windows Updates
   win_updates:
     category_names: 
@@ -28,23 +42,11 @@
       - Updates
     reboot: True
     reboot_timeout: 3600
-    reject_list:
-    - KB5007406 # Update for Removal of Adobe Flash Player for Windows Server 2019 for x64-based systems (KB4577586)
   register: update_result
 
 - name: show update_result
   debug:
     msg: "{{ update_result }}"
-
-- name: reboot
-  win_reboot:
-    pre_reboot_delay: 300
-    reboot_timeout: 6000
-
-- name: Install KB5007406
-  win_updates:
-    accept_list:
-    - KB5007406
 
 - name: reboot
   win_reboot:
