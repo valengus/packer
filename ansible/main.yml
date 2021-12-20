@@ -19,15 +19,11 @@
     win_command: powercfg -h off
 
 
-
-
-  - include: installWin11CumulativeUpdates.yml
+  - include: installUpdatesWin11.yml
     when: ansible_os_name == "Microsoft Windows 11 Pro"
 
   - include: installUpdates2019.yml
     when: ansible_os_name == "Microsoft Windows Server 2019 Standard Evaluation"
-
-
 
 
   - include: installUpdates.yml
