@@ -1,3 +1,6 @@
+# TODO
+# install over ansible
+
 # install
 Add-WindowsCapability -Online -Name (Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH.Server*').Name
 
