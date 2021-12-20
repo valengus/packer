@@ -5,7 +5,7 @@ variable "iso_checksum" {
 
 variable "iso_url" {
   type    = string
-  default = "https://software-download.microsoft.com/download/sg/20348.169.210806-2348.fe_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
+  default = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
 }
 
 variable "cloud_token" {
@@ -15,11 +15,11 @@ variable "cloud_token" {
 
 locals {
   packerstarttime     = formatdate("YYYYMMDD", timestamp())
-  name                = "windows-2022"
+  name                = "windows-2019"
   winrm_username      = "Administrator"
   winrm_password      = "password"
   version_description = <<-EOF
-  ### Windows Server 2022 SERVERSTANDARD box with :
+  ### Windows Server 2019 SERVERSTANDARD box with :
   source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
 
   - chocolatey
@@ -37,9 +37,9 @@ locals {
   EOF
 }
 
-source "qemu" "windows-2022" {
+source "qemu" "windows-2019" {
   accelerator         = "kvm"
-  cd_files            = ["unattend/windows-2022/autounattend.xml", "scripts/*", "drivers/qemu/*"]
+  cd_files            = ["unattend/${local.name}/autounattend.xml", "scripts/*", "drivers/qemu/*"]
   communicator        = "winrm"
   cpus                = "2"
   memory              = "4096"
@@ -55,7 +55,7 @@ source "qemu" "windows-2022" {
   shutdown_command    = "C:/Windows/Temp/packerShutdown.bat"
   shutdown_timeout    = "15m"
   use_default_display = false
-  vm_name             = "windows-2022_${local.packerstarttime}"
+  vm_name             = "${local.name}_${local.packerstarttime}"
   winrm_insecure      = true
   winrm_use_ssl       = false
   winrm_password      = "${local.winrm_password}"
@@ -65,18 +65,18 @@ source "qemu" "windows-2022" {
 build {
 
   sources = [
-    "source.qemu.windows-2022"
+    "source.qemu.windows-2019"
   ]
 
   provisioner "powershell" {
     inline = ["Start-Sleep -Seconds 120"]
   }
 
-  provisioner "ansible" {
-    playbook_file = "ansible/main.yml"
-    use_proxy     = false
-    user          = "${local.winrm_username}"
-  }
+  // provisioner "ansible" {
+  //   playbook_file = "ansible/main.yml"
+  //   use_proxy     = false
+  //   user          = "${local.winrm_username}"
+  // }
 
   provisioner "powershell" {
     inline = ["Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"]
@@ -120,17 +120,17 @@ build {
 
     post-processor "vagrant" {
       compression_level    = 9
-      output               = "windows-2022-{{.Provider}}.box"
+      output               = "${local.name}-{{.Provider}}.box"
       vagrantfile_template = "vagrant/windows.template"
     }
-    
-    post-processor "vagrant-cloud" {
-      access_token        = "${var.cloud_token}"
-      box_tag             = "valengus/windows-2022"
-      version             = "1.0.${local.packerstarttime}"
-      version_description = "${local.version_description}"
-      no_release          = true
-    }
+
+    // post-processor "vagrant-cloud" {
+    //   access_token        = "${var.cloud_token}"
+    //   box_tag             = "valengus/${local.name}"
+    //   version             = "1.0.${local.packerstarttime}"
+    //   version_description = "${local.version_description}"
+    //   no_release          = true
+    // }
   }
 
 }
