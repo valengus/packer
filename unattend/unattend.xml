@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
 
-
   <!-- <settings pass="specialize">
-
     <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
-
       <RunSynchronous>
           <RunSynchronousCommand wcm:action="add">
               <Order>1</Order>
               <Path>cmd.exe /c net user administrator password /active:yes /expires:never /logonpasswordchg:no</Path>
           </RunSynchronousCommand>
       </RunSynchronous>
-
     </component>
-
   </settings> -->
-
-
 
   <settings pass="oobeSystem">
 
@@ -34,17 +27,32 @@
 
       <TimeZone>UTC</TimeZone>
 
-      <UserAccounts>
+      <!-- <UserAccounts>
         <AdministratorPassword>
           <Value>password</Value>
           <PlainText>true</PlainText>
         </AdministratorPassword>
+      </UserAccounts> -->
+
+      <UserAccounts>
+        <LocalAccounts>
+          <LocalAccount wcm:action="add">
+            <Description>Administrator</Description>
+            <DisplayName>Admin</DisplayName>
+            <Name>Admin</Name>
+            <Password>
+                <Value>password</Value>
+                <PlainText>true</PlainText>
+            </Password>
+            <Group>Administrators</Group>
+          </LocalAccount>
+        </LocalAccounts>
       </UserAccounts>
 
       <AutoLogon>
         <Enabled>true</Enabled>
         <LogonCount>2</LogonCount>
-        <Username>Administrator</Username>
+        <Username>Admin</Username>
         <Password>
           <Value>password</Value>
           <PlainText>true</PlainText>
@@ -54,11 +62,16 @@
       <FirstLogonCommands>
         <SynchronousCommand wcm:action="add">
           <Order>1</Order>
+          <CommandLine>net user administrator /active:no</CommandLine>
+          <Description>Disabling the Built-in Administrator Account</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>2</Order>
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\ConfigureRemotingForAnsible.ps1"</CommandLine>
           <Description>allow ansible</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>2</Order>
+          <Order>3</Order>
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path "C:\scripts" -Recurse"</CommandLine>
           <Description>rm script folder</Description>
         </SynchronousCommand>
