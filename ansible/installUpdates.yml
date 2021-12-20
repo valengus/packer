@@ -7,7 +7,7 @@
 
 - name: show updates to install
   debug:
-    msg: "{{ update_search_result.updates }}"
+    msg: "{{ update_search_result }}"
 
 - name: pre reboot, if needed
   win_reboot:
