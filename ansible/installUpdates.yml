@@ -28,6 +28,9 @@
       - Updates
     reboot: True
     reboot_timeout: 3600
+    reject_list:
+    - KB5007406 
+
   register: update_result
 
 - name: show update_result
