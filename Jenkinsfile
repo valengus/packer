@@ -6,7 +6,6 @@ pipeline {
     booleanParam (name: 'RefreshOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
     choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019' ],  description: 'os')
-    // string (name: 'PACKER_BOX', defaultValue: 'windows-11-pro', description: '*.pkr.hcl file name')
     string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
   }
 
@@ -22,7 +21,7 @@ pipeline {
 
     stage('Prepare') {
       steps {
-        cleanWs()
+        // cleanWs()
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
@@ -75,7 +74,7 @@ pipeline {
         sh "vagrant box remove $params.PACKER_BOX-test || true"
         sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-.*-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
         sh "rm -f ./Vagrantfile"
-
+        echo ">add box"
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant init $params.PACKER_BOX-test"
         sh "vagrant up --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
@@ -88,6 +87,9 @@ pipeline {
     stage('Release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
+          // script {
+          //   env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
+          // }
           echo "Release $params.PACKER_BOX-${BOX_SUFFIX}.box"
           // sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
           // sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
