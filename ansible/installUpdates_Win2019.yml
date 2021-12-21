@@ -35,12 +35,9 @@
     sleep: 15
     timeout: 900
 
+- name: Install KB4577586 (Update for Removal of Adobe Flash Player for Windows Server 2019 for x64-based systems)
+  win_updates:
+    accept_list:
+    - KB4577586
 
-
-
-# - name: Install KB4577586 (Update for Removal of Adobe Flash Player for Windows Server 2019 for x64-based systems)
-#   win_updates:
-#     accept_list:
-#     - KB4577586
-
-# - win_reboot:
+- win_reboot:
