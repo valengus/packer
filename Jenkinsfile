@@ -49,10 +49,10 @@ pipeline {
             env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
           }
         }
-        sh 'vagrant destroy -f'
+        sh 'vagrant destroy -f || true'
+        sh "rm -f ./Vagrantfile"
         sh "vagrant box remove $params.PACKER_BOX-test || true"
         sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
-        sh "rm -f ./Vagrantfile"
       }
     }
 
