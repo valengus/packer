@@ -49,6 +49,7 @@ pipeline {
             env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
           }
         }
+        sh 'vagrant destroy -f'
         sh "vagrant box remove $params.PACKER_BOX-test || true"
         sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
         sh "rm -f ./Vagrantfile"
@@ -92,9 +93,9 @@ pipeline {
     stage('Release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-          // script {
-          //   env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
-          // }
+          script {
+            env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
+          }
           echo "Release $params.PACKER_BOX-${BOX_SUFFIX}.box"
           sh "echo $RELEASE_BOX"
           // sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
@@ -105,10 +106,12 @@ pipeline {
     stage('Cleanup') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-          echo 'cleanup'
-          // sh 'vagrant destroy -f'
-          // sh "vagrant box remove --force $params.PACKER_BOX-test --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
-          // sh "rm -f $params.PACKER_BOX-${BOX_SUFFIX}.box"
+        echo 'cleanup'
+        sh 'vagrant destroy -f'
+        sh 'vagrant destroy -f'
+        sh "vagrant box remove $params.PACKER_BOX-test || true"
+        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
+        sh "rm -f ./Vagrantfile"
       }
     }
 
