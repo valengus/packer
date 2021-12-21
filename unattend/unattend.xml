@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
 
-  <settings pass="specialize">
+  <!-- <settings pass="specialize">
     <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
       <RunSynchronous>
           <RunSynchronousCommand wcm:action="add">
@@ -10,7 +10,7 @@
           </RunSynchronousCommand>
       </RunSynchronous>
     </component>
-  </settings>
+  </settings> -->
 
   <settings pass="oobeSystem">
 
@@ -27,12 +27,12 @@
 
       <TimeZone>UTC</TimeZone>
 
-      <!-- <UserAccounts>
+      <UserAccounts>
         <AdministratorPassword>
           <Value>password</Value>
           <PlainText>true</PlainText>
         </AdministratorPassword>
-      </UserAccounts> -->
+      </UserAccounts>
 
       <!-- <UserAccounts>
         <LocalAccounts>
@@ -60,11 +60,6 @@
       </AutoLogon>
 
       <FirstLogonCommands>
-        <!-- <SynchronousCommand wcm:action="add">
-          <Order>1</Order>
-          <CommandLine>net user administrator /active:no</CommandLine>
-          <Description>Disabling the Built-in Administrator Account</Description>
-        </SynchronousCommand> -->
         <SynchronousCommand wcm:action="add">
           <Order>1</Order>
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\ConfigureRemotingForAnsible.ps1"</CommandLine>
