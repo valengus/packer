@@ -21,7 +21,7 @@ pipeline {
 
     stage('Prepare') {
       steps {
-        cleanWs()
+        // cleanWs()
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
@@ -72,7 +72,7 @@ pipeline {
 
       steps {
         sh "vagrant box remove $params.PACKER_BOX-test || true"
-        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-.*-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
+        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
         sh "rm -f ./Vagrantfile"
         echo ">add box"
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
