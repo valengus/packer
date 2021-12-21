@@ -73,7 +73,7 @@ pipeline {
       
       steps {
         echo "Building $params.PACKER_BOX "
-        // sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
+        sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 

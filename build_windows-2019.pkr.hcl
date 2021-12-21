@@ -8,6 +8,7 @@ variable "iso_url" {
   default = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
 }
 
+
 variable "cloud_token" {
   type    = string
   default = "${env("CLOUD_TOKEN")}"
