@@ -31,6 +31,8 @@ pipeline {
     }
 
     stage('Prepare') {
+      when { expression { return params.RefreshOnly == false } }
+
       steps {
         script {
           if (PACKER_PROVIDER == 'qemu') {
