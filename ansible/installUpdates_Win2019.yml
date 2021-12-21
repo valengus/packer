@@ -29,7 +29,7 @@
       - UpdateRollups
       - Updates
     reject_list:
-    - KB5007406
+    - KB5007406 # (Update for Removal of Adobe Flash Player for Windows Server 2019 for x64-based systems)
   register: update_result
 
 - name: show update_result
