@@ -19,9 +19,8 @@ pipeline {
 
   stages {
 
-    stage('Prepare') {
+    stage('Checkout') {
       steps {
-        // cleanWs()
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
@@ -31,9 +30,7 @@ pipeline {
       }
     }
 
-    stage('Info') {
-      when { expression { return params.RefreshOnly == false } }
-
+    stage('Prepare') {
       steps {
         script {
           if (PACKER_PROVIDER == 'qemu') {
@@ -49,18 +46,28 @@ pipeline {
             env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
           }
         }
-        
+        cleanWs()
+        sh "vagrant box remove $params.PACKER_BOX-test || true"
+        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
+        sh "rm -f ./Vagrantfile"
+      }
+    }
+
+    stage('Info') {
+      when { expression { return params.RefreshOnly == false } }
+
+      steps {
         echo "Git BRANCH is ${params.BRANCH}"
         echo "> building box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
         sh 'vagrant --version'
         sh 'ansible --version'
-        sh 'env'
       }
     }
 
     stage('Build') {
       when { expression { return params.RefreshOnly == false } }
+      
       steps {
         echo "Building $params.PACKER_BOX "
         sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
@@ -71,10 +78,6 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
-        sh "vagrant box remove $params.PACKER_BOX-test || true"
-        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
-        sh "rm -f ./Vagrantfile"
-        echo ">add box"
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant init $params.PACKER_BOX-test"
         sh "vagrant up --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
