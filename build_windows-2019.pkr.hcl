@@ -96,12 +96,12 @@ build {
   //   ]
   // }
 
-  provisioner "powershell" {
-    inline = [
-      "Optimize-Volume -DriveLetter C -Defrag",
-      "sdelete -z c:",
-    ]
-  }
+  // provisioner "powershell" {
+  //   inline = [
+  //     "Optimize-Volume -DriveLetter C -Defrag",
+  //     "sdelete -z c:",
+  //   ]
+  // }
 
   provisioner "powershell" {
     inline = ["Set-Service -Name sshd -StartupType Automatic"]
