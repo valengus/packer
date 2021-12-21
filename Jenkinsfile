@@ -97,7 +97,7 @@ pipeline {
           //   env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
           // }
           echo "Release $params.PACKER_BOX-${BOX_SUFFIX}.box"
-          sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; echo $RELEASE_BOX"
+          sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; echo \$RELEASE_BOX"
           // sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
           // sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
       }
