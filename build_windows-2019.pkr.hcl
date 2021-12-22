@@ -131,13 +131,13 @@ build {
       vagrantfile_template = "vagrant/windows.template"
     }
 
-    // post-processor "vagrant-cloud" {
-    //   access_token        = "${var.cloud_token}"
-    //   box_tag             = "valengus/${local.name}"
-    //   version             = "1.0.${local.packerstarttime}"
-    //   version_description = "${local.version_description}"
-    //   no_release          = true
-    // }
+    post-processor "vagrant-cloud" {
+      access_token        = "${var.cloud_token}"
+      box_tag             = "valengus/${local.name}"
+      version             = "1.0.${local.packerstarttime}"
+      version_description = "${local.version_description}"
+      no_release          = true
+    }
   }
 
 }
