@@ -73,7 +73,7 @@ pipeline {
       
       steps {
         echo "Building $params.PACKER_BOX "
-        sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
+        // sh "packer build --force --only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
@@ -81,7 +81,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
-        sh 'virsh pool-refresh default'
+        // sh 'virsh pool-refresh default'
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant init $params.PACKER_BOX-test"
         sh "vagrant up --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
