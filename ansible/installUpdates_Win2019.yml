@@ -1,3 +1,13 @@
+- name: Install KB4577586 (Update for Removal of Adobe Flash Player for Windows Server 2019 for x64-based systems)
+  win_updates:
+    accept_list:
+    - KB4577586
+
+- win_reboot:
+
+
+
+
 - name: search for Windows updates 
   win_updates:
     state: searched
@@ -7,37 +17,31 @@
   debug:
     msg: "{{ update_search_result }}"
 
-- name: pre reboot, if needed
-  win_reboot:
-    pre_reboot_delay: 300
-    reboot_timeout: 6000
-  when: update_search_result.reboot_required
+# - name: pre reboot, if needed
+#   win_reboot:
+#     pre_reboot_delay: 300
+#     reboot_timeout: 6000
+#   when: update_search_result.reboot_required
 
-- name: Install Windows Updates
-  win_updates:
-    reject_list:
-    - KB4577586 # (Update for Removal of Adobe Flash Player for Windows Server 2019 for x64-based systems)
-  register: update_result
+# - name: Install Windows Updates
+#   win_updates:
+#     reject_list:
+#     - KB4577586 # (Update for Removal of Adobe Flash Player for Windows Server 2019 for x64-based systems)
+#   register: update_result
 
-- name: show update_result
-  debug:
-    msg: "{{ update_result }}"
+# - name: show update_result
+#   debug:
+#     msg: "{{ update_result }}"
 
-- name: reboot, if needed
-  win_reboot:
-    pre_reboot_delay: 300
-    reboot_timeout: 6000
-  when: update_result.reboot_required
+# - name: reboot, if needed
+#   win_reboot:
+#     pre_reboot_delay: 300
+#     reboot_timeout: 6000
+#   when: update_result.reboot_required
 
-- name: wait for system to become reachable over WinRM
-  wait_for_connection:
-    delay: 60
-    sleep: 15
-    timeout: 900
+# - name: wait for system to become reachable over WinRM
+#   wait_for_connection:
+#     delay: 60
+#     sleep: 15
+#     timeout: 900
 
-- name: Install KB4577586 (Update for Removal of Adobe Flash Player for Windows Server 2019 for x64-based systems)
-  win_updates:
-    accept_list:
-    - KB4577586
-
-- win_reboot:

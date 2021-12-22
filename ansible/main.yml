@@ -23,8 +23,8 @@
   - include: installUpdates_Win2019.yml
     when: ansible_os_name == "Microsoft Windows Server 2019 Standard Evaluation"
 
-  - include: installUpdates.yml
-  - include: installUpdates.yml
+  # - include: installUpdates.yml
+  # - include: installUpdates.yml
 
   - include: installVMTools.yml
 
