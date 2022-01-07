@@ -20,16 +20,16 @@ pipeline {
 
   stages {
 
-    // stage('Read Jenkinsfile') {
-    //   steps {
-    //     script {
-    //       if( RefreshOnly == true ) {
-    //         currentBuild.result = 'SUCCESS'
-    //         return
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Read Jenkinsfile') {
+      steps {
+        script {
+          if( RefreshOnly == true ) {
+            currentBuild.result = 'SUCCESS'
+            return
+          }
+        }
+      }
+    }
 
 
     stage('Checkout') {
