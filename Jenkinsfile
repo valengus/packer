@@ -13,7 +13,7 @@ pipeline {
   agent {label 'packer'}
 
   parameters {
-    choiceParam('OPTION', my_choices_list)
+    choice (name: 'OPTION', choices: [my_choices_list])
     gitParameter (name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'origin/main')
     booleanParam (name: 'RefreshOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
