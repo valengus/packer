@@ -3,7 +3,7 @@ def my_choices_list = []
 node('master') {
    stage('prepare choices') {
        // read the folder contents
-       def my_choices = sh script: "ls -1 /home", returnStdout:true
+       def my_choices = sh script: "ls -1 /var", returnStdout:true
        // make a list out of it - I haven't tested this!
        my_choices_list = my_choices.trim().split("\n")
    }
