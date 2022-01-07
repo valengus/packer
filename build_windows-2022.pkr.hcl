@@ -87,22 +87,22 @@ build {
     inline = ["choco install sdelete -y"]
   }
 
-  // provisioner "powershell" {
-  //   inline = [
-  //     "Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
-  //     "Dism.exe /online /Cleanup-Image /SPSuperseded",
-  //     "Get-WindowsFeature | ? { $_.InstallState -eq 'Available' } | Uninstall-WindowsFeature -Remove",
-  //     "Optimize-Volume -DriveLetter C -Defrag",
-  //     "sdelete -z c:",
-  //   ]
-  // }
+  provisioner "powershell" {
+    inline = [
+      "Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
+      "Dism.exe /online /Cleanup-Image /SPSuperseded",
+      "Get-WindowsFeature | ? { $_.InstallState -eq 'Available' } | Uninstall-WindowsFeature -Remove",
+      "Optimize-Volume -DriveLetter C -Defrag",
+      "sdelete -z c:",
+    ]
+  }
 
-  // provisioner "powershell" {
-  //   inline = [
-  //     "Optimize-Volume -DriveLetter C -Defrag",
-  //     "sdelete -z c:",
-  //   ]
-  // }
+  provisioner "powershell" {
+    inline = [
+      "Optimize-Volume -DriveLetter C -Defrag",
+      "sdelete -z c:",
+    ]
+  }
 
   provisioner "powershell" {
     inline = ["Set-Service -Name sshd -StartupType Automatic"]
