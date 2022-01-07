@@ -1,7 +1,19 @@
+def my_choices_list = []
+
+node('master') {
+   stage('prepare choices') {
+       // read the folder contents
+       def my_choices = sh script: "ls -l /home", returnStdout:true
+       // make a list out of it - I haven't tested this!
+       my_choices_list = my_choices.trim().split("\n")
+   }
+}
+
 pipeline {
   agent {label 'packer'}
 
   parameters {
+    choiceParam('OPTION', my_choices_list)
     gitParameter (name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'origin/main')
     booleanParam (name: 'RefreshOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
