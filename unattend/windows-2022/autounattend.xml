@@ -127,16 +127,19 @@
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Set-NetConnectionProfile -NetworkCategory Private -InputObject (Get-NetConnectionProfile)"</CommandLine>
           <Description>NetworkLocation</Description>
         </SynchronousCommand>
+
         <SynchronousCommand wcm:action="add">
           <Order>2</Order>
-          <CommandLine>cmd.exe /c E:\winrmConfig.bat</CommandLine>
-          <Description>Configure WinRM</Description>
-        </SynchronousCommand>
-        <SynchronousCommand wcm:action="add">
-          <Order>3</Order>
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "E:\InstallOpenSSHServer.ps1"</CommandLine>
           <Description>Install OpenSSH.Server</Description>
         </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <CommandLine>cmd.exe /c E:\winrmConfig.bat</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
       </FirstLogonCommands>
 
     </component>
