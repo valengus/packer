@@ -1,1 +1,4 @@
 output-*/*
+Vagrantfile
+.vagrant/*
+*.box
