@@ -53,7 +53,7 @@ source "qemu" "windows-2022" {
   vnc_bind_address    = "0.0.0.0"
   iso_checksum        = "${var.iso_checksum}"
   iso_url             = "${var.iso_url}"
-  shutdown_command    = "C:/Windows/Temp/packerShutdown.bat"
+  shutdown_command    = "C:\\Windows\\Temp\\packerShutdown.bat"
   shutdown_timeout    = "15m"
   use_default_display = false
   vm_name             = "${local.name}_${local.packerstarttime}"
