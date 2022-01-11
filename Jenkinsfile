@@ -62,7 +62,7 @@ pipeline {
 
       steps {
         echo "Git BRANCH is ${params.BRANCH}"
-        echo "> building box for $params.PACKER_PROVIDER provider"
+        echo "> box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
         sh 'vagrant --version'
         sh 'ansible --version'
@@ -73,7 +73,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       
       steps {
-        echo "Building $params.PACKER_BOX "
+        echo "> building $params.PACKER_BOX "
         sh "packer build --force -only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX -except=vagrant-cloud  build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
