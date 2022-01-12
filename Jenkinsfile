@@ -31,7 +31,7 @@ pipeline {
       }
     }
 
-    stage('Prepare') {
+    stage('PreCleanup') {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
@@ -48,6 +48,7 @@ pipeline {
             BOX_SUFFIX = 'vmware'
             env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
           }
+          env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
         }
         sh 'vagrant destroy -f || true'
         sh "rm -f ./Vagrantfile"
@@ -65,6 +66,7 @@ pipeline {
         sh 'packer --version'
         sh 'vagrant --version'
         sh 'ansible --version'
+        sh 'env'
       }
     }
 
@@ -93,9 +95,6 @@ pipeline {
     stage('Release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-          script {
-            env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
-          }
           sh "echo \$RELEASE_BOX"
           // sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
           // sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
