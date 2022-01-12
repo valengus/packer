@@ -21,7 +21,7 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        // cleanWs()
+        cleanWs()
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
@@ -51,7 +51,6 @@ pipeline {
           env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
         }
         sh 'vagrant destroy -f || true'
-        sh "rm -f ./Vagrantfile"
         sh "vagrant box remove $params.PACKER_BOX-test || true"
         sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
       }
@@ -95,9 +94,8 @@ pipeline {
     stage('Release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-          sh "echo \$RELEASE_BOX"
-          // sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
-          // sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
+          sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
+          sh "packer build release_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
@@ -108,7 +106,6 @@ pipeline {
         sh 'vagrant destroy -f'
         sh "vagrant box remove $params.PACKER_BOX-test || true"
         sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
-        sh "rm -f ./Vagrantfile"
       }
     }
 
