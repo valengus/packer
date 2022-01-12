@@ -1,8 +1,4 @@
 ---
-# tasks file for vdagent-win
-
-
-
 
 - name: Check services
   win_service:
