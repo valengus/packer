@@ -38,15 +38,15 @@ pipeline {
         script {
           if (PACKER_PROVIDER == 'qemu') {
             BOX_SUFFIX = 'libvirt'
-            env.VAGRANT_DEFAULT_PROVIDER = 'libvirt'
+            env.VAGRANT_PROVIDER = 'libvirt'
           }
           else if (PACKER_PROVIDER == 'virtualbox-iso') { 
             BOX_SUFFIX = 'virtualbox' 
-            env.VAGRANT_DEFAULT_PROVIDER = 'virtualbox'
+            env.VAGRANT_PROVIDER = 'virtualbox'
           }
           else if (PACKER_PROVIDER == 'vmware-iso') { 
             BOX_SUFFIX = 'vmware'
-            env.VAGRANT_DEFAULT_PROVIDER = 'vmware_desktop'
+            env.VAGRANT_PROVIDER = 'vmware_desktop'
           }
           env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
         }
@@ -66,7 +66,7 @@ pipeline {
         sh 'packer --version'
         sh 'vagrant --version'
         sh 'ansible --version'
-        sh 'env'
+
       }
     }
 
@@ -85,7 +85,7 @@ pipeline {
       steps {
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant init $params.PACKER_BOX-test"
-        sh "vagrant up --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
+        sh "vagrant up --provider=${env.VAGRANT_PROVIDER}"
         sh "sleep 300"
         sh "vagrant status"
       }
