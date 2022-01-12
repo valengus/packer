@@ -2,11 +2,10 @@ pipeline {
   agent {label 'packer'}
 
   parameters {
-
     gitParameter (name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'origin/main')
     booleanParam (name: 'RefreshOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
-    choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019' ],  description: 'os')
+    choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019', 'windows-2022' ],  description: 'os')
     string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
   }
 
@@ -82,7 +81,6 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
-        // sh 'virsh pool-refresh default'
         sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "vagrant init $params.PACKER_BOX-test"
         sh "vagrant up --provider=${env.VAGRANT_DEFAULT_PROVIDER}"
@@ -95,11 +93,10 @@ pipeline {
     stage('Release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
-          // script {
-          //   env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
-          // }
-          echo "Release $params.PACKER_BOX-${BOX_SUFFIX}.box"
-          sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; echo \$RELEASE_BOX"
+          script {
+            env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
+          }
+          sh "echo \$RELEASE_BOX"
           // sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
           // sh "RELEASE_BOX=$params.PACKER_BOX-${BOX_SUFFIX}.box ; packer build --force release_$params.PACKER_BOX'.'pkr.hcl"
       }

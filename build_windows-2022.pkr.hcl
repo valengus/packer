@@ -8,33 +8,11 @@ variable "iso_url" {
   default = "https://software-download.microsoft.com/download/sg/20348.169.210806-2348.fe_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
 }
 
-
-variable "cloud_token" {
-  type    = string
-  default = "${env("CLOUD_TOKEN")}"
-}
-
 locals {
   packerstarttime     = formatdate("YYYYMMDD", timestamp())
   name                = "windows-2022"
   winrm_username      = "Administrator"
   winrm_password      = "password"
-  version_description = <<-EOF
-  ### Windows Server 2022 SERVERSTANDARD box with :
-  source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
-
-  - chocolatey
-  - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
-  - qemu|virtualbox|vmware guest agent
-  - winrm enabled over https
-  - openssh
-
-  ### Login Credentials
-
-  Username: Administrator
-
-  Password: password
-  EOF
 }
 
 source "qemu" "windows-2022" {
@@ -130,13 +108,6 @@ build {
       vagrantfile_template = "vagrant/windows.template"
     }
 
-    // post-processor "vagrant-cloud" {
-    //   access_token        = "${var.cloud_token}"
-    //   box_tag             = "valengus/${local.name}"
-    //   version             = "1.0.${local.packerstarttime}"
-    //   version_description = "${local.version_description}"
-    //   no_release          = true
-    // }
   }
 
 }

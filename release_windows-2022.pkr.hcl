@@ -3,6 +3,11 @@ variable "cloud_token" {
   default = "${env("CLOUD_TOKEN")}"
 }
 
+variable "release_box" {
+  type    = string
+  default = "${env("RELEASE_BOX")}"
+}
+
 locals {
   packerstarttime     = formatdate("YYYYMMDD", timestamp())
   name                = "windows-2022"
@@ -38,9 +43,8 @@ build {
   post-processors {
 
     post-processor "artifice" {
-      files = ["./windows-2022-libvirt.box"]
+      files = ["./${var.release_box}"]
     }
-
 
     post-processor "vagrant-cloud" {
       access_token        = "${var.cloud_token}"
