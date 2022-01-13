@@ -142,7 +142,7 @@ build {
 
 #### RELEASE
 
-source "null" "release " {
+source "null" "release" {
   communicator = "none"
 }
 
