@@ -147,7 +147,7 @@ source "null" "release " {
 }
 
 build {
-  sources = ["source.null.release "]
+  sources = ["source.null.release"]
 
   post-processor "shell-local" {
     inline = ["echo Doing stuff..."]
