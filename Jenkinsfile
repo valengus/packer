@@ -75,7 +75,7 @@ pipeline {
       
       steps {
         echo "> building $params.PACKER_BOX "
-        sh "packer build --force -only=source.$params.PACKER_PROVIDER'.'$params.PACKER_BOX -except=vagrant-cloud  build_$params.PACKER_BOX'.'pkr.hcl"
+        sh "packer build --force -only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX -except=vagrant-cloud  build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
@@ -96,7 +96,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
           sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
-          sh "packer build --force -only=source.null.release build_$params.PACKER_BOX'.'pkr.hcl"
+          sh "packer build --force -only=null.release build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
