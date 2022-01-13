@@ -96,7 +96,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
           sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
-          sh "packer build release_$params.PACKER_BOX'.'pkr.hcl"
+          sh "packer build --force -only=null.release build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 

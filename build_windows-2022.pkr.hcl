@@ -8,12 +8,40 @@ variable "iso_url" {
   default = "https://software-download.microsoft.com/download/sg/20348.169.210806-2348.fe_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
 }
 
+variable "cloud_token" {
+  type    = string
+  default = "${env("CLOUD_TOKEN")}"
+}
+
+variable "release_box" {
+  type    = string
+  default = "${env("RELEASE_BOX")}"
+}
+
 locals {
   packerstarttime     = formatdate("YYYYMMDD", timestamp())
   name                = "windows-2022"
   winrm_username      = "Administrator"
   winrm_password      = "password"
+  version_description = <<-EOF
+  ### Windows Server 2022 SERVERSTANDARD box with :
+  source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
+
+  - chocolatey
+  - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
+  - qemu|virtualbox|vmware guest agent
+  - winrm enabled over https
+  - openssh
+
+  ### Login Credentials
+
+  Username: Administrator
+
+  Password: password
+  EOF
 }
+
+#### BUILD
 
 source "qemu" "windows-2022" {
   accelerator         = "kvm"
@@ -106,6 +134,37 @@ build {
       compression_level    = 9
       output               = "${local.name}-{{.Provider}}.box"
       vagrantfile_template = "vagrant/windows.template"
+    }
+
+  }
+
+}
+
+#### RELEASE
+
+source "null" "release " {
+  communicator = "none"
+}
+
+build {
+  sources = ["source.null.release "]
+
+  post-processor "shell-local" {
+    inline = ["echo Doing stuff..."]
+  }
+
+  post-processors {
+
+    post-processor "artifice" {
+      files = ["./${var.release_box}"]
+    }
+
+    post-processor "vagrant-cloud" {
+      access_token        = "${var.cloud_token}"
+      box_tag             = "valengus/${local.name}"
+      version             = "1.0.${local.packerstarttime}"
+      version_description = "${local.version_description}"
+      no_release          = true
     }
 
   }
