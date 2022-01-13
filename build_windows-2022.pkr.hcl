@@ -13,11 +13,6 @@ variable "cloud_token" {
   default = "${env("CLOUD_TOKEN")}"
 }
 
-variable "release_box" {
-  type    = string
-  default = "${env("RELEASE_BOX")}"
-}
-
 locals {
   packerstarttime     = formatdate("YYYYMMDD", timestamp())
   name                = "windows-2022"
@@ -142,16 +137,17 @@ build {
 
 #### RELEASE
 
+variable "release_box" {
+  type    = string
+  default = "${env("RELEASE_BOX")}"
+}
+
 source "null" "release" {
   communicator = "none"
 }
 
 build {
   sources = ["source.null.release"]
-
-  post-processor "shell-local" {
-    inline = ["echo Doing stuff..."]
-  }
 
   post-processors {
 
