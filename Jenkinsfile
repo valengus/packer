@@ -49,6 +49,7 @@ pipeline {
             env.VAGRANT_PROVIDER = 'vmware_desktop'
           }
           env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
+          env.TMPDIR = "/var/tmp"
         }
         sh 'vagrant destroy -f || true'
         sh "vagrant box remove $params.PACKER_BOX-test || true"
