@@ -63,6 +63,32 @@ source "qemu" "windows-2022" {
   winrm_username      = "${local.winrm_username}"
 }
 
+source "virtualbox-iso" "windows-2022" {
+  headless             = true  
+  boot_wait            = "10s"
+  cd_files            = ["unattend/${local.name}/autounattend.xml"]
+  communicator         = "winrm"
+  cpus                 = 2
+  disk_size            = 61440
+  format               = "ova"
+  guest_additions_mode = "disable"
+  # VBoxManage list ostypes :
+  guest_os_type        = "Windows2019_64"
+  iso_checksum         = "${var.iso_checksum}"
+  iso_url              = "${var.iso_url}"
+  keep_registered      = false
+  memory               = 4096
+  post_shutdown_delay  = "15m"
+  shutdown_command    = "C:\\Windows\\Temp\\packerShutdown.bat"
+  skip_export          = false
+  vm_name             = "${local.name}_${local.packerstarttime}"
+  winrm_insecure       = "true"
+  winrm_password       = "${var.winrm_password}"
+  winrm_use_ssl        = false
+  winrm_username       = "${var.winrm_username}"
+}
+
+
 build {
 
   sources = [
