@@ -83,6 +83,7 @@ source "virtualbox-iso" "windows-2022" {
   shutdown_command    = "C:\\Windows\\Temp\\packerShutdown.bat"
   skip_export          = false
   vm_name             = "${local.name}_${local.packerstarttime}"
+  winrm_timeout       = "60m"
   winrm_insecure       = "true"
   winrm_use_ssl        = false
   winrm_password      = "${local.winrm_password}"
