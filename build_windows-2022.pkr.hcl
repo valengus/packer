@@ -92,7 +92,8 @@ source "virtualbox-iso" "windows-2022" {
 build {
 
   sources = [
-    "source.qemu.windows-2022"
+    "source.qemu.windows-2022",
+    "source.virtualbox-iso.windows-2022"
   ]
 
   provisioner "powershell" {
