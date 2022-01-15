@@ -19,7 +19,7 @@ locals {
   winrm_username      = "Administrator"
   winrm_password      = "password"
   version_description = <<-EOF
-  ### Windows Server 2022 SERVERSTANDARD box with :
+  ### Windows Server 2022 STANDARD box with :
   source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
 
   - chocolatey
