@@ -83,9 +83,9 @@ source "virtualbox-iso" "windows-2022" {
   skip_export          = false
   vm_name             = "${local.name}_${local.packerstarttime}"
   winrm_insecure       = "true"
-  winrm_password       = "${var.winrm_password}"
   winrm_use_ssl        = false
-  winrm_username       = "${var.winrm_username}"
+  winrm_password      = "${local.winrm_password}"
+  winrm_username      = "${local.winrm_username}"
 }
 
 
