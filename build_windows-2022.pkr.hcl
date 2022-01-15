@@ -66,7 +66,7 @@ source "qemu" "windows-2022" {
 source "virtualbox-iso" "windows-2022" {
   headless             = true  
   boot_wait            = "10s"
-  cd_files            = ["unattend/${local.name}/autounattend.xml"]
+  cd_files            = ["unattend/${local.name}/autounattend.xml", "scripts/*"]
   communicator         = "winrm"
   cpus                 = 2
   disk_size            = 61440
