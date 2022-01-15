@@ -57,6 +57,7 @@ source "qemu" "windows-2022" {
   shutdown_timeout    = "15m"
   use_default_display = false
   vm_name             = "${local.name}_${local.packerstarttime}"
+  winrm_timeout       = "60m"
   winrm_insecure      = true
   winrm_use_ssl       = false
   winrm_password      = "${local.winrm_password}"
