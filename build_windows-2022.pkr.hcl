@@ -118,9 +118,9 @@ build {
 
   provisioner "powershell" {
     inline = [
-      "Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
-      "Dism.exe /online /Cleanup-Image /SPSuperseded",
-      "Get-WindowsFeature | ? { $_.InstallState -eq 'Available' } | Uninstall-WindowsFeature -Remove",
+      "# Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
+      "# Dism.exe /online /Cleanup-Image /SPSuperseded",
+      "# Get-WindowsFeature | ? { $_.InstallState -eq 'Available' } | Uninstall-WindowsFeature -Remove",
       "Optimize-Volume -DriveLetter C -Defrag",
       "sdelete -z c:",
     ]
