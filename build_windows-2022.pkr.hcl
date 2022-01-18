@@ -185,7 +185,8 @@ build {
     post-processor "vagrant-cloud" {
       access_token        = "${var.cloud_token}"
       box_tag             = "valengus/${local.name}"
-      version             = "1.0.${local.packerstarttime}"
+      # version             = "1.0.${local.packerstarttime}"
+      version             = "1.0.20220116"
       version_description = "${local.version_description}"
       no_release          = true
     }
