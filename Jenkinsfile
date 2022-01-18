@@ -1,3 +1,5 @@
+properties([disableConcurrentBuilds()])
+
 pipeline {
   agent {label 'packer'}
 
@@ -11,7 +13,6 @@ pipeline {
     
   options {
     buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
-    properties([disableConcurrentBuilds()])
   }
 
   triggers {
