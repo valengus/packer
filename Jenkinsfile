@@ -1,6 +1,3 @@
-#!groovy
-properties([disableConcurrentBuilds()])
-
 pipeline {
   agent {label 'packer'}
 
@@ -23,19 +20,19 @@ pipeline {
 
   stages {
 
-    stage('Checkout') {
-      steps {
-        cleanWs()
-        checkout([
-          $class: 'GitSCM',
-          doGenerateSubmoduleConfigurations: false,
-          userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
-          branches: [ [name: "${params.BRANCH}"] ]
-        ])
-      }
-    }
+    // stage('Checkout') {
+    //   steps {
+    //     cleanWs()
+    //     checkout([
+    //       $class: 'GitSCM',
+    //       doGenerateSubmoduleConfigurations: false,
+    //       userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
+    //       branches: [ [name: "${params.BRANCH}"] ]
+    //     ])
+    //   }
+    // }
 
-    stage('PreCleanup') {
+    stage('preCleanup') {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
@@ -61,7 +58,7 @@ pipeline {
       }
     }
 
-    stage('Info') {
+    stage('info') {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
@@ -74,7 +71,7 @@ pipeline {
       }
     }
 
-    stage('Build') {
+    stage('build') {
       when { expression { return params.RefreshOnly == false } }
       steps {
         echo "> building $params.PACKER_BOX "
@@ -82,7 +79,7 @@ pipeline {
       }
     }
 
-    stage('Test') {
+    stage('test') {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
@@ -96,7 +93,7 @@ pipeline {
 
     }
 
-    stage('Release') {
+    stage('release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
           sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
@@ -104,7 +101,7 @@ pipeline {
       }
     }
 
-    stage('Cleanup') {
+    stage('postCleanup') {
       when { expression { return params.RefreshOnly == false } }
       steps {
         echo 'cleanup'
