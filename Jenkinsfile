@@ -10,7 +10,7 @@ pipeline {
     choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019', 'windows-2022' ],  description: 'os')
     string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
 
-    booleanParam (name: 'RefreshOnlyqweqwqe', defaultValue: true, description: 'Read Jenkinsfile and exit.')
+    // booleanParam (name: 'RefreshOnlyqweqwqe', defaultValue: true, description: 'Read Jenkinsfile and exit.')
   }
     
   options {
@@ -18,9 +18,9 @@ pipeline {
     skipDefaultCheckout true
   }
 
-  // triggers {
-  //     pollSCM 'H/5 *  * * *'
-  // }
+  triggers {
+      pollSCM 'H/5 *  * * *'
+  }
 
   environment {
     CLOUD_TOKEN = "$params.CLOUD_TOKEN"
