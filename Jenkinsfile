@@ -1,3 +1,5 @@
+properties([disableConcurrentBuilds()])
+
 pipeline {
   agent {label 'packer'}
 
@@ -7,6 +9,11 @@ pipeline {
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
     choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019', 'windows-2022' ],  description: 'os')
     string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
+  }
+    
+  options {
+      buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+      timestamps()
   }
 
   triggers {
@@ -32,7 +39,7 @@ pipeline {
       }
     }
 
-    stage('preCleanup') {
+    stage('Prepare') {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
@@ -58,7 +65,7 @@ pipeline {
       }
     }
 
-    stage('info') {
+    stage('Info') {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
@@ -71,7 +78,7 @@ pipeline {
       }
     }
 
-    stage('build') {
+    stage('Build') {
       when { expression { return params.RefreshOnly == false } }
       steps {
         echo "> building $params.PACKER_BOX "
@@ -79,7 +86,7 @@ pipeline {
       }
     }
 
-    stage('test') {
+    stage('Test') {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
@@ -93,7 +100,7 @@ pipeline {
 
     }
 
-    stage('release') {
+    stage('Release') {
       when { expression { return params.RefreshOnly == false } }
       steps {
           sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
@@ -101,7 +108,7 @@ pipeline {
       }
     }
 
-    stage('postCleanup') {
+    stage('PostCleanup') {
       when { expression { return params.RefreshOnly == false } }
       steps {
         echo 'cleanup'
