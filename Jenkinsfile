@@ -72,10 +72,9 @@ pipeline {
 
     stage('Build') {
       when { expression { return params.RefreshOnly == false } }
-      
       steps {
         echo "> building $params.PACKER_BOX "
-        sh "packer build --force -only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX -except=vagrant-cloud  build_$params.PACKER_BOX'.'pkr.hcl"
+        // sh "packer build --force -only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX -except=vagrant-cloud  build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
