@@ -13,9 +13,9 @@ pipeline {
     booleanParam (name: 'RefreshOnlyqweqwqe', defaultValue: true, description: 'Read Jenkinsfile and exit.')
   }
     
-  options {
-    skipDefaultCheckout true
-  }
+  // options {
+  //   skipDefaultCheckout true
+  // }
 
   triggers {
       pollSCM 'H/5 *  * * *'
