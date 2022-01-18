@@ -21,7 +21,7 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        cleanWs()
+        // cleanWs()
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
