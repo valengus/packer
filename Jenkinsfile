@@ -83,11 +83,11 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
-        sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
-        sh "vagrant init $params.PACKER_BOX-test"
-        sh "vagrant up --provider=${env.VAGRANT_PROVIDER}"
-        sh "sleep 300"
-        sh "vagrant status"
+        // sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
+        // sh "vagrant init $params.PACKER_BOX-test"
+        // sh "vagrant up --provider=${env.VAGRANT_PROVIDER}"
+        // sh "sleep 300"
+        // sh "vagrant status"
       }
 
     }
