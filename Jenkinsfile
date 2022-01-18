@@ -22,7 +22,7 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        // cleanWs()
+        cleanWs()
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
@@ -75,7 +75,7 @@ pipeline {
       when { expression { return params.RefreshOnly == false } }
       steps {
         echo "> building $params.PACKER_BOX "
-        // sh "packer build --force -only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX -except=vagrant-cloud  build_$params.PACKER_BOX'.'pkr.hcl"
+        sh "packer build --force -only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX -except=vagrant-cloud  build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
@@ -84,11 +84,11 @@ pipeline {
 
       steps {
         echo "> Test"
-        // sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
-        // sh "vagrant init $params.PACKER_BOX-test"
-        // sh "vagrant up --provider=${env.VAGRANT_PROVIDER}"
-        // sh "sleep 300"
-        // sh "vagrant status"
+        sh "vagrant box add --force $params.PACKER_BOX-test $params.PACKER_BOX-${BOX_SUFFIX}.box"
+        sh "vagrant init $params.PACKER_BOX-test"
+        sh "vagrant up --provider=${env.VAGRANT_PROVIDER}"
+        sh "sleep 300"
+        sh "vagrant status"
       }
 
     }
