@@ -15,6 +15,7 @@ pipeline {
 
   environment {
     CLOUD_TOKEN = "$params.CLOUD_TOKEN"
+    TMPDIR = "/var/tmp"
   }
 
   stages {
@@ -49,9 +50,9 @@ pipeline {
             env.VAGRANT_PROVIDER = 'vmware_desktop'
           }
           env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
-          env.TMPDIR = "/var/tmp"
         }
         sh 'vagrant destroy -f || true'
+        sh 'rm -f ./Vagrantfile'
         sh "vagrant box remove $params.PACKER_BOX-test || true"
         sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
       }
