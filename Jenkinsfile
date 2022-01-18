@@ -13,11 +13,12 @@ pipeline {
     
   options {
     buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    skipDefaultCheckout true
   }
 
-  triggers {
-      pollSCM 'H/5 *  * * *'
-  }
+  // triggers {
+  //     pollSCM 'H/5 *  * * *'
+  // }
 
   environment {
     CLOUD_TOKEN = "$params.CLOUD_TOKEN"
