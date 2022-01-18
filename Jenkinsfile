@@ -9,9 +9,9 @@ pipeline {
     string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
   }
 
-  // triggers {
-  //     pollSCM 'H/5 *  * * *'
-  // }
+  triggers {
+      pollSCM 'H/5 *  * * *'
+  }
 
   environment {
     CLOUD_TOKEN = "$params.CLOUD_TOKEN"
@@ -20,17 +20,17 @@ pipeline {
 
   stages {
 
-    // stage('Checkout') {
-    //   steps {
-    //     cleanWs()
-    //     checkout([
-    //       $class: 'GitSCM',
-    //       doGenerateSubmoduleConfigurations: false,
-    //       userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
-    //       branches: [ [name: "${params.BRANCH}"] ]
-    //     ])
-    //   }
-    // }
+    stage('Checkout') {
+      steps {
+        cleanWs()
+        checkout([
+          $class: 'GitSCM',
+          doGenerateSubmoduleConfigurations: false,
+          userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
+          branches: [ [name: "${params.BRANCH}"] ]
+        ])
+      }
+    }
 
     stage('preCleanup') {
       when { expression { return params.RefreshOnly == false } }
