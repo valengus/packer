@@ -18,9 +18,9 @@ pipeline {
     skipDefaultCheckout true
   }
 
-  triggers {
-      pollSCM 'H/5 *  * * *'
-  }
+  // triggers {
+  //     pollSCM 'H/5 *  * * *'
+  // }
 
   environment {
     CLOUD_TOKEN = "$params.CLOUD_TOKEN"
