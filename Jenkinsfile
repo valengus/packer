@@ -1,3 +1,6 @@
+#!groovy
+properties([disableConcurrentBuilds()])
+
 pipeline {
   agent {label 'packer'}
 
