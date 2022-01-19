@@ -5,7 +5,8 @@ pipeline {
 
   parameters {
     gitParameter (name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'origin/main')
-    booleanParam (name: 'RefreshOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
+    booleanParam (name: 'RefreshJF', defaultValue: true, description: 'Read Jenkinsfile and exit.')
+    booleanParam (name: 'Release', defaultValue: false, description: 'Upload box')
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
     choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019', 'windows-2022' ],  description: 'os')
     string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
@@ -42,7 +43,7 @@ pipeline {
 
 
     stage('Info') {
-      when { expression { return params.RefreshOnly == false } }
+      when { expression { return params.RefreshJF == false } }
 
       steps {
         script {
@@ -71,7 +72,7 @@ pipeline {
 
 
     stage('Prepare') {
-      when { expression { return params.RefreshOnly == false } }
+      when { expression { return params.RefreshJF == false } }
 
       steps {
         sh 'vagrant destroy -f || true'
@@ -84,7 +85,7 @@ pipeline {
 
 
     stage('Build') {
-      when { expression { return params.RefreshOnly == false } }
+      when { expression { return params.RefreshJF == false } }
 
       steps {
         echo "> building $params.PACKER_BOX "
@@ -94,7 +95,7 @@ pipeline {
 
 
     stage('Test') {
-      when { expression { return params.RefreshOnly == false } }
+      when { expression { return params.RefreshJF == false } }
 
       steps {
         echo "> Test"
@@ -109,7 +110,7 @@ pipeline {
 
 
     stage('Release') {
-      when { expression { return params.RefreshOnly == false } }
+      when { expression { return params.Release == true } }
 
       steps {
           sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
