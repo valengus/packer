@@ -40,7 +40,8 @@ pipeline {
       }
     }
 
-    stage('Prepare') {
+
+    stage('Info') {
       when { expression { return params.RefreshOnly == false } }
 
       steps {
@@ -59,17 +60,6 @@ pipeline {
           }
           env.RELEASE_BOX = "$params.PACKER_BOX-${BOX_SUFFIX}.box"
         }
-        sh 'vagrant destroy -f || true'
-        sh 'rm -f ./Vagrantfile'
-        sh "vagrant box remove $params.PACKER_BOX-test || true"
-        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
-      }
-    }
-
-    stage('Info') {
-      when { expression { return params.RefreshOnly == false } }
-
-      steps {
         echo "Git BRANCH is ${params.BRANCH}"
         echo "> box for $params.PACKER_PROVIDER provider"
         sh 'packer --version'
@@ -79,13 +69,28 @@ pipeline {
       }
     }
 
+
+    stage('Prepare') {
+      when { expression { return params.RefreshOnly == false } }
+
+      steps {
+        sh 'vagrant destroy -f || true'
+        sh 'rm -f ./Vagrantfile'
+        sh "vagrant box remove $params.PACKER_BOX-test || true"
+        sh "sudo find /var/lib/libvirt/images | grep -P \"$params.PACKER_BOX-test.*box.img\"  | xargs -d\"\\n\" sudo rm || true"
+      }
+    }
+
+
     stage('Build') {
       when { expression { return params.RefreshOnly == false } }
+
       steps {
         echo "> building $params.PACKER_BOX "
         sh "packer build --force -only=$params.PACKER_PROVIDER'.'$params.PACKER_BOX -except=vagrant-cloud  build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
+
 
     stage('Test') {
       when { expression { return params.RefreshOnly == false } }
@@ -101,16 +106,20 @@ pipeline {
 
     }
 
+
     stage('Release') {
       when { expression { return params.RefreshOnly == false } }
+
       steps {
           sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
           sh "packer build --force -only=null.release build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
+
     stage('PostCleanup') {
       when { expression { return params.RefreshOnly == false } }
+
       steps {
         echo 'cleanup'
         sh 'vagrant destroy -f'
