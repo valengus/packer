@@ -35,7 +35,7 @@ pipeline {
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
-          userRemoteConfigs: [[ url: "env.GIT_URL" ]],
+          userRemoteConfigs: [[ url: "$env.GIT_URL" ]],
           branches: [ [name: "${params.BRANCH}"] ]
         ])
       }
