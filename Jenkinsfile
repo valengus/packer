@@ -38,6 +38,7 @@ pipeline {
           userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
           branches: [ [name: "${params.BRANCH}"] ]
         ])
+        sh 'env'
       }
     }
 
