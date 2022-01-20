@@ -5,7 +5,7 @@ pipeline {
 
   parameters {
     gitParameter (name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'origin/main')
-    booleanParam (name: 'RefreshJF', defaultValue: true, description: 'Read Jenkinsfile and exit.')
+    booleanParam (name: 'RefreshJFOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
     booleanParam (name: 'Release', defaultValue: false, description: 'Upload box')
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
     choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019', 'windows-2022' ],  description: 'os')
@@ -43,7 +43,7 @@ pipeline {
 
 
     stage('Info') {
-      when { expression { return params.RefreshJF == false } }
+      when { expression { return params.RefreshJFOnly == false } }
 
       steps {
         script {
@@ -72,7 +72,7 @@ pipeline {
 
 
     stage('Prepare') {
-      when { expression { return params.RefreshJF == false } }
+      when { expression { return params.RefreshJFOnly == false } }
 
       steps {
         sh 'vagrant destroy -f || true'
@@ -85,7 +85,7 @@ pipeline {
 
 
     stage('Build') {
-      when { expression { return params.RefreshJF == false } }
+      when { expression { return params.RefreshJFOnly == false } }
 
       steps {
         echo "> building $params.PACKER_BOX "
@@ -95,7 +95,7 @@ pipeline {
 
 
     stage('Test') {
-      when { expression { return params.RefreshJF == false } }
+      when { expression { return params.RefreshJFOnly == false } }
 
       steps {
         echo "> Test"
