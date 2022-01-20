@@ -39,6 +39,8 @@ pipeline {
           branches: [ [name: "${params.BRANCH}"] ]
         ])
         sh 'env'
+        echo "scm : ${scmInfo}"
+        echo "${scmInfo.GIT_COMMIT}"
       }
     }
 
