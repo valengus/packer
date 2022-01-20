@@ -14,9 +14,9 @@ pipeline {
 
   }
     
-  options {
-    skipDefaultCheckout true
-  }
+  // options {
+  //   skipDefaultCheckout true
+  // }
 
   triggers {
       pollSCM 'H/5 *  * * *'
@@ -39,8 +39,6 @@ pipeline {
           branches: [ [name: "${params.BRANCH}"] ]
         ])
         sh 'env'
-        echo "scm : ${scmInfo}"
-        echo "${scmInfo.GIT_COMMIT}"
       }
     }
 
