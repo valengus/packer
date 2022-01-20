@@ -35,10 +35,9 @@ pipeline {
         checkout([
           $class: 'GitSCM',
           doGenerateSubmoduleConfigurations: false,
-          userRemoteConfigs: [[ url: 'https://github.com/valengus/packer.git' ]],
+          userRemoteConfigs: [[ url: "env.GIT_URL" ]],
           branches: [ [name: "${params.BRANCH}"] ]
         ])
-        sh 'env'
       }
     }
 
