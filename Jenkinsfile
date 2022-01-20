@@ -10,8 +10,6 @@ pipeline {
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
     choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019', 'windows-2022' ],  description: 'os')
     string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
-
-
   }
     
   // options {
