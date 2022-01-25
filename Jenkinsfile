@@ -108,7 +108,7 @@ pipeline {
 
 
     stage('Release') {
-      when { expression { return params.Release == true } }
+      when { expression { return params.Release == true && return params.RefreshJFOnly == false } }
       input {
         message "Do you want to proceed?"
       }
