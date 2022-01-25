@@ -109,7 +109,9 @@ pipeline {
 
     stage('Release') {
       when { expression { return params.Release == true } }
-
+      input {
+        message "Do you want to proceed?"
+      }
       steps {
           sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
           sh "packer build --force -only=null.release build_$params.PACKER_BOX'.'pkr.hcl"
