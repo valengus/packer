@@ -108,7 +108,14 @@ pipeline {
 
 
     stage('Release') {
-      when { expression { return params.Release == true || return params.RefreshJFOnly == false } }
+      // when { expression { return params.Release == true || return params.RefreshJFOnly == false } }
+
+      when {
+        allOf {
+          expression { return params.Release == true }
+          expression { return params.RefreshJFOnly == false }
+        }
+      }
 
       input {
         message "Do you want to proceed?"
