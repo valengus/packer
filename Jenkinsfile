@@ -108,8 +108,6 @@ pipeline {
 
 
     stage('Release') {
-      // when { expression { return params.Release == true || return params.RefreshJFOnly == false } }
-
       when {
         allOf {
           expression { return params.Release == true }
@@ -117,13 +115,12 @@ pipeline {
         }
       }
 
-      // input {
-      //   message "Do you want to proceed?"
-      // }
-
       steps {
-          sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
-          sh "packer build --force -only=null.release build_$params.PACKER_BOX'.'pkr.hcl"
+        input {
+          message "Do you want to proceed?"
+        }
+        sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
+        sh "packer build --force -only=null.release build_$params.PACKER_BOX'.'pkr.hcl"
       }
     }
 
