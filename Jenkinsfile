@@ -115,11 +115,8 @@ pipeline {
         }
       }
 
-      script {
-        input message: 'Do you want to proceed?'
-      }
-
       steps {
+        script { input message: 'Do you want to proceed?' }
         sh "du -hs $params.PACKER_BOX-${BOX_SUFFIX}.box"
         sh "packer build --force -only=null.release build_$params.PACKER_BOX'.'pkr.hcl"
       }
