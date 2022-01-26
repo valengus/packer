@@ -6,9 +6,11 @@ pipeline {
   parameters {
     gitParameter (name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'origin/main')
     booleanParam (name: 'RefreshJFOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
-    booleanParam (name: 'Release', defaultValue: false, description: 'Upload box')
+
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
     choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019', 'windows-2022' ],  description: 'os')
+
+    booleanParam (name: 'Release', defaultValue: false, description: 'Upload box')
     string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
   }
     
