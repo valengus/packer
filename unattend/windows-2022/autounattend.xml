@@ -96,21 +96,6 @@
         </AdministratorPassword>
       </UserAccounts>
 
-      <!-- <UserAccounts>
-        <LocalAccounts>
-          <LocalAccount wcm:action="add">
-            <Description>Administrator</Description>
-            <DisplayName>Admin</DisplayName>
-            <Name>Admin</Name>
-            <Password>
-                <Value>password</Value>
-                <PlainText>true</PlainText>
-            </Password>
-            <Group>Administrators</Group>
-          </LocalAccount>
-        </LocalAccounts>
-      </UserAccounts> -->
-
       <AutoLogon>
         <Enabled>true</Enabled>
         <LogonCount>2</LogonCount>
@@ -122,6 +107,7 @@
       </AutoLogon>
 
       <FirstLogonCommands>
+        
         <SynchronousCommand wcm:action="add">
           <Order>1</Order>
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Set-NetConnectionProfile -NetworkCategory Private -InputObject (Get-NetConnectionProfile)"</CommandLine>

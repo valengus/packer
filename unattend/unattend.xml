@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
 
-  <!-- <settings pass="specialize">
-    <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
-      <RunSynchronous>
-          <RunSynchronousCommand wcm:action="add">
-              <Order>1</Order>
-              <Path>cmd.exe /c net user Administrator password /active:yes /expires:never /logonpasswordchg:no</Path>
-          </RunSynchronousCommand>
-      </RunSynchronous>
-    </component>
-  </settings> -->
-
   <settings pass="oobeSystem">
 
     <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
@@ -33,21 +22,6 @@
           <PlainText>true</PlainText>
         </AdministratorPassword>
       </UserAccounts>
-
-      <!-- <UserAccounts>
-        <LocalAccounts>
-          <LocalAccount wcm:action="add">
-            <Description>Administrator</Description>
-            <DisplayName>Admin</DisplayName>
-            <Name>Admin</Name>
-            <Password>
-                <Value>password</Value>
-                <PlainText>true</PlainText>
-            </Password>
-            <Group>Administrators</Group>
-          </LocalAccount>
-        </LocalAccounts>
-      </UserAccounts> -->
 
       <AutoLogon>
         <Enabled>true</Enabled>
