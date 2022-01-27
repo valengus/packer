@@ -67,7 +67,7 @@ source "qemu" "windows-2022" {
 source "virtualbox-iso" "windows-2022" {
   headless             = true  
   boot_wait            = "10s"
-  cd_files            = ["unattend/${local.name}/autounattend.xml", "scripts/*"]
+  cd_files             = ["unattend/${local.name}/autounattend.xml", "scripts/*"]
   communicator         = "winrm"
   cpus                 = 2
   disk_size            = 61440
@@ -80,14 +80,14 @@ source "virtualbox-iso" "windows-2022" {
   keep_registered      = false
   memory               = 4096
   post_shutdown_delay  = "15m"
-  shutdown_command    = "C:\\Windows\\Temp\\packerShutdown.bat"
+  shutdown_command     = "C:\\Windows\\Temp\\packerShutdown.bat"
   skip_export          = false
-  vm_name             = "${local.name}_${local.packerstarttime}"
-  winrm_timeout       = "60m"
+  vm_name              = "${local.name}_${local.packerstarttime}"
+  winrm_timeout        = "60m"
   winrm_insecure       = true
   winrm_use_ssl        = false
-  winrm_password      = "${local.winrm_password}"
-  winrm_username      = "${local.winrm_username}"
+  winrm_password       = "${local.winrm_password}"
+  winrm_username       = "${local.winrm_username}"
 }
 
 
