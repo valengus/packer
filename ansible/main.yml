@@ -25,16 +25,16 @@
   # - include: installUpdates_Win2019.yml
   #   when: ansible_os_name == "Microsoft Windows Server 2019 Standard Evaluation"
 
-  # - include: installUpdates.yml
-  # - include: installUpdates.yml
+  - include: installUpdates.yml
+  - include: installUpdates.yml
 
   - include: vdagent-win.yml
     when: ansible_system_vendor == "QEMU"
 
   - include: installVMTools.yml
 
-  # - include: cloudContent.yml
-  #   when: ansible_os_name == "Microsoft Windows 11 Pro"
+  - include: cloudContent.yml
+    when: ansible_os_name == "Microsoft Windows 10 Pro"
 
-  # - include: appxPackages.yml
-  #   when: ansible_os_name == "Microsoft Windows 11 Pro"
+  - include: appxPackages.yml
+    when: ansible_os_name == "Microsoft Windows 10 Pro"
