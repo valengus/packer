@@ -1,13 +1,12 @@
 variable "iso_checksum" {
   type    = string
-  default = "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1"
+  default = "sha1:30ff3cc3cdc05abf47489742e2e1b810d0003968"
 }
 
 variable "iso_url" {
   type    = string
-  default = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
+  default = "https://tb.rg-adguard.net/dl.php?go=ba3275f9"
 }
-
 
 variable "cloud_token" {
   type    = string
@@ -16,15 +15,15 @@ variable "cloud_token" {
 
 locals {
   packerstarttime     = formatdate("YYYYMMDD", timestamp())
-  name                = "windows-2019"
+  name                = "windows-10"
   winrm_username      = "Administrator"
   winrm_password      = "password"
   version_description = <<-EOF
-  ### Windows Server 2019 SERVERSTANDARD box with :
+  ### Windows 10 Pro STANDARD box with :
   source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
 
-  - chocolatey
   - updates
+  - chocolatey
   - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
   - qemu|virtualbox|vmware guest agent
   - winrm enabled over https
@@ -38,12 +37,11 @@ locals {
   EOF
 }
 
-source "qemu" "windows-2019" {
+source "qemu" "windows-10-pro" {
   accelerator         = "kvm"
   cd_files            = ["unattend/${local.name}/autounattend.xml", "scripts/*", "drivers/qemu/*"]
   communicator        = "winrm"
   cpus                = "2"
-  memory              = "4096"
   disk_cache          = "writeback"
   disk_discard        = "ignore"
   disk_interface      = "virtio"
@@ -53,20 +51,23 @@ source "qemu" "windows-2019" {
   vnc_bind_address    = "0.0.0.0"
   iso_checksum        = "${var.iso_checksum}"
   iso_url             = "${var.iso_url}"
-  shutdown_command    = "C:/Windows/Temp/packerShutdown.bat"
+  memory              = "4096"
+  shutdown_command    = "C:\\Windows\\Temp\\packerShutdown.bat"
   shutdown_timeout    = "15m"
   use_default_display = false
   vm_name             = "${local.name}_${local.packerstarttime}"
+  winrm_timeout       = "60m"
   winrm_insecure      = true
   winrm_use_ssl       = false
   winrm_password      = "${local.winrm_password}"
   winrm_username      = "${local.winrm_username}"
 }
 
+
 build {
 
   sources = [
-    "source.qemu.windows-2019"
+    "source.qemu.windows-10-pro",
   ]
 
   provisioner "powershell" {
@@ -87,22 +88,12 @@ build {
     inline = ["choco install sdelete -y"]
   }
 
-  // provisioner "powershell" {
-  //   inline = [
-  //     "Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase",
-  //     "Dism.exe /online /Cleanup-Image /SPSuperseded",
-  //     "Get-WindowsFeature | ? { $_.InstallState -eq 'Available' } | Uninstall-WindowsFeature -Remove",
-  //     "Optimize-Volume -DriveLetter C -Defrag",
-  //     "sdelete -z c:",
-  //   ]
-  // }
-
-  // provisioner "powershell" {
-  //   inline = [
-  //     "Optimize-Volume -DriveLetter C -Defrag",
-  //     "sdelete -z c:",
-  //   ]
-  // }
+  provisioner "powershell" {
+    inline = [
+      "Optimize-Volume -DriveLetter C -Defrag",
+      "sdelete -z c:",
+    ]
+  }
 
   provisioner "powershell" {
     inline = ["Set-Service -Name sshd -StartupType Automatic"]
@@ -131,13 +122,6 @@ build {
       vagrantfile_template = "vagrant/windows.template"
     }
 
-    post-processor "vagrant-cloud" {
-      access_token        = "${var.cloud_token}"
-      box_tag             = "valengus/${local.name}"
-      version             = "1.0.${local.packerstarttime}"
-      version_description = "${local.version_description}"
-      no_release          = true
-    }
   }
 
 }

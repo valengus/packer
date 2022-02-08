@@ -8,7 +8,7 @@ pipeline {
     booleanParam (name: 'RefreshJFOnly', defaultValue: true, description: 'Read Jenkinsfile and exit.')
 
     choice (name: 'PACKER_PROVIDER', choices: ['qemu', 'virtualbox-iso', 'vmware-iso' ],  description: 'build provider')
-    choice (name: 'PACKER_BOX', choices: ['windows-11-pro', 'windows-2019', 'windows-2022' ],  description: 'os')
+    choice (name: 'PACKER_BOX', choices: ['windows-10-pro', 'windows-2022' ],  description: 'os')
 
     booleanParam (name: 'Release', defaultValue: false, description: 'Upload box')
     string (name: 'CLOUD_TOKEN', defaultValue: '', description: 'token for vagrant cloud')
