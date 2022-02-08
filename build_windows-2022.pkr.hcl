@@ -73,7 +73,6 @@ source "virtualbox-iso" "windows-2022" {
   disk_size            = 61440
   format               = "ova"
   guest_additions_mode = "disable"
-  # VBoxManage list ostypes :
   guest_os_type        = "Windows2019_64"
   iso_checksum         = "${var.iso_checksum}"
   iso_url              = "${var.iso_url}"
