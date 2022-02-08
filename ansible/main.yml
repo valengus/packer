@@ -19,15 +19,6 @@
   - name: Disable Hibernate Mode
     win_command: powercfg -h off
 
-  # - include: installUpdates_Win11.yml
-  #   when: ansible_os_name == "Microsoft Windows 11 Pro"
-
-  # - include: installUpdates_Win2019.yml
-  #   when: ansible_os_name == "Microsoft Windows Server 2019 Standard Evaluation"
-
-  - include: installUpdates.yml
-  - include: installUpdates.yml
-
   - include: vdagent-win.yml
     when: ansible_system_vendor == "QEMU"
 
@@ -38,3 +29,13 @@
 
   - include: appxPackages.yml
     when: ansible_os_name == "Microsoft Windows 10 Pro"
+
+  # - include: installUpdates_Win11.yml
+  #   when: ansible_os_name == "Microsoft Windows 11 Pro"
+
+  # - include: installUpdates_Win2019.yml
+  #   when: ansible_os_name == "Microsoft Windows Server 2019 Standard Evaluation"
+
+  - include: installUpdates.yml
+  - include: installUpdates.yml
+

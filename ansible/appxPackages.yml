@@ -1,3 +1,8 @@
+- name: Pause for 60 minutes
+  pause:
+    minutes: 60
+
+
 - name: Remove AppxProvisionedPackage
   win_shell: |
     Get-AppxProvisionedPackage -Online | Where { `
@@ -17,8 +22,11 @@
     $_.Name -NotMatch 'Microsoft.StorePurchaseApp' -and `
     $_.Name -NotMatch 'Microsoft.WindowsStore' -and `
     $_.Name -NotMatch 'Microsoft.Windows.Photos' -and `
-    $_.Name -NotMatch 'Microsoft.WindowsCalculator' `
+    $_.Name -NotMatch 'Microsoft.WindowsCalculator' -and `
+    $_.Name -NotMatch 'Microsoft.DesktopAppInstaller' `
     } | Remove-AppxPackage -AllUsers
+
+
 
 
 - name: "Change {{ item.name }} for HKCU"  
@@ -51,7 +59,9 @@
     delete_key: yes
 
 
-- name: "Change {{ item.name }}for HKLM"
+
+
+- name: "Change {{ item.name }}for new users"
   win_regedit:
     path: "{{ item.path }}"
     name: "{{ item.name }}"
@@ -69,14 +79,16 @@
     - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SubscribedContentEnabled', data: '0' }
     - { path: 'HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', name: 'SystemPaneSuggestionsEnabled', data: '0' }
 
-- name: Remove registry path SuggestedApps for HKLM
+- name: Remove registry path SuggestedApps for new users
   win_regedit:
     path: HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps
     state: absent
     delete_key: yes
+    hive: C:\Users\Default\NTUSER.dat
 
-- name: Remove registry path Subscriptions for HKLM
+- name: Remove registry path Subscriptions for new users
   win_regedit:
     path: HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions
     state: absent
     delete_key: yes
+    hive: C:\Users\Default\NTUSER.dat
