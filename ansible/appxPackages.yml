@@ -1,7 +1,6 @@
-- name: Pause for 60 minutes
-  pause:
-    minutes: 60
-
+# - name: Pause for 60 minutes
+#   pause:
+#     minutes: 60
 
 - name: Remove AppxProvisionedPackage
   win_shell: |
