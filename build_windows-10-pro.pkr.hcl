@@ -99,6 +99,8 @@ build {
     inline = ["Start-Sleep -Seconds 120"]
   }
 
+  # docker build --rm -t local/ansible:2.11.8 ansible
+
   provisioner "ansible" {
     playbook_file = "ansible/main.yml"
     use_proxy     = false
