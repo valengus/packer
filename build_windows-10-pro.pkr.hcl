@@ -19,7 +19,7 @@ locals {
   winrm_username      = "Administrator"
   winrm_password      = "password"
   version_description = <<-EOF
-  ### Windows 10 Pro STANDARD box with :
+  ### Windows 10 Pro box with :
   source : [https://github.com/valengus/packer](https://github.com/valengus/packer)
 
   - updates
