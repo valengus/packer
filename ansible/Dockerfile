@@ -8,7 +8,7 @@ RUN yum check-update; \
     yum clean all
 
 RUN pip3 install --upgrade pip; \
-    pip3 install ansible==4.4.0;
+    pip3 install ansible==4.4.0
     # ansible-galaxy collection install ...
 
 COPY ansible.cfg /etc/ansible/ansible.cfg
