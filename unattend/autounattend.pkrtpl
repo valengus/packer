@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+
+  <settings pass="windowsPE">
+
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
+        <SetupUILanguage>
+            <UILanguage>en-US</UILanguage>
+        </SetupUILanguage>
+        <InputLocale>en-US</InputLocale>
+        <SystemLocale>en-US</SystemLocale>
+        <UILanguage>en-US</UILanguage>
+        <UILanguageFallback>en-US</UILanguageFallback>
+        <UserLocale>en-US</UserLocale>
+      </component>
+
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
+        <DriverPaths>
+          <PathAndCredentials wcm:action="add" wcm:keyValue="1">
+            <Path>E:\</Path>
+          </PathAndCredentials>
+        </DriverPaths>
+      </component>
+
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
+
+        <RunSynchronous>
+          <RunSynchronousCommand wcm:action="add">
+              <Order>1</Order>
+              <Description>BypassTPMCheck</Description>
+              <Path>cmd /c reg add "HKLM\SYSTEM\Setup\LabConfig" /v "BypassTPMCheck" /t REG_DWORD /d 1</Path>
+          </RunSynchronousCommand>
+          <RunSynchronousCommand wcm:action="add">
+              <Order>2</Order>
+              <Description>BypassSecureBootCheck</Description>
+              <Path>cmd /c reg add "HKLM\SYSTEM\Setup\LabConfig" /v "BypassSecureBootCheck" /t REG_DWORD /d 1</Path>
+          </RunSynchronousCommand>
+          <RunSynchronousCommand wcm:action="add">
+              <Order>3</Order>
+              <Description>BypassRAMCheck</Description>
+              <Path>cmd /c reg add "HKLM\SYSTEM\Setup\LabConfig" /v "BypassRAMCheck" /t REG_DWORD /d 1</Path>
+          </RunSynchronousCommand>
+        </RunSynchronous>
+        
+        <DiskConfiguration>
+          <Disk wcm:action="add">
+            <CreatePartitions>
+              <CreatePartition wcm:action="add">
+                <Type>Primary</Type>
+                <Order>1</Order>
+                <Size>350</Size>
+              </CreatePartition>
+              <CreatePartition wcm:action="add">
+                <Order>2</Order>
+                <Type>Primary</Type>
+                <Extend>true</Extend>
+              </CreatePartition>
+            </CreatePartitions>
+            <ModifyPartitions>
+              <ModifyPartition wcm:action="add">
+                <Active>true</Active>
+                <Format>NTFS</Format>
+                <Order>1</Order>
+                <PartitionID>1</PartitionID>
+              </ModifyPartition>
+              <ModifyPartition wcm:action="add">
+                <Format>NTFS</Format>
+                <Letter>C</Letter>
+                <Order>2</Order>
+                <PartitionID>2</PartitionID>
+              </ModifyPartition>
+            </ModifyPartitions>
+            <DiskID>0</DiskID>
+            <WillWipeDisk>true</WillWipeDisk>
+          </Disk>
+        </DiskConfiguration>
+
+      <ImageInstall>
+        <OSImage>
+
+          <InstallFrom> 
+            <MetaData wcm:action="add"> 
+              <Key>/IMAGE/NAME</Key> 
+              <Value>${autounattend.image_name}</Value> 
+            </MetaData> 
+          </InstallFrom>
+
+          <InstallTo>
+            <DiskID>0</DiskID>
+            <PartitionID>2</PartitionID>
+          </InstallTo>
+
+          <WillShowUI>OnError</WillShowUI>
+
+        </OSImage>
+      </ImageInstall>
+
+      <UserData>
+        <ProductKey>
+            ${autounattend.user_data_key}
+            <WillShowUI>OnError</WillShowUI>
+        </ProductKey>
+        <AcceptEula>true</AcceptEula>
+      </UserData>
+
+      </component>
+
+    </settings>
+
+   <settings pass="oobeSystem">
+
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Reseal>
+        <Mode>Audit</Mode>
+      </Reseal>
+    </component>
+
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+      <FirstLogonCommands>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <CommandLine>cmd /C wmic useraccount where "name='Administrator'" set PasswordExpires=FALSE</CommandLine>
+          <Description>PasswordExpires=FALSE</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Set-NetConnectionProfile -NetworkCategory Private -InputObject (Get-NetConnectionProfile)"</CommandLine>
+          <Description>NetworkLocation</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <CommandLine>winrm quickconfig -q</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>4</Order>
+          <CommandLine>winrm set winrm/config/service @{AllowUnencrypted="true"}</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>5</Order>
+          <CommandLine>winrm set winrm/config/service/auth @{Basic="true"}</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>6</Order>
+          <CommandLine>netsh advfirewall firewall set rule group="remote administration" new enable=yes</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>7</Order>
+          <CommandLine>net stop winrm</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>8</Order>
+          <CommandLine>net start winrm</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+        
+      </FirstLogonCommands>
+
+    </component>
+
+  </settings>
+
+
+  <settings pass="auditSystem">
+
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+      <UserAccounts>
+        <AdministratorPassword>
+          <Value>${autounattend.administrator_password}</Value>
+          <PlainText>true</PlainText>
+        </AdministratorPassword>
+      </UserAccounts>
+
+      <AutoLogon>
+        <Enabled>true</Enabled>
+        <LogonCount>3</LogonCount>
+        <Username>Administrator</Username>
+        <Password>
+          <Value>${autounattend.administrator_password}</Value>
+          <PlainText>true</PlainText>
+        </Password>
+      </AutoLogon>
+
+    </component>
+
+  </settings>
+
+</unattend>

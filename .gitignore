@@ -1,0 +1,7 @@
+.vagrant/*
+ansible/osbuilder/*
+ansible/windows/tools
+osbuilder-do/*
+output/*
+Dockerfile
+*.box

@@ -1,0 +1,21 @@
+---  
+- name: download VMware Tools
+  win_get_url:
+    url: https://packages.vmware.com/tools/releases/11.3.5/windows/x64/VMware-tools-11.3.5-18557794-x86_64.exe
+    dest: "{{ ansible_env.TEMP }}\\VMware-tools-11.3.5-18557794-x86_64.exe"
+
+- name: install VMware Tools
+  win_package:
+    path: "{{ ansible_env.TEMP }}\\VMware-tools-11.3.5-18557794-x86_64.exe"
+    product_id: VMware Tools
+    arguments: /S /v /qn REBOOT=R ADDLOCAL=ALL
+    state: present
+
+- name: Remove VMware Tools
+  win_file:
+    path: "{{ ansible_env.TEMP }}\\VMware-tools-11.3.5-18557794-x86_64.exe"
+    state: absent
+
+# - name: reboot
+#   win_reboot:
+#     reboot_timeout: 6000

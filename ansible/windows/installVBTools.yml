@@ -1,0 +1,41 @@
+---
+
+# - name: nslookup download.virtualbox.org
+#   win_command: nslookup download.virtualbox.org
+
+# - name: download VBoxGuestAdditions iso
+#   win_get_url:
+#     url: http://download.virtualbox.org/virtualbox/6.1.40/VBoxGuestAdditions_6.1.40.iso
+#     dest: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.40.iso"
+
+- name: Copy VBoxGuestAdditions_6.1.40.iso
+  ansible.windows.win_copy:
+    src: "tools/VBoxGuestAdditions_6.1.40.iso"
+    dest: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.40.iso"
+
+- name: ensure ISO is mounted
+  win_disk_image:
+    image_path: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.40.iso"
+    state: present
+  register: disk_image_out
+
+- name: install VBoxWindowsAdditions
+  win_package:
+    path: '{{ disk_image_out.mount_paths[0] }}VBoxWindowsAdditions-amd64.exe'
+    product_id: Oracle VM VirtualBox Guest Additions 6.1.40
+    state: present
+    arguments: /S
+
+- name: umount
+  win_disk_image:
+    image_path: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.40.iso"
+    state: absent
+
+- name: Remove VBoxGuestAdditions iso
+  win_file:
+    path: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.40.iso"
+    state: absent
+
+# - name: reboot
+#   win_reboot:
+#     reboot_timeout: 6000

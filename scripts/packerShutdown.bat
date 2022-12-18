@@ -1,0 +1,2 @@
+@REM C:\Windows\System32\Sysprep\sysprep.exe /generalize /oobe /shutdown /unattend:C:\Windows\Panther\Unattend.xml
+C:\Windows\System32\Sysprep\sysprep.exe /generalize /oobe /shutdown /unattend:E:\unattend.xml

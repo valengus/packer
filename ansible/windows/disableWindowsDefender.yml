@@ -1,0 +1,17 @@
+---
+- name: "disable Windows Defender"
+  win_regedit:
+    path: "{{ item.path }}"
+    name: "{{ item.name }}"
+    data: "{{ item.data }}"
+    type: dword
+    state: present
+  loop:
+    - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender', name: 'DisableAntiSpyware', data: '1' }
+    # - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection', name: 'DisableBehaviorMonitoring', data: '1' }
+    # - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection', name: 'DisableOnAccessProtection', data: '1' }
+    # - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection', name: 'DisableScanOnRealtimeEnable', data: '1' }
+
+# - name: reboot, if needed
+#   win_reboot:
+#     reboot_timeout: 6000
