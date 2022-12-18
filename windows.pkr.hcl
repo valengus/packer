@@ -5,7 +5,7 @@ variable "cloud_token" {
 
 locals {
   packerstarttime         = formatdate("YYYY.MM.DD", timestamp())
-  # packerstarttime       = "20221215"
+  # packerstarttime       = "2022.12.18"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
@@ -26,6 +26,7 @@ locals {
     Username: Administrator
 
     Password: ${local.administrator_password}
+
 
     Username: ${local.user}
 
@@ -92,8 +93,8 @@ source "virtualbox-iso" "windows" {
   disk_size             = "${local.disk_size}"
   boot_wait             = "10s"
   keep_registered       = false
-  skip_export           = true
-  format                = "ova"
+  skip_export           = false
+  format                = "ovf"
   communicator          = "winrm"
   winrm_timeout         = "60m"
   winrm_insecure        = true
@@ -218,17 +219,6 @@ build {
     restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
   }
 
-  # provisioner "powershell" {
-  #   inline = [
-  #     "Optimize-Volume -DriveLetter C -Defrag",
-  #     "sdelete -z c:",
-  #   ]
-  # }
-
-  # provisioner "powershell" {
-  #   script = "scripts/sysprep.ps1"
-  # }
-
   provisioner "file" {
     destination = "C:/Windows/Temp/packerShutdown.bat"
     source      = "scripts/packerShutdown.bat"
@@ -238,11 +228,6 @@ build {
     destination = "C:/Windows/Panther/Unattend.xml"
     source      = "unattend/unattend.pkrtpl"
   }
-
-  # provisioner "file" {
-  #   destination = "C:/scripts/Sysprep.ps1"
-  #   source      = "scripts/Sysprep.ps1"
-  # }
 
   provisioner "file" {
     destination = "C:/scripts/ConfigureRemotingForAnsible.ps1"
@@ -255,12 +240,6 @@ build {
     direction   =  "download"
   }
 
-  # provisioner "file" {
-  #   content     =  templatefile("vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
-  #   destination =  "vagrant/windows.test"
-  #   direction   =  "download"
-  # }
-
   post-processors {
 
     post-processor "vagrant" {
@@ -269,10 +248,10 @@ build {
       vagrantfile_template = "vagrant/windows.template"
     }
 
+    # TEST
     post-processor "shell-local" {
       inline = ["vagrant box add --force ${source.name} ${source.name}-${source.type}.box"]
     }
-
     post-processor "shell-local" {
       inline = [ 
         "bash -c \"if [[ $PACKER_BUILDER_TYPE == 'qemu' ]]; then vagrant up ${source.name} --provider=libvirt ; fi\"",
@@ -280,12 +259,14 @@ build {
         "bash -c \"if [[ $PACKER_BUILDER_TYPE == 'vmware-iso' ]]; then vagrant up ${source.name} --provider=vmware_desktop ; fi\""
       ]
     }
+    post-processor "shell-local" {
+      inline = ["vagrant destroy -f"]
+    }
 
     # post-processor "vagrant-cloud" {
     #   access_token        = "${var.cloud_token}"
     #   box_tag             = "valengus/${source.name}"
     #   version             = "1.0.${local.packerstarttime}"
-    #   # version             = "1.0.20221109"
     #   version_description = "${local.version_description}"
     #   no_release          = false
     # }
@@ -296,7 +277,6 @@ build {
 
 
 #### RELEASE
-
 variable "release_box" {
   type    = string
   default = "${env("RELEASE_BOX")}"
