@@ -36,12 +36,12 @@
   - include: installVMwareTools.yml
     when: ansible_virtualization_type == "VMware"
 
-  # - include: installUpdates.yml
+  - include: installUpdates.yml
 
-  - include: windows10Customization.yml
+  - include: windows10.yml
     when: ansible_os_name == "Microsoft Windows 10 Pro"
 
   - include: appxPackages.yml
     when: ansible_os_name == "Microsoft Windows 10 Pro"
 
-  # - include: cleanUp.yml
+  - include: cleanUp.yml

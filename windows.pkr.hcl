@@ -4,15 +4,15 @@ variable "cloud_token" {
 }
 
 locals {
-  packerstarttime         = formatdate("YYYY.MM.DD", timestamp())
-  # packerstarttime       = "2022.12.18"
+  # packerstarttime         = formatdate("YYYY.MM.DD", timestamp())
+  packerstarttime       = "2022.12.18"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
   cpus                    = 2
   memory                  = 4096
   disk_size               = 61440
-  headless                = false
+  headless                = true
   shutdown_command      = "C:\\Windows\\Temp\\packerShutdown.bat"
   version_description   = <<-EOF
     ### ${source.name} :
@@ -207,6 +207,16 @@ build {
     }
   }
 
+  provisioner "file" {
+    destination = "C:/scripts/ConfigureRemotingForAnsible.ps1"
+    source      = "scripts/ConfigureRemotingForAnsible.ps1"
+  }
+
+  provisioner "file" {
+    source      =  "E:/windows.template"
+    destination =  "vagrant/windows.template"
+    direction   =  "download"
+  }
 
   provisioner "ansible" {
     playbook_file   = "ansible/windows/main.yml"
@@ -222,22 +232,6 @@ build {
   provisioner "file" {
     destination = "C:/Windows/Temp/packerShutdown.bat"
     source      = "scripts/packerShutdown.bat"
-  }
-
-  provisioner "file" {
-    destination = "C:/Windows/Panther/Unattend.xml"
-    source      = "unattend/unattend.pkrtpl"
-  }
-
-  provisioner "file" {
-    destination = "C:/scripts/ConfigureRemotingForAnsible.ps1"
-    source      = "scripts/ConfigureRemotingForAnsible.ps1"
-  }
-
-  provisioner "file" {
-    source      =  "E:/windows.template"
-    destination =  "vagrant/windows.template"
-    direction   =  "download"
   }
 
   post-processors {
@@ -263,13 +257,13 @@ build {
       inline = ["vagrant destroy -f"]
     }
 
-    # post-processor "vagrant-cloud" {
-    #   access_token        = "${var.cloud_token}"
-    #   box_tag             = "valengus/${source.name}"
-    #   version             = "1.0.${local.packerstarttime}"
-    #   version_description = "${local.version_description}"
-    #   no_release          = false
-    # }
+    post-processor "vagrant-cloud" {
+      access_token        = "${var.cloud_token}"
+      box_tag             = "valengus/${source.name}"
+      version             = "1.0.${local.packerstarttime}"
+      version_description = "${local.version_description}"
+      no_release          = false
+    }
 
   }
 
