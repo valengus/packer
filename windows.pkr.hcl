@@ -23,12 +23,19 @@ locals {
       vmware_guest_os_type = "windows9-64"
       iso_url              = "https://tb.rg-adguard.net/dl.php?go=f2951538"
       iso_checksum         = "sha1:af8d0e9efd3ef482d0ab365766e191e420777b2b"
-      autounattend      = {
+      autounattend        = {
         image_name              = "Windows 10 Pro"
         administrator_password  = "${local.administrator_password}"
         user                    = "${local.user}"
         user_password           = "${local.user_password}"
         user_data_key           = "<Key />"
+      }
+      version_description = {
+        box_name                = "WINDOWS 10 22H2 Pro x64"
+        date                    = "${local.packerstarttime}"
+        administrator_password  = "${local.administrator_password}"
+        user                    = "${local.user}"
+        user_password           = "${local.user_password}"
       }
     }
 
@@ -43,6 +50,13 @@ locals {
         user                    = "${local.user}"
         user_password           = "${local.user_password}"
         user_data_key           = ""
+      }
+      version_description = {
+        box_name                = "Windows SERVER 2022 STANDARD"
+        date                    = "${local.packerstarttime}"
+        administrator_password  = "${local.administrator_password}"
+        user                    = "${local.user}"
+        user_password           = "${local.user_password}"
       }
     }
 
@@ -59,6 +73,13 @@ locals {
         user                    = "${local.user}"
         user_password           = "${local.user_password}"
         user_data_key           = ""
+      }
+      version_description = {
+        box_name                = "Windows SERVER CORE 2022"
+        date                    = "${local.packerstarttime}"
+        administrator_password  = "${local.administrator_password}"
+        user                    = "${local.user}"
+        user_password           = "${local.user_password}"
       }
     }
 
@@ -243,7 +264,7 @@ build {
       access_token        = "${var.cloud_token}"
       box_tag             = "valengus/${source.name}"
       version             = "1.0.${local.packerstarttime}"
-      # version_description = "${local.version_description}"
+      version_description = templatefile("${path.root}/vagrant/version_description.md", source.value)
       no_release          = false
     }
 
