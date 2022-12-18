@@ -5,7 +5,7 @@ variable "cloud_token" {
 
 locals {
   # packerstarttime         = formatdate("YYYY.MM.DD", timestamp())
-  packerstarttime       = "2022.12.18"
+  packerstarttime         = "2022.12.18"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
@@ -13,26 +13,8 @@ locals {
   memory                  = 4096
   disk_size               = 61440
   headless                = true
-  shutdown_command      = "C:\\Windows\\Temp\\packerShutdown.bat"
-  version_description   = <<-EOF
-    ### ${source.name} :
+  shutdown_command        = "C:\\Windows\\Temp\\packerShutdown.bat"
 
-    - updates ( ${local.packerstarttime} )
-    - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
-    - qemu|virtualbox|vmware guest agent
-    - winrm enabled over https
-
-    ### Login Credentials
-    Username: Administrator
-
-    Password: ${local.administrator_password}
-
-
-    Username: ${local.user}
-
-    Password: ${local.user_password}
-
-  EOF
 
   builds = {
 
@@ -261,7 +243,7 @@ build {
       access_token        = "${var.cloud_token}"
       box_tag             = "valengus/${source.name}"
       version             = "1.0.${local.packerstarttime}"
-      version_description = "${local.version_description}"
+      # version_description = "${local.version_description}"
       no_release          = false
     }
 
@@ -298,7 +280,7 @@ build {
       access_token        = "${var.cloud_token}"
       box_tag             = "valengus/${var.release_box_tag}"
       version             = "1.0.${local.packerstarttime}"
-      version_description = "${local.version_description}"
+      # version_description = "${local.version_description}"
       no_release          = false
     }
 
