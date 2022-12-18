@@ -1,5 +1,5 @@
 .vagrant/*
-
+vagrant/windows.template
 ansible/osbuilder/*
 ansible/windows/tools
 osbuilder-do/*
