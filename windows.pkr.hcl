@@ -5,7 +5,7 @@ variable "cloud_token" {
 
 locals {
   # packerstarttime         = formatdate("YYYY.MM.DD", timestamp())
-  packerstarttime         = "2022.12.18"
+  packerstarttime         = "2022.12.23"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
@@ -30,13 +30,6 @@ locals {
         user_password           = "${local.user_password}"
         user_data_key           = "<Key />"
       }
-      version_description = {
-        box_name                = "WINDOWS 10 22H2 Pro x64"
-        date                    = "${local.packerstarttime}"
-        administrator_password  = "${local.administrator_password}"
-        user                    = "${local.user}"
-        user_password           = "${local.user_password}"
-      }
     }
 
     windows-2022-standard = {
@@ -50,13 +43,6 @@ locals {
         user                    = "${local.user}"
         user_password           = "${local.user_password}"
         user_data_key           = ""
-      }
-      version_description = {
-        box_name                = "Windows SERVER 2022 STANDARD"
-        date                    = "${local.packerstarttime}"
-        administrator_password  = "${local.administrator_password}"
-        user                    = "${local.user}"
-        user_password           = "${local.user_password}"
       }
     }
 
@@ -73,13 +59,6 @@ locals {
         user                    = "${local.user}"
         user_password           = "${local.user_password}"
         user_data_key           = ""
-      }
-      version_description = {
-        box_name                = "Windows SERVER CORE 2022"
-        date                    = "${local.packerstarttime}"
-        administrator_password  = "${local.administrator_password}"
-        user                    = "${local.user}"
-        user_password           = "${local.user_password}"
       }
     }
 
@@ -141,7 +120,7 @@ source "vmware-iso" "windows" {
   disk_adapter_type              = "lsisas1068"
   vmx_remove_ethernet_interfaces = true
   headless                       = "${local.headless}"
-  shutdown_command      = "${local.shutdown_command}"
+  shutdown_command               = "${local.shutdown_command}"
   shutdown_timeout               = "15m"
   winrm_timeout                  = "60m"
   winrm_insecure                 = true
@@ -170,7 +149,7 @@ build {
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
         "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
-        "/windows.template" = templatefile("vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
+        "/windows.template" = templatefile("${path.root}/vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })        
       }
     }
   }
@@ -187,7 +166,7 @@ build {
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
         "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
-        "/windows.template" = templatefile("vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
+        "/windows.template" = templatefile("${path.root}/vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
       }
     }
   }
@@ -205,16 +184,16 @@ build {
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
         "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
-        "/windows.template" = templatefile("vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
+        "/windows.template" = templatefile("${path.root}/vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
       }
     }
   }
-
+  
   provisioner "file" {
     destination = "C:/scripts/ConfigureRemotingForAnsible.ps1"
     source      = "scripts/ConfigureRemotingForAnsible.ps1"
   }
-
+  
   provisioner "file" {
     source      =  "E:/windows.template"
     destination =  "vagrant/windows.template"
@@ -245,10 +224,11 @@ build {
       vagrantfile_template = "vagrant/windows.template"
     }
 
-    # TEST
+    # TEST 
     post-processor "shell-local" {
       inline = ["vagrant box add --force ${source.name} ${source.name}-${source.type}.box"]
     }
+
     post-processor "shell-local" {
       inline = [ 
         "bash -c \"if [[ $PACKER_BUILDER_TYPE == 'qemu' ]]; then vagrant up ${source.name} --provider=libvirt ; fi\"",
@@ -256,6 +236,7 @@ build {
         "bash -c \"if [[ $PACKER_BUILDER_TYPE == 'vmware-iso' ]]; then vagrant up ${source.name} --provider=vmware_desktop ; fi\""
       ]
     }
+
     post-processor "shell-local" {
       inline = ["vagrant destroy -f"]
     }
@@ -264,8 +245,10 @@ build {
       access_token        = "${var.cloud_token}"
       box_tag             = "valengus/${source.name}"
       version             = "1.0.${local.packerstarttime}"
-      version_description = templatefile("${path.root}/vagrant/version_description.md", source.value)
       no_release          = false
+      version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.tmpl", { 
+        date = local.packerstarttime 
+      } )
     }
 
   }
@@ -301,7 +284,6 @@ build {
       access_token        = "${var.cloud_token}"
       box_tag             = "valengus/${var.release_box_tag}"
       version             = "1.0.${local.packerstarttime}"
-      # version_description = "${local.version_description}"
       no_release          = false
     }
 
