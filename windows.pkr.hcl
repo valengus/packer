@@ -5,7 +5,7 @@ variable "cloud_token" {
 
 locals {
   # packerstarttime         = formatdate("YYYYMMDD", timestamp())
-  packerstarttime         = "20221223"
+  packerstarttime         = "20221225"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
