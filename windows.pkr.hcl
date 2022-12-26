@@ -5,7 +5,7 @@ variable "cloud_token" {
 
 locals {
   # packerstarttime         = formatdate("YYYYMMDD", timestamp())
-  packerstarttime         = "20221225"
+  packerstarttime         = "20221226"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
@@ -245,7 +245,7 @@ build {
       access_token        = "${var.cloud_token}"
       box_tag             = "valengus/${source.name}"
       version             = "1.0.${local.packerstarttime}"
-      no_release          = false
+      no_release          = true
       version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.tmpl", { 
         date = local.packerstarttime 
       } )

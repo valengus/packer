@@ -6,3 +6,4 @@ osbuilder-do/*
 output/*
 Dockerfile
 *.box
+Makefile
