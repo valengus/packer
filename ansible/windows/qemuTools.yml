@@ -1,15 +1,15 @@
 ---
 
-# - name: Download virtio-win.iso
-#   win_get_url:
-#     url: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.208-1/virtio-win.iso
-#     force: no
-#     dest: "{{ ansible_env.TEMP }}\\virtio-win.iso"
-
-- name: Copy virtio-win.iso
-  ansible.windows.win_copy:
-    src: "tools/virtio-win-0.1.208.iso"
+- name: Download virtio-win.iso
+  win_get_url:
+    url: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.208-1/virtio-win.iso
+    force: no
     dest: "{{ ansible_env.TEMP }}\\virtio-win.iso"
+
+# - name: Copy virtio-win.iso
+#   ansible.windows.win_copy:
+#     src: "tools/virtio-win-0.1.208.iso"
+#     dest: "{{ ansible_env.TEMP }}\\virtio-win.iso"
 
 - name: Ensure an ISO is mounted
   win_disk_image:
@@ -70,15 +70,15 @@
 - name: Install vdagent
   block:
 
-    # - name: Download vdagent
-    #   win_get_url:
-    #     url: "https://www.spice-space.org/download/windows/vdagent/vdagent-win-{{ vdagent_win_version }}/vdagent-win-{{ vdagent_win_version }}-x64.zip"
-    #     dest: "{{ ansible_env.TEMP }}\\vdagent-win.zip"
-
-    - name: Copy vdagent
-      ansible.windows.win_copy:
-        src: "tools/vdagent-win-0.10.0-x64.zip"
+    - name: Download vdagent
+      win_get_url:
+        url: "https://www.spice-space.org/download/windows/vdagent/vdagent-win-{{ vdagent_win_version }}/vdagent-win-{{ vdagent_win_version }}-x64.zip"
         dest: "{{ ansible_env.TEMP }}\\vdagent-win.zip"
+
+    # - name: Copy vdagent
+    #   ansible.windows.win_copy:
+    #     src: "tools/vdagent-win-0.10.0-x64.zip"
+    #     dest: "{{ ansible_env.TEMP }}\\vdagent-win.zip"
 
     - name: Create {{ ansible_env['ProgramFiles(x86)'] }}\\SPICE Guest Tools directory
       win_file:

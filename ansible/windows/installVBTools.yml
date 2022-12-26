@@ -1,17 +1,17 @@
 ---
 
-# - name: nslookup download.virtualbox.org
-#   win_command: nslookup download.virtualbox.org
+- name: nslookup download.virtualbox.org
+  win_command: nslookup download.virtualbox.org
 
-# - name: download VBoxGuestAdditions iso
-#   win_get_url:
-#     url: http://download.virtualbox.org/virtualbox/6.1.40/VBoxGuestAdditions_6.1.40.iso
-#     dest: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.40.iso"
-
-- name: Copy VBoxGuestAdditions_6.1.40.iso
-  ansible.windows.win_copy:
-    src: "tools/VBoxGuestAdditions_6.1.40.iso"
+- name: download VBoxGuestAdditions iso
+  win_get_url:
+    url: http://download.virtualbox.org/virtualbox/6.1.40/VBoxGuestAdditions_6.1.40.iso
     dest: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.40.iso"
+
+# - name: Copy VBoxGuestAdditions_6.1.40.iso
+#   ansible.windows.win_copy:
+#     src: "tools/VBoxGuestAdditions_6.1.40.iso"
+#     dest: "{{ ansible_env.TEMP }}\\VBoxGuestAdditions_6.1.40.iso"
 
 - name: ensure ISO is mounted
   win_disk_image:
