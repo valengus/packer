@@ -245,7 +245,7 @@ build {
       access_token        = "${var.cloud_token}"
       box_tag             = "valengus/${source.name}"
       version             = "1.0.${local.packerstarttime}"
-      no_release          = true
+      no_release          = false
       version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.tmpl", { 
         date = local.packerstarttime 
       } )
