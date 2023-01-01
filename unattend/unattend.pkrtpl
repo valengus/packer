@@ -71,16 +71,31 @@
       </AutoLogon>
 
       <FirstLogonCommands>
+
         <SynchronousCommand wcm:action="add">
           <Order>1</Order>
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\ConfigureRemotingForAnsible.ps1"</CommandLine>
           <Description>allow ansible</Description>
         </SynchronousCommand>
+
         <SynchronousCommand wcm:action="add">
           <Order>2</Order>
-          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path "C:\scripts" -Recurse"</CommandLine>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path 'C:\scripts" -Recurse'</CommandLine>
           <Description>rm script folder</Description>
         </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name 'fDenyTSConnections' -value 0"</CommandLine>
+          <Description>allow rdp</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>4</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'"</CommandLine>
+          <Description>allow rdp</Description>
+        </SynchronousCommand>
+
       </FirstLogonCommands>
 
     </component>

@@ -13,21 +13,19 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", privileged: "true", powershell_elevated_interactive: "true", path: "scripts/testBox.ps1"
   end
 
-
   config.vm.define "windows-2022-standard-core" do |config|
     config.vm.box  = "windows-2022-standard-core"
     config.vm.provision "shell", privileged: "true", powershell_elevated_interactive: "true", path: "scripts/testBox.ps1"
   end
 
   # config.vm.define "windows-osbuilder" do |config|
-  #   config.vm.box        = "windows-2022-standard"
-  #   config.vm.provider :libvirt do |libvirt|
-  #     libvirt.qemu_use_session           = false
-  #     libvirt.cpus                       = 4
-  #     libvirt.memory                     = 6144
-  #     libvirt.nested                     = true
-  #     libvirt.cpu_mode                   = "host-model"
-  #     libvirt.machine_virtual_size       = 125
+  #   config.vm.box        = "valengus/windows-2022-standard"
+  #   config.vm.network :forwarded_port, guest: 3389, host: 3389, id: "rdp", auto_correct:true
+  #   config.disksize.size = '125GB'
+  #   config.vm.provider "virtualbox" do |virtualbox|
+  #     virtualbox.customize ['modifyvm', :id, '--nested-hw-virt', 'on']
+  #     virtualbox.cpus    = 4
+  #     virtualbox.memory  = 6144
   #   end
   #   config.vm.provision "ansible" , run: "always" do |ansible|
   #     ansible.playbook = "ansible/osbuilder/windows.yml"

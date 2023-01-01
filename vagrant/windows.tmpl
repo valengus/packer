@@ -20,6 +20,8 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.cpus    = 2
+    virtualbox.memory  = 4096
     virtualbox.customize ["modifyvm", :id, "--vram", "32"]
     virtualbox.customize ["modifyvm", :id, "--audioout", "on"]
     virtualbox.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
@@ -38,6 +40,9 @@ Vagrant.configure("2") do |config|
     vmware_desktop.vmx["memsize"]  = "4096"  
     vmware_desktop.vmx["numvcpus"] = "2"
   end
+
+  # RDP
+  config.vm.network :forwarded_port, guest: 3389, host: 3389, id: "rdp", auto_correct:true
 
   # WinRM
   config.vm.network :forwarded_port, guest: 5986, host: 5986, id: "winrm-ssl", auto_correct: true
