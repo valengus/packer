@@ -131,23 +131,23 @@ source "vmware-iso" "windows" {
   disk_type_id                   = 0
 }
 
-source "hyperv-iso" "windows" {
-  communicator          = "winrm"
-  cpus                  = "${local.cpus}"
-  disk_size             = "${local.disk_size}"
-  enable_dynamic_memory = "true"
-  enable_secure_boot    = false
-  generation            = 2
-  guest_additions_mode  = "disable"
-  memory                = "${local.memory}"
-  shutdown_command      = "${local.shutdown_command}"
-  shutdown_timeout      = "15m"
-  winrm_insecure        = true
-  winrm_use_ssl         = false
-  winrm_password        = "${local.administrator_password}"
-  winrm_timeout         = "4h"
-  winrm_username        = "Administrator"
-}
+# source "hyperv-iso" "windows" {
+#   communicator          = "winrm"
+#   cpus                  = "${local.cpus}"
+#   disk_size             = "${local.disk_size}"
+#   enable_dynamic_memory = "true"
+#   enable_secure_boot    = false
+#   generation            = 2
+#   guest_additions_mode  = "disable"
+#   memory                = "${local.memory}"
+#   shutdown_command      = "${local.shutdown_command}"
+#   shutdown_timeout      = "15m"
+#   winrm_insecure        = true
+#   winrm_use_ssl         = false
+#   winrm_password        = "${local.administrator_password}"
+#   winrm_timeout         = "60m"
+#   winrm_username        = "Administrator"
+# }
 
 build {
   name = "windows"
@@ -208,22 +208,22 @@ build {
   }
 
 
-  dynamic "source" {
-    for_each = local.builds
-    labels   = ["source.hyperv-iso.windows"]
-    content {
-      name              = source.key
-      vm_name           = source.key
-      iso_url           = source.value.iso_url
-      iso_checksum      = source.value.iso_checksum
-      output_directory  = "output/vmware_${source.key}"
-      cd_content        = {
-        "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
-        "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
-        "/windows.template" = templatefile("${path.root}/vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
-      }
-    }
-  }
+  # dynamic "source" {
+  #   for_each = local.builds
+  #   labels   = ["source.hyperv-iso.windows"]
+  #   content {
+  #     name              = source.key
+  #     vm_name           = source.key
+  #     iso_url           = source.value.iso_url
+  #     iso_checksum      = source.value.iso_checksum
+  #     output_directory  = "output/vmware_${source.key}"
+  #     cd_content        = {
+  #       "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
+  #       "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
+  #       "/windows.template" = templatefile("${path.root}/vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
+  #     }
+  #   }
+  # }
 
   # provisioner "powershell" {
   #   inline = ["Start-Sleep -Seconds 3600"]
