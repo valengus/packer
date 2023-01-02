@@ -1,3 +1,15 @@
+# packer {
+#   required_version = ">= 1.8.5"
+#   required_plugins {
+#     windows-update = {
+#       version = ">= 0.14.1"
+#       source  = "github.com/rgl/windows-update"
+#     }
+#   }
+# }
+
+
+
 variable "cloud_token" {
   type    = string
   default = "${env("CLOUD_TOKEN")}"
@@ -240,6 +252,19 @@ build {
     direction   =  "download"
   }
 
+  # provisioner "windows-update" {
+  #   pause_before    = "30s"
+  #   search_criteria = "IsInstalled=0"
+  #   filters = [
+  #     "exclude:$_.Title -like '*VMware*'",
+  #     "exclude:$_.Title -like '*Preview*'",
+  #     "exclude:$_.Title -like '*Defender*'",
+  #     "exclude:$_.InstallationBehavior.CanRequestUserInput",
+  #     "include:$true"
+  #   ]
+  #   restart_timeout = "120m"
+  # }
+
   provisioner "ansible" {
     playbook_file   = "ansible/windows/main.yml"
     use_proxy       = false
@@ -287,15 +312,15 @@ build {
       inline = ["vagrant destroy -f"]
     }
 
-    post-processor "vagrant-cloud" {
-      access_token        = "${var.cloud_token}"
-      box_tag             = "valengus/${source.name}"
-      version             = "1.0.${local.packerstarttime}"
-      no_release          = false
-      version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.tmpl", { 
-        date = formatdate("DD.MM.YYYY", timestamp())
-      } )
-    }
+    # post-processor "vagrant-cloud" {
+    #   access_token        = "${var.cloud_token}"
+    #   box_tag             = "valengus/${source.name}"
+    #   version             = "1.0.${local.packerstarttime}"
+    #   no_release          = false
+    #   version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.tmpl", { 
+    #     date = formatdate("DD.MM.YYYY", timestamp())
+    #   } )
+    # }
 
   }
 

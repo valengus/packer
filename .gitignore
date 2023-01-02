@@ -6,3 +6,4 @@ output/*
 Dockerfile
 *.box
 Makefile
+vagrant/windows.template

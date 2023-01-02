@@ -1,0 +1,69 @@
+Vagrant.configure("2") do |config|
+  
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.driver           = "kvm"
+    libvirt.qemu_use_session = false
+    libvirt.cpus             = 2
+    libvirt.memory           = 4096
+    libvirt.disk_bus         = "virtio"
+    libvirt.graphics_type    = "spice"
+    libvirt.nic_model_type   = "virtio"
+    libvirt.sound_type       = "ich9"
+    libvirt.video_type       = "qxl"
+    libvirt.channel :type  => 'spicevmc', :target_name => 'com.redhat.spice.0',     :target_type => 'virtio'
+    libvirt.channel :type  => 'unix',     :target_name => 'org.qemu.guest_agent.0', :target_type => 'virtio'
+    libvirt.random  :model => 'random'
+    libvirt.hyperv_feature :name => 'relaxed', :state => 'on'
+    libvirt.hyperv_feature :name => 'synic',   :state => 'on'
+    libvirt.hyperv_feature :name => 'vapic',   :state => 'on'
+    libvirt.hyperv_feature :name => 'vpindex', :state => 'on'
+  end
+
+  config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.cpus    = 2
+    virtualbox.memory  = 4096
+    virtualbox.customize ["modifyvm", :id, "--vram", "32"]
+    virtualbox.customize ["modifyvm", :id, "--audioout", "on"]
+    virtualbox.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
+    virtualbox.gui = false
+    if RUBY_PLATFORM =~ /darwin/
+      virtualbox.customize ["modifyvm", :id, '--audio', 'coreaudio']
+    elsif RUBY_PLATFORM =~ /mingw|mswin|bccwin|cygwin|emx/
+      virtualbox.customize ["modifyvm", :id, '--audio', 'dsound']
+    elsif RUBY_PLATFORM =~ /linux/
+      virtualbox.customize ["modifyvm", :id, '--audio', 'alsa']
+    end
+  end
+
+  config.vm.provider "vmware_desktop" do |vmware_desktop|
+    vmware_desktop.gui             = true
+    vmware_desktop.vmx["memsize"]  = "4096"  
+    vmware_desktop.vmx["numvcpus"] = "2"
+  end
+
+  # RDP
+  config.vm.network :forwarded_port, guest: 3389, host: 3389, id: "rdp", auto_correct:true
+
+  # WinRM
+  config.vm.network :forwarded_port, guest: 5986, host: 5986, id: "winrm-ssl", auto_correct: true
+  config.vm.boot_timeout             = 1000
+  config.vm.guest                    = :windows
+  config.windows.halt_timeout        = 15
+  config.vm.communicator             = "winrm"
+  config.winrm.max_tries             = 100
+  config.winrm.retry_delay           = 5
+  config.winrm.username              = "vagrant"
+  config.winrm.password              = "vagrant"
+  config.winrm.transport             = :ssl
+  config.winrm.guest_port            = 5986
+  config.winrm.ssl_peer_verification = false
+
+  # Disable NFS sharing (==> default: Mounting NFS shared folders...)
+  config.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
+  if Vagrant.has_plugin?("vagrant-winrm-syncedfolders")
+    config.vm.synced_folder ".", "/vagrant", type: "winrm"
+  else
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+  end
+
+end
