@@ -17,7 +17,7 @@ variable "cloud_token" {
 
 locals {
   # packerstarttime         = formatdate("YYYYMMDD", timestamp())
-  packerstarttime         = "20230101"
+  packerstarttime         = "20230102"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
@@ -312,15 +312,15 @@ build {
       inline = ["vagrant destroy -f"]
     }
 
-    # post-processor "vagrant-cloud" {
-    #   access_token        = "${var.cloud_token}"
-    #   box_tag             = "valengus/${source.name}"
-    #   version             = "1.0.${local.packerstarttime}"
-    #   no_release          = false
-    #   version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.tmpl", { 
-    #     date = formatdate("DD.MM.YYYY", timestamp())
-    #   } )
-    # }
+    post-processor "vagrant-cloud" {
+      access_token        = "${var.cloud_token}"
+      box_tag             = "valengus/${source.name}"
+      version             = "1.0.${local.packerstarttime}"
+      no_release          = false
+      version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.tmpl", { 
+        date = formatdate("DD.MM.YYYY", timestamp())
+      } )
+    }
 
   }
 
