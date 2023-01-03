@@ -6,3 +6,4 @@ output/*
 Dockerfile
 *.box
 vagrant/windows.template
+salt/*

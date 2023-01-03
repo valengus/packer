@@ -8,8 +8,6 @@
 #   }
 # }
 
-
-
 variable "cloud_token" {
   type    = string
   default = "${env("CLOUD_TOKEN")}"
@@ -81,7 +79,7 @@ locals {
 source "virtualbox-iso" "windows" {
   headless              = "${local.headless}"  
   guest_additions_mode  = "disable"
-  cd_files              = ["scripts"]
+  cd_files              = ["scripts", "salt"]
   cpus                  = "${local.cpus}"
   memory                = "${local.memory}"
   disk_size             = "${local.disk_size}"
@@ -102,7 +100,7 @@ source "virtualbox-iso" "windows" {
 source "qemu" "windows" {
   accelerator         = "kvm"
   communicator        = "winrm"
-  cd_files            = ["drivers/qemu/*","scripts"]
+  cd_files            = ["drivers/qemu/*","scripts", "salt"]
   cpus                = "${local.cpus}"
   memory              = "${local.memory}"
   disk_size           = "${local.disk_size}"
@@ -125,7 +123,7 @@ source "qemu" "windows" {
 
 source "vmware-iso" "windows" {
   communicator                   = "winrm"
-  cd_files                       = ["scripts"]
+  cd_files                       = ["scripts", "salt"]
   cpus                           = "${local.cpus}"
   memory                         = "${local.memory}"
   disk_size                      = "${local.disk_size}"
@@ -145,6 +143,7 @@ source "vmware-iso" "windows" {
 
 # source "hyperv-iso" "windows" {
 #   communicator          = "winrm"
+#   cd_files              = ["scripts", "salt"]
 #   cpus                  = "${local.cpus}"
 #   disk_size             = "${local.disk_size}"
 #   enable_dynamic_memory = "true"
@@ -241,6 +240,14 @@ build {
   #   inline = ["Start-Sleep -Seconds 3600"]
   # }
 
+  # provisioner "powershell" {
+  #   script = "scripts/installSalt.ps1"
+  # }
+
+  # provisioner "powershell" {
+  #   inline = ["salt-call --local state.highstate --file-root=E:\\salt\\states"]
+  # }
+
   provisioner "file" {
     destination = "C:/scripts/ConfigureRemotingForAnsible.ps1"
     source      = "scripts/ConfigureRemotingForAnsible.ps1"
@@ -275,7 +282,6 @@ build {
       "hyperv-iso.windows-2022-standard",
       "hyperv-iso.windows-2022-standard-core"
     ]
-
   }
 
   provisioner "windows-restart" {

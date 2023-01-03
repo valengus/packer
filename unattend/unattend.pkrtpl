@@ -80,7 +80,7 @@
 
         <SynchronousCommand wcm:action="add">
           <Order>2</Order>
-          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path 'C:\scripts" -Recurse'</CommandLine>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path 'C:\scripts' -Recurse"</CommandLine>
           <Description>rm script folder</Description>
         </SynchronousCommand>
 
