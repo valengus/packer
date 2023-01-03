@@ -323,7 +323,7 @@ build {
       box_tag             = "valengus/${source.name}"
       version             = "1.0.${local.packerstarttime}"
       no_release          = false
-      version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.tmpl", { 
+      version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
         date = formatdate("DD.MM.YYYY", timestamp())
       } )
     }
