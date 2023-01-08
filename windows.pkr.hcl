@@ -93,7 +93,7 @@ locals {
 source "virtualbox-iso" "windows" {
   headless              = "${local.headless}"  
   guest_additions_mode  = "disable"
-  cd_files              = ["scripts", "salt"]
+  cd_files              = ["scripts"]
   cpus                  = "${local.cpus}"
   memory                = "${local.memory}"
   disk_size             = "${local.disk_size}"
@@ -114,7 +114,7 @@ source "virtualbox-iso" "windows" {
 source "qemu" "windows" {
   accelerator         = "kvm"
   communicator        = "winrm"
-  cd_files            = ["drivers/qemu/*","scripts", "salt"]
+  cd_files            = ["drivers/qemu/*","scripts"]
   cpus                = "${local.cpus}"
   memory              = "${local.memory}"
   disk_size           = "${local.disk_size}"
@@ -137,7 +137,7 @@ source "qemu" "windows" {
 
 source "vmware-iso" "windows" {
   communicator                   = "winrm"
-  cd_files                       = ["scripts", "salt"]
+  cd_files                       = ["scripts"]
   cpus                           = "${local.cpus}"
   memory                         = "${local.memory}"
   disk_size                      = "${local.disk_size}"
@@ -160,7 +160,7 @@ source "vmware-iso" "windows" {
 
 # source "hyperv-iso" "windows" {
 #   communicator          = "winrm"
-#   cd_files              = ["scripts", "salt"]
+#   cd_files              = ["scripts"]
 #   cpus                  = "${local.cpus}"
 #   disk_size             = "${local.disk_size}"
 #   enable_dynamic_memory = "true"
