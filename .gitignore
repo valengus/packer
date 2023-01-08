@@ -7,3 +7,4 @@ Dockerfile
 *.box
 vagrant/windows.template
 salt/*
+wim/*
