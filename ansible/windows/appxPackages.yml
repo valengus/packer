@@ -3,6 +3,7 @@
   win_shell: |
     Get-AppxProvisionedPackage -Online | Where { `
     $_.DisplayName -NotMatch 'Microsoft.StorePurchaseApp' -and `
+    $_.DisplayName -NotMatch 'Microsoft.WindowsNotepad' -and `
     $_.DisplayName -NotMatch 'Microsoft.WindowsStore' -and `
     $_.DisplayName -NotMatch 'Microsoft.WindowsCalculator' -and`
     $_.DisplayName -NotMatch 'Microsoft.Windows.Photos' -and`
@@ -16,6 +17,7 @@
     $_.IsFramework -Match 'False' -and `
     $_.NonRemovable -Match 'False' -and `
     $_.Name -NotMatch 'Microsoft.StorePurchaseApp' -and `
+    $_.Name -NotMatch 'Microsoft.WindowsNotepad' -and `
     $_.Name -NotMatch 'Microsoft.WindowsStore' -and `
     $_.Name -NotMatch 'Microsoft.Windows.Photos' -and `
     $_.Name -NotMatch 'Microsoft.WindowsCalculator' -and `

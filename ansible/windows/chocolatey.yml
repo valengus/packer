@@ -1,0 +1,5 @@
+---
+- name: Install sdelete
+  win_chocolatey:
+    name: sdelete
+    state: present

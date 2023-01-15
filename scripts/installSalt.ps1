@@ -6,4 +6,3 @@ Remove-Item -Path "$env:TEMP\Salt-Minion.msi"
 
 
 Stop-Service -Name 'salt-minion'
-Remove-Item -Path "C:\ProgramData\Salt Project\Salt\conf\minion_id"

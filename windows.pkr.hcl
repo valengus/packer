@@ -91,6 +91,13 @@ locals {
 }
 
 source "virtualbox-iso" "windows" {
+
+  keep_registered       = true
+  skip_export           = true 
+
+  # keep_registered       = false
+  # skip_export           = false 
+
   headless              = "${local.headless}"  
   guest_additions_mode  = "disable"
   cd_files              = ["scripts"]
@@ -98,8 +105,6 @@ source "virtualbox-iso" "windows" {
   memory                = "${local.memory}"
   disk_size             = "${local.disk_size}"
   boot_wait             = "10s"
-  keep_registered       = false
-  skip_export           = false
   format                = "ovf"
   communicator          = "winrm"
   winrm_timeout         = "60m"
@@ -304,6 +309,7 @@ build {
 
   provisioner "windows-restart" {
     restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
+    restart_timeout       = "15m"
   }
 
   provisioner "file" {
@@ -332,9 +338,9 @@ build {
       ]
     }
 
-    post-processor "shell-local" {
-      inline = ["vagrant destroy -f"]
-    }
+    # post-processor "shell-local" {
+    #   inline = ["vagrant destroy -f"]
+    # }
 
     # post-processor "vagrant-cloud" {
     #   access_token        = "${var.cloud_token}"
