@@ -53,12 +53,12 @@
 #     Get-AppxProvisionedPackage -online | where-object {$_.PackageName -like "*MicrosoftTeams*"} | Remove-AppxProvisionedPackage -online -Verbose
 #     reg add HKLM\Software\Microsoft\Windows\CurrentVersion\Communications /v ConfigureChatAutoInstall /t REG_DWORD /d 0 /f
 
-- name: "desktop"
-  win_regedit:
-    path: "{{ item.path }}"
-    name: "{{ item.name }}"
-    data: "{{ item.data }}"
-    type: dword
-    state: present
-  loop:
-    - { path: 'HKLM:\Software\Policies\Microsoft\Windows\Windows Chat', name: 'ChatIcon', data: '3' } # disable Chat
+# - name: "desktop"
+#   win_regedit:
+#     path: "{{ item.path }}"
+#     name: "{{ item.name }}"
+#     data: "{{ item.data }}"
+#     type: dword
+#     state: present
+#   loop:
+#     - { path: 'HKLM:\Software\Policies\Microsoft\Windows\Windows Chat', name: 'ChatIcon', data: '3' } # disable Chat

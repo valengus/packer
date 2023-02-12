@@ -43,7 +43,7 @@
   - include: installVMwareTools.yml
     when: ansible_virtualization_type == "VMware"
 
-  # - include: installUpdates.yml
+  - include: installUpdates.yml
 
   - include: appxPackages.yml
     when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 11 Pro"
@@ -54,6 +54,6 @@
   - include: windows11.yml
     when: ansible_os_name == "Microsoft Windows 11 Pro"
 
-  # - include: chocolatey.yml
+  - include: chocolatey.yml
 
-  # - include: cleanUp.yml
+  - include: cleanUp.yml
