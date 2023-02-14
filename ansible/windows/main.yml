@@ -46,10 +46,10 @@
   - include: installUpdates.yml
 
   - include: appxPackages.yml
-    when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 11 Pro"
+    when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation" or ansible_os_name == "Microsoft Windows 11 Pro"
 
   - include: windows10.yml
-    when: ansible_os_name == "Microsoft Windows 10 Pro"
+    when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation"
 
   - include: windows11.yml
     when: ansible_os_name == "Microsoft Windows 11 Pro"

@@ -15,7 +15,7 @@ variable "cloud_token" {
 
 locals {
   # packerstarttime         = formatdate("YYYYMMDD", timestamp())
-  packerstarttime         = "20230102"
+  packerstarttime         = "20230212"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
@@ -28,33 +28,47 @@ locals {
 
   builds = {
 
-    windows10-22h2-x64-pro = {
+    # windows10-22h2-x64-pro = {
+    #   vb_guest_os_type     = "Windows10_64"
+    #   vmware_guest_os_type = "windows9-64"
+    #   iso_url              = "https://tb.rg-adguard.net/dl.php?go=f2951538"
+    #   iso_checksum         = "sha1:af8d0e9efd3ef482d0ab365766e191e420777b2b"
+    #   autounattend        = {
+    #     image_name              = "Windows 10 Pro"
+    #     administrator_password  = "${local.administrator_password}"
+    #     user                    = "${local.user}"
+    #     user_password           = "${local.user_password}"
+    #     user_data_key           = "<Key />"
+    #   }
+    # }
+
+    windows10-22h2-x64 = {
       vb_guest_os_type     = "Windows10_64"
       vmware_guest_os_type = "windows9-64"
-      iso_url              = "https://tb.rg-adguard.net/dl.php?go=f2951538"
-      iso_checksum         = "sha1:af8d0e9efd3ef482d0ab365766e191e420777b2b"
+      iso_url              = "https://software-download.microsoft.com/download/sg/444969d5-f34g-4e03-ac9d-1f9786c69161/19044.1288.211006-0501.21h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+      iso_checksum         = "69efac1df9ec8066341d8c9b62297ddece0e6b805533fdb6dd66bc8034fba27a"
       autounattend        = {
-        image_name              = "Windows 10 Pro"
+        image_name              = "Windows 10 Enterprise Evaluation"
         administrator_password  = "${local.administrator_password}"
         user                    = "${local.user}"
         user_password           = "${local.user_password}"
-        user_data_key           = "<Key />"
+        user_data_key           = ""
       }
     }
 
-    windows11-22h2-x64-pro = {
-      vb_guest_os_type     = "Windows10_64"
-      vmware_guest_os_type = "windows9-64"
-      iso_url              = "https://tb.rg-adguard.net/dl.php?go=44a66bc5"
-      iso_checksum         = "sha1:c5341ba26e420684468fa4d4ab434823c9d1b61f"
-      autounattend        = {
-        image_name              = "Windows 11 Pro"
-        administrator_password  = "${local.administrator_password}"
-        user                    = "${local.user}"
-        user_password           = "${local.user_password}"
-        user_data_key           = "<Key />"
-      }
-    }
+    # windows11-22h2-x64-pro = {
+    #   vb_guest_os_type     = "Windows10_64"
+    #   vmware_guest_os_type = "windows9-64"
+    #   iso_url              = "https://tb.rg-adguard.net/dl.php?go=44a66bc5"
+    #   iso_checksum         = "sha1:c5341ba26e420684468fa4d4ab434823c9d1b61f"
+    #   autounattend        = {
+    #     image_name              = "Windows 11 Pro"
+    #     administrator_password  = "${local.administrator_password}"
+    #     user                    = "${local.user}"
+    #     user_password           = "${local.user_password}"
+    #     user_data_key           = "<Key />"
+    #   }
+    # }
 
     windows-2022-standard = {
       vb_guest_os_type     = "Windows2019_64"
@@ -92,12 +106,11 @@ locals {
 
 source "virtualbox-iso" "windows" {
 
-  keep_registered       = true
-  skip_export           = true 
+  # keep_registered       = true
+  # skip_export           = true 
 
-  # keep_registered       = false
-  # skip_export           = false 
-
+  keep_registered       = false
+  skip_export           = false 
   headless              = "${local.headless}"  
   guest_additions_mode  = "disable"
   cd_files              = ["scripts"]
@@ -281,19 +294,6 @@ build {
     direction   =  "download"
   }
 
-  # provisioner "windows-update" {
-  #   pause_before    = "30s"
-  #   search_criteria = "IsInstalled=0"
-  #   filters = [
-  #     "exclude:$_.Title -like '*VMware*'",
-  #     "exclude:$_.Title -like '*Preview*'",
-  #     "exclude:$_.Title -like '*Defender*'",
-  #     "exclude:$_.InstallationBehavior.CanRequestUserInput",
-  #     "include:$true"
-  #   ]
-  #   restart_timeout = "120m"
-  # }
-
   provisioner "ansible" {
     playbook_file   = "ansible/windows/main.yml"
     use_proxy       = false
@@ -306,6 +306,10 @@ build {
       "hyperv-iso.windows-2022-standard-core"
     ]
   }
+
+  # provisioner "shell-local" {
+  #   inline = ["ansible-playbook --connection=winrm --extra-vars='ansible_password=\"${build.Password}\" ansible_remote_port=${build.Port}' -u Administrator -i 127.0.0.1, ansible/windows/main.yml"]
+  # }
 
   provisioner "windows-restart" {
     restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
@@ -338,19 +342,19 @@ build {
       ]
     }
 
-    # post-processor "shell-local" {
-    #   inline = ["vagrant destroy -f"]
-    # }
+    post-processor "shell-local" {
+      inline = ["vagrant destroy -f"]
+    }
 
-    # post-processor "vagrant-cloud" {
-    #   access_token        = "${var.cloud_token}"
-    #   box_tag             = "valengus/${source.name}"
-    #   version             = "1.0.${local.packerstarttime}"
-    #   no_release          = false
-    #   version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
-    #     date = formatdate("DD.MM.YYYY", timestamp())
-    #   } )
-    # }
+    post-processor "vagrant-cloud" {
+      access_token        = "${var.cloud_token}"
+      box_tag             = "valengus/${source.name}"
+      version             = "1.0.${local.packerstarttime}"
+      no_release          = false
+      version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
+        date = formatdate("DD.MM.YYYY", timestamp())
+      } )
+    }
 
   }
 
