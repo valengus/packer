@@ -1,17 +1,23 @@
-# packer {
-#   required_version = ">= 1.8.5"
-#   required_plugins {
-#     windows-update = {
-#       version = ">= 0.14.1"
-#       source  = "github.com/rgl/windows-update"
-#     }
-#   }
-# }
-
 variable "cloud_token" {
   type    = string
   default = "${env("CLOUD_TOKEN")}"
 }
+
+variable "headless" {
+  type    = bool
+  default = true
+}
+
+variable "cpus" {
+  type    = number
+  default = 2
+}
+
+variable "memory" {
+  type    = number
+  default = 4096
+}
+
 
 locals {
   # packerstarttime         = formatdate("YYYYMMDD", timestamp())
@@ -19,12 +25,11 @@ locals {
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
-  cpus                    = 2
-  memory                  = 4096
+  cpus                    = "${var.cpus}"
+  memory                  = "${var.memory}"
   disk_size               = 61440
-  headless                = true
+  headless                = "${var.headless}"
   shutdown_command        = "C:\\Windows\\Temp\\packerShutdown.bat"
-
 
   builds = {
 
@@ -35,6 +40,20 @@ locals {
     #   iso_checksum         = "sha1:af8d0e9efd3ef482d0ab365766e191e420777b2b"
     #   autounattend        = {
     #     image_name              = "Windows 10 Pro"
+    #     administrator_password  = "${local.administrator_password}"
+    #     user                    = "${local.user}"
+    #     user_password           = "${local.user_password}"
+    #     user_data_key           = "<Key />"
+    #   }
+    # }
+
+    # windows11-22h2-x64-pro = {
+    #   vb_guest_os_type     = "Windows10_64"
+    #   vmware_guest_os_type = "windows9-64"
+    #   iso_url              = "https://tb.rg-adguard.net/dl.php?go=44a66bc5"
+    #   iso_checksum         = "sha1:c5341ba26e420684468fa4d4ab434823c9d1b61f"
+    #   autounattend        = {
+    #     image_name              = "Windows 11 Pro"
     #     administrator_password  = "${local.administrator_password}"
     #     user                    = "${local.user}"
     #     user_password           = "${local.user_password}"
@@ -55,20 +74,6 @@ locals {
         user_data_key           = ""
       }
     }
-
-    # windows11-22h2-x64-pro = {
-    #   vb_guest_os_type     = "Windows10_64"
-    #   vmware_guest_os_type = "windows9-64"
-    #   iso_url              = "https://tb.rg-adguard.net/dl.php?go=44a66bc5"
-    #   iso_checksum         = "sha1:c5341ba26e420684468fa4d4ab434823c9d1b61f"
-    #   autounattend        = {
-    #     image_name              = "Windows 11 Pro"
-    #     administrator_password  = "${local.administrator_password}"
-    #     user                    = "${local.user}"
-    #     user_password           = "${local.user_password}"
-    #     user_data_key           = "<Key />"
-    #   }
-    # }
 
     windows-2022-standard = {
       vb_guest_os_type     = "Windows2019_64"
@@ -105,10 +110,8 @@ locals {
 }
 
 source "virtualbox-iso" "windows" {
-
   # keep_registered       = true
   # skip_export           = true 
-
   keep_registered       = false
   skip_export           = false 
   headless              = "${local.headless}"  
@@ -171,9 +174,10 @@ source "vmware-iso" "windows" {
   winrm_username                 = "Administrator"
   disable_vnc                    = true
   disk_type_id                   = 0
-  network_adapters {
-    network_card = "vmxnet3"
-  }
+  version                        = 14
+  network_adapter_type           = "e1000"
+  # network                        = "VMnet0"
+
 }
 
 # source "hyperv-iso" "windows" {
@@ -253,7 +257,6 @@ build {
     }
   }
 
-
   # dynamic "source" {
   #   for_each = local.builds
   #   labels   = ["source.hyperv-iso.windows"]
@@ -329,7 +332,6 @@ build {
       vagrantfile_template = "vagrant/windows.template"
     }
 
-    # TEST 
     post-processor "shell-local" {
       inline = ["vagrant box add --force ${source.name} ${source.name}-${source.type}.box"]
     }
@@ -359,7 +361,6 @@ build {
   }
 
 }
-
 
 #### RELEASE
 variable "release_box" {
