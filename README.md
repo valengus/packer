@@ -2,11 +2,21 @@
 export TMPDIR=/var/tmp/
 export CLOUD_TOKEN="..."
 
+
 export PKR_VAR_cpus=4
 export PKR_VAR_memory=8192
 export PKR_VAR_headless=false
 
 ```
+
+```powershell
+$Env:CLOUD_TOKEN = '...'
+
+
+
+
+```
+
 
 ```bash
 packer build -force --only=windows.vmware-iso.windows10-22h2-x64 ./windows.pkr.hcl

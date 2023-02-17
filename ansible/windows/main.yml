@@ -32,28 +32,28 @@
   - name: Disable Hibernate Mode
     win_command: powercfg -h off
 
-  - include: disableWindowsDefender.yml
+  - include_tasks: disableWindowsDefender.yml
 
-  - include: installVBTools.yml
+  - include_tasks: installVBTools.yml
     when: ansible_virtualization_type == "VirtualBox"
 
-  - include: qemuTools.yml
+  - include_tasks: qemuTools.yml
     when: ansible_system_vendor == "QEMU"
 
-  - include: installVMwareTools.yml
+  - include_tasks: installVMwareTools.yml
     when: ansible_virtualization_type == "VMware"
 
-  - include: installUpdates.yml
+  - include_tasks: installUpdates.yml
 
-  - include: appxPackages.yml
+  - include_tasks: appxPackages.yml
     when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation" or ansible_os_name == "Microsoft Windows 11 Pro"
 
-  - include: windows10.yml
+  - include_tasks: windows10.yml
     when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation"
 
-  - include: windows11.yml
+  - include_tasks: windows11.yml
     when: ansible_os_name == "Microsoft Windows 11 Pro"
 
-  - include: chocolatey.yml
+  - include_tasks: chocolatey.yml
 
-  - include: cleanUp.yml
+  - include_tasks: cleanUp.yml

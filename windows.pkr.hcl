@@ -178,24 +178,24 @@ source "vmware-iso" "windows" {
   network_adapter_type           = "e1000"
 }
 
-# source "hyperv-iso" "windows" {
-#   communicator          = "winrm"
-#   cd_files              = ["scripts"]
-#   cpus                  = "${local.cpus}"
-#   disk_size             = "${local.disk_size}"
-#   enable_dynamic_memory = "true"
-#   enable_secure_boot    = false
-#   generation            = 2
-#   guest_additions_mode  = "disable"
-#   memory                = "${local.memory}"
-#   shutdown_command      = "${local.shutdown_command}"
-#   shutdown_timeout      = "15m"
-#   winrm_insecure        = true
-#   winrm_use_ssl         = false
-#   winrm_password        = "${local.administrator_password}"
-#   winrm_timeout         = "60m"
-#   winrm_username        = "Administrator"
-# }
+source "hyperv-iso" "windows" {
+  communicator          = "winrm"
+  cd_files              = ["scripts"]
+  cpus                  = "${local.cpus}"
+  disk_size             = "${local.disk_size}"
+  enable_dynamic_memory = "true"
+  enable_secure_boot    = false
+  generation            = 2
+  guest_additions_mode  = "disable"
+  memory                = "${local.memory}"
+  shutdown_command      = "${local.shutdown_command}"
+  shutdown_timeout      = "15m"
+  winrm_insecure        = true
+  winrm_use_ssl         = false
+  winrm_password        = "${local.administrator_password}"
+  winrm_timeout         = "60m"
+  winrm_username        = "Administrator"
+}
 
 build {
   name = "windows"
@@ -250,22 +250,21 @@ build {
     }
   }
 
-  # dynamic "source" {
-  #   for_each = local.builds
-  #   labels   = ["source.hyperv-iso.windows"]
-  #   content {
-  #     name              = source.key
-  #     vm_name           = source.key
-  #     iso_url           = source.value.iso_url
-  #     iso_checksum      = source.value.iso_checksum
-  #     output_directory  = "output/vmware_${source.key}"
-  #     cd_content        = {
-  #       "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
-  #       "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
-  #       "/windows.template" = templatefile("${path.root}/vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
-  #     }
-  #   }
-  # }
+  dynamic "source" {
+    for_each = local.builds
+    labels   = ["source.hyperv-iso.windows"]
+    content {
+      name              = source.key
+      vm_name           = source.key
+      iso_url           = source.value.iso_url
+      iso_checksum      = source.value.iso_checksum
+      output_directory  = "output/vmware_${source.key}"
+      cd_content        = {
+        "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
+        "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
+      }
+    }
+  }
 
   # provisioner "powershell" {
   #   inline = ["Start-Sleep -Seconds 3600"]
@@ -283,23 +282,40 @@ build {
     destination = "C:/scripts/ConfigureRemotingForAnsible.ps1"
     source      = "scripts/ConfigureRemotingForAnsible.ps1"
   }
-  
+
+  provisioner "shell-local" {
+    only   = [ 
+      "hyperv-iso.windows10-22h2-x64",
+      "hyperv-iso.windows-2022-standard",
+      "hyperv-iso.windows-2022-standard-core"
+    ]
+    inline = [
+      "wsl -e 'apt update'",
+      "wsl -e 'apt install -y ansible'"
+    ]
+
+  }
+
+  provisioner "shell-local" {
+    inline = ["ansible-playbook --extra-vars='ansible_user=Administrator ansible_password=\"${build.Password}\" ansible_port=${build.Port}' -i 127.0.0.1, ansible/windows/main.yml"]
+    only   = [ 
+      "hyperv-iso.windows10-22h2-x64",
+      "hyperv-iso.windows-2022-standard",
+      "hyperv-iso.windows-2022-standard-core"
+    ]
+  }
+
   provisioner "ansible" {
     playbook_file   = "ansible/windows/main.yml"
     use_proxy       = false
     user            = "Administrator"
     extra_arguments = [ "-e", "winrm_password=${build.Password}" ]
     except = [
-      "hyperv-iso.windows10-22h2-x64-pro",
-      "hyperv-iso.windows11-22h2-x64-pro",
+      "hyperv-iso.windows10-22h2-x64",
       "hyperv-iso.windows-2022-standard",
       "hyperv-iso.windows-2022-standard-core"
     ]
   }
-
-  # provisioner "shell-local" {
-  #   inline = ["ansible-playbook --connection=winrm --extra-vars='ansible_password=\"${build.Password}\" ansible_remote_port=${build.Port}' -u Administrator -i 127.0.0.1, ansible/windows/main.yml"]
-  # }
 
   provisioner "windows-restart" {
     restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
