@@ -5,6 +5,5 @@ osbuilder-do/*
 output/*
 Dockerfile
 *.box
-vagrant/windows.template
 salt/*
 wim/*

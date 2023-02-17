@@ -176,8 +176,6 @@ source "vmware-iso" "windows" {
   disk_type_id                   = 0
   version                        = 14
   network_adapter_type           = "e1000"
-  # network                        = "VMnet0"
-
 }
 
 # source "hyperv-iso" "windows" {
@@ -204,9 +202,7 @@ build {
 
   dynamic "source" {
     for_each = local.builds
-
     labels   = ["source.virtualbox-iso.windows"]
-
     content {
       name              = source.key
       vm_name           = source.key
@@ -217,7 +213,6 @@ build {
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
         "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
-        "/windows.template" = templatefile("${path.root}/vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })        
       }
     }
   }
@@ -234,7 +229,6 @@ build {
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
         "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
-        "/windows.template" = templatefile("${path.root}/vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
       }
     }
   }
@@ -252,7 +246,6 @@ build {
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
         "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
-        "/windows.template" = templatefile("${path.root}/vagrant/windows.tmpl", { user = local.user, user_password = local.user_password })
       }
     }
   }
@@ -291,12 +284,6 @@ build {
     source      = "scripts/ConfigureRemotingForAnsible.ps1"
   }
   
-  provisioner "file" {
-    source      =  "E:/windows.template"
-    destination =  "vagrant/windows.template"
-    direction   =  "download"
-  }
-
   provisioner "ansible" {
     playbook_file   = "ansible/windows/main.yml"
     use_proxy       = false
