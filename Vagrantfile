@@ -41,9 +41,9 @@ Vagrant.configure("2") do |config|
       vmware_desktop.vmx["numvcpus"]   = "6"
       vmware_desktop.vmx["vhv.enable"] = "TRUE"
     end
-    # config.vm.provision "ansible" , run: "always" do |ansible|
-    #   ansible.playbook = "ansible/osbuilder/windows.yml"
-    # end
+    config.vm.provision "ansible" , run: "always" do |ansible|
+      ansible.playbook = "ansible/osbuilder/windows.yml"
+    end
   end
 
   config.vm.define "linux-osbuilder" do |config|
