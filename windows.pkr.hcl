@@ -298,6 +298,7 @@ build {
 
   provisioner "shell-local" {
     inline = ["ansible-playbook --extra-vars='ansible_user=Administrator ansible_password=\"${build.Password}\" ansible_port=${build.Port}' -i 127.0.0.1, ansible/windows/main.yml"]
+    use_linux_pathing = true
     only   = [ 
       "hyperv-iso.windows10-22h2-x64",
       "hyperv-iso.windows-2022-standard",
