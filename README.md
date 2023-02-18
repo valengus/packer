@@ -31,4 +31,9 @@ packer build -force --only=windows.qemu.windows10-22h2-x64 ./windows.pkr.hcl
 packer build -force --only=windows.qemu.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.qemu.windows-2022-standard-core ./windows.pkr.hcl
 
+
+packer build -force --only=windows.hyperv-iso.windows-2022-standard ./windows.pkr.hcl
+
+
+
 ```
