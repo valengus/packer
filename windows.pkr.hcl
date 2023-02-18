@@ -303,7 +303,7 @@ build {
       ]
       execute_command = ["bash", "-c", "{{.Vars}} {{.Script}}"]
       use_linux_pathing = true
-      scripts = ["./ansible-playbook_wsl.sh"]
+      scripts = ["./ansible/ansible-playbook_wsl.sh"]
   }
 
   # provisioner "shell-local" {
