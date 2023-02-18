@@ -299,24 +299,19 @@ build {
   }
 
   provisioner "shell-local"{
-      environment_vars = [
-        "ANSIBLE_PASSWORD=${build.Password}",
-        "ANSIBLE_PORT=${build.Port}",
-      ]
-      execute_command = ["bash", "-c", "{{.Vars}} {{.Script}}"]
-      use_linux_pathing = true
-      scripts = ["./ansible/ansible-playbook_wsl.sh"]
+    environment_vars = [
+      "ANSIBLE_PASSWORD=${build.Password}",
+      "ANSIBLE_PORT=${build.Port}",
+    ]
+    execute_command = ["bash", "-c", "{{.Vars}} {{.Script}}"]
+    use_linux_pathing = true
+    scripts = ["./ansible/ansible-playbook_wsl.sh"]
+    only   = [ 
+      "hyperv-iso.windows10-22h2-x64",
+      "hyperv-iso.windows-2022-standard",
+      "hyperv-iso.windows-2022-standard-core"
+    ]
   }
-
-  # provisioner "shell-local" {
-  #   inline = ["ansible-playbook --extra-vars='ansible_user=Administrator ansible_password=\"${build.Password}\" ansible_port=${build.Port}' -i 127.0.0.1, ansible/windows/main.yml"]
-  #   use_linux_pathing = true
-  #   only   = [ 
-  #     "hyperv-iso.windows10-22h2-x64",
-  #     "hyperv-iso.windows-2022-standard",
-  #     "hyperv-iso.windows-2022-standard-core"
-  #   ]
-  # }
 
   provisioner "ansible" {
     playbook_file   = "ansible/windows/main.yml"
