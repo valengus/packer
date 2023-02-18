@@ -184,7 +184,6 @@ source "hyperv-iso" "windows" {
   cpus                  = "${local.cpus}"
   disk_size             = "${local.disk_size}"
   enable_dynamic_memory = "true"
-  enable_secure_boot    = false
   generation            = 2
   guest_additions_mode  = "disable"
   memory                = "${local.memory}"
@@ -196,8 +195,8 @@ source "hyperv-iso" "windows" {
   winrm_timeout         = "60m"
   winrm_username        = "Administrator"
   # switch_name           = "external"
-  generation = 2
-  enable_secure_boot =  false
+  generation            = 2
+  enable_secure_boot    =  false
 }
 
 build {
