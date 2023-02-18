@@ -193,7 +193,8 @@ source "hyperv-iso" "windows" {
   winrm_password        = "${local.administrator_password}"
   winrm_timeout         = "60m"
   winrm_username        = "Administrator"
-  # switch_name           = "external"
+  # switch_name           = "packer-windows"
+  boot_command          = ["a<wait>a<wait>a"]
   generation            = 2
   enable_secure_boot    =  false
 }
