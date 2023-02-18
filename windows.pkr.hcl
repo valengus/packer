@@ -195,6 +195,9 @@ source "hyperv-iso" "windows" {
   winrm_password        = "${local.administrator_password}"
   winrm_timeout         = "60m"
   winrm_username        = "Administrator"
+  # switch_name           = "external"
+  generation = 2
+  enable_secure_boot =  false
 }
 
 build {
