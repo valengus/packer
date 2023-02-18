@@ -196,7 +196,7 @@ source "hyperv-iso" "windows" {
   # switch_name           = "packer-windows"
   boot_command          = ["a<wait>a<wait>a"]
   generation            = 2
-  enable_secure_boot    =  false
+  enable_secure_boot    = false
 }
 
 build {
