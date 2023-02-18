@@ -184,7 +184,6 @@ source "hyperv-iso" "windows" {
   cpus                  = "${local.cpus}"
   disk_size             = "${local.disk_size}"
   enable_dynamic_memory = "true"
-  generation            = 2
   guest_additions_mode  = "disable"
   memory                = "${local.memory}"
   shutdown_command      = "${local.shutdown_command}"
