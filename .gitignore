@@ -7,3 +7,4 @@ Dockerfile
 *.box
 salt/*
 wim/*
+packer_cache/*

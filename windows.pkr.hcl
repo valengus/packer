@@ -1,3 +1,7 @@
+/*
+ * Windows Packer templates for building Vagrant boxes.
+ */
+
 variable "cloud_token" {
   type    = string
   default = "${env("CLOUD_TOKEN")}"
@@ -36,8 +40,8 @@ locals {
     # windows10-22h2-x64-pro = {
     #   vb_guest_os_type     = "Windows10_64"
     #   vmware_guest_os_type = "windows9-64"
-    #   iso_url              = "https://tb.rg-adguard.net/dl.php?go=f2951538"
-    #   iso_checksum         = "sha1:af8d0e9efd3ef482d0ab365766e191e420777b2b"
+    #   iso_url              = "..."
+    #   iso_checksum         = "..."
     #   autounattend        = {
     #     image_name              = "Windows 10 Pro"
     #     administrator_password  = "${local.administrator_password}"
@@ -50,8 +54,8 @@ locals {
     # windows11-22h2-x64-pro = {
     #   vb_guest_os_type     = "Windows10_64"
     #   vmware_guest_os_type = "windows9-64"
-    #   iso_url              = "https://tb.rg-adguard.net/dl.php?go=44a66bc5"
-    #   iso_checksum         = "sha1:c5341ba26e420684468fa4d4ab434823c9d1b61f"
+    #   iso_url              = "..."
+    #   iso_checksum         = "..."
     #   autounattend        = {
     #     image_name              = "Windows 11 Pro"
     #     administrator_password  = "${local.administrator_password}"
@@ -194,8 +198,6 @@ source "hyperv-iso" "windows" {
   winrm_timeout         = "60m"
   winrm_username        = "Administrator"
   # switch_name           = "packer-windows"
-  boot_command          = ["a<wait>a<wait>a"]
-  generation            = 2
   enable_secure_boot    = false
 }
 
@@ -285,33 +287,6 @@ build {
     source      = "scripts/ConfigureRemotingForAnsible.ps1"
   }
 
-  provisioner "shell-local" {
-    only   = [ 
-      "hyperv-iso.windows10-22h2-x64",
-      "hyperv-iso.windows-2022-standard",
-      "hyperv-iso.windows-2022-standard-core"
-    ]
-    inline = [
-      "wsl -e 'apt update'",
-      "wsl -e 'apt install -y ansible'"
-    ]
-
-  }
-
-  provisioner "shell-local"{
-    environment_vars = [
-      "ANSIBLE_PASSWORD=${build.Password}",
-      "ANSIBLE_PORT=${build.Port}",
-    ]
-    execute_command = ["bash", "-c", "{{.Vars}} {{.Script}}"]
-    use_linux_pathing = true
-    scripts = ["./ansible/ansible-playbook_wsl.sh"]
-    only   = [ 
-      "hyperv-iso.windows10-22h2-x64",
-      "hyperv-iso.windows-2022-standard",
-      "hyperv-iso.windows-2022-standard-core"
-    ]
-  }
 
   provisioner "ansible" {
     playbook_file   = "ansible/windows/main.yml"
@@ -324,6 +299,43 @@ build {
       "hyperv-iso.windows-2022-standard-core"
     ]
   }
+
+  # # for Debian WSL
+  # provisioner "shell-local"{
+  #   inline =[
+  #     "apt update",
+  #     "apt install -y ansible python3 python3-pip",
+  #     "python3 -m pip install pywinrm"
+  #   ]
+  #   only   = [
+  #     "hyperv-iso.windows10-22h2-x64",
+  #     "hyperv-iso.windows-2022-standard",
+  #     "hyperv-iso.windows-2022-standard-core"
+  #   ]
+  # }
+
+  # Set-ExecutionPolicy -ExecutionPolicy Bypass
+
+  provisioner "shell-local"{
+    environment_vars = [
+      "ANSIBLE_HOST=${build.Host}",
+      "ANSIBLE_PORT=${build.Port}",
+      "ANSIBLE_USER=${build.User}",
+      "ANSIBLE_PASSWORD=${build.Password}"
+    ]
+    tempfile_extension = ".ps1"
+    execute_command    = ["powershell.exe", "{{.Vars}} {{.Script}}"]
+    env_var_format     = "$env:%s=\"%s\"; "
+    inline             = [
+      "wsl -e ansible-playbook --extra-vars=\"ansible_user=$Env:ANSIBLE_USER ansible_password=$Env:ANSIBLE_PASSWORD ansible_port=$Env:ANSIBLE_PORT\" -i \"$Env:ANSIBLE_HOST,\"  ansible/windows/main.yml"
+    ]
+    only   = [
+      "hyperv-iso.windows10-22h2-x64",
+      "hyperv-iso.windows-2022-standard",
+      "hyperv-iso.windows-2022-standard-core"
+    ]
+  }
+
 
   provisioner "windows-restart" {
     restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
@@ -353,21 +365,26 @@ build {
         "bash -c \"if [[ $PACKER_BUILDER_TYPE == 'virtualbox-iso' ]]; then vagrant up ${source.name} --provider=virtualbox ; fi\"",
         "bash -c \"if [[ $PACKER_BUILDER_TYPE == 'vmware-iso' ]]; then vagrant up ${source.name} --provider=vmware_desktop ; fi\""
       ]
+      except = [
+        "hyperv-iso.windows10-22h2-x64",
+        "hyperv-iso.windows-2022-standard",
+        "hyperv-iso.windows-2022-standard-core"
+      ]
     }
 
     post-processor "shell-local" {
       inline = ["vagrant destroy -f"]
     }
 
-    post-processor "vagrant-cloud" {
-      access_token        = "${var.cloud_token}"
-      box_tag             = "valengus/${source.name}"
-      version             = "1.0.${local.packerstarttime}"
-      no_release          = false
-      version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
-        date = formatdate("DD.MM.YYYY", timestamp())
-      } )
-    }
+    # post-processor "vagrant-cloud" {
+    #   access_token        = "${var.cloud_token}"
+    #   box_tag             = "valengus/${source.name}"
+    #   version             = "1.0.${local.packerstarttime}"
+    #   no_release          = false
+    #   version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
+    #     date = formatdate("DD.MM.YYYY", timestamp())
+    #   } )
+    # }
 
   }
 
