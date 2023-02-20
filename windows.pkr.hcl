@@ -262,7 +262,7 @@ build {
       vm_name           = source.key
       iso_url           = source.value.iso_url
       iso_checksum      = source.value.iso_checksum
-      output_directory  = "output/vmware_${source.key}"
+      output_directory  = "output/hyperv_${source.key}"
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
         "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
