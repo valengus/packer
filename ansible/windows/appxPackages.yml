@@ -8,6 +8,7 @@
     $_.DisplayName -NotMatch 'Microsoft.WindowsCalculator' -and`
     $_.DisplayName -NotMatch 'Microsoft.Windows.Photos' -and`
     $_.DisplayName -NotMatch 'Microsoft.SecHealthUI' -and`
+    $_.DisplayName -NotMatch 'Microsoft.WindowsTerminal' -and`
     $_.DisplayName -NotMatch 'Microsoft.DesktopAppInstaller' `
     } | Remove-AppxProvisionedPackage -Online
 
@@ -20,6 +21,7 @@
     $_.Name -NotMatch 'Microsoft.WindowsNotepad' -and `
     $_.Name -NotMatch 'Microsoft.WindowsStore' -and `
     $_.Name -NotMatch 'Microsoft.Windows.Photos' -and `
+    $_.Name -NotMatch 'Microsoft.WindowsTerminal' -and `
     $_.Name -NotMatch 'Microsoft.WindowsCalculator' -and `
     $_.Name -NotMatch 'Microsoft.DesktopAppInstaller' `
     } | Remove-AppxPackage -AllUsers

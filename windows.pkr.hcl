@@ -79,6 +79,20 @@ locals {
       }
     }
 
+    windows11-22h2-x64 = {
+      vb_guest_os_type     = "Windows10_64"
+      vmware_guest_os_type = "windows9-64"
+      iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66751/22621.525.220925-0207.ni_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+      iso_checksum         = "sha256:ebbc79106715f44f5020f77bd90721b17c5a877cbc15a3535b99155493a1bb3f"
+      autounattend        = {
+        image_name              = "Windows 11 Enterprise Evaluation"
+        administrator_password  = "${local.administrator_password}"
+        user                    = "${local.user}"
+        user_password           = "${local.user_password}"
+        user_data_key           = ""
+      }
+    }
+
     windows-2022-standard = {
       vb_guest_os_type     = "Windows2019_64"
       vmware_guest_os_type = "windows9srv-64"
@@ -376,15 +390,15 @@ build {
       inline = ["vagrant destroy -f"]
     }
 
-    # post-processor "vagrant-cloud" {
-    #   access_token        = "${var.cloud_token}"
-    #   box_tag             = "valengus/${source.name}"
-    #   version             = "1.0.${local.packerstarttime}"
-    #   no_release          = false
-    #   version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
-    #     date = formatdate("DD.MM.YYYY", timestamp())
-    #   } )
-    # }
+    post-processor "vagrant-cloud" {
+      access_token        = "${var.cloud_token}"
+      box_tag             = "valengus/${source.name}"
+      version             = "1.0.${local.packerstarttime}"
+      no_release          = false
+      version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
+        date = formatdate("DD.MM.YYYY", timestamp())
+      } )
+    }
 
   }
 

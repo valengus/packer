@@ -4,7 +4,6 @@
 #   tasks:
 #   - ping:
 
-
 - hosts: all
 
   vars:
@@ -46,13 +45,18 @@
   - include_tasks: installUpdates.yml
 
   - include_tasks: appxPackages.yml
-    when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation" or ansible_os_name == "Microsoft Windows 11 Pro"
+    when: ansible_os_name == "Microsoft Windows 10 Pro" or 
+          ansible_os_name == "Microsoft Windows 11 Pro" or 
+          ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation" or 
+          ansible_os_name == "Microsoft Windows 11 Enterprise Evaluation"
 
   - include_tasks: windows10.yml
-    when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation"
+    when: ansible_os_name == "Microsoft Windows 10 Pro" or 
+          ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation"
 
   - include_tasks: windows11.yml
-    when: ansible_os_name == "Microsoft Windows 11 Pro"
+    when: ansible_os_name == "Microsoft Windows 11 Pro" or
+          ansible_os_name == "Microsoft Windows 11 Enterprise Evaluation"
 
   - include_tasks: chocolatey.yml
 
