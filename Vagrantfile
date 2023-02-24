@@ -25,11 +25,6 @@ Vagrant.configure("2") do |config|
     config.vm.box  = "windows11-22h2-x64"
     config.vm.synced_folder ".", "/vagrant", disabled: true
     config.vm.provision "shell", privileged: "true", powershell_elevated_interactive: "true", path: "scripts/testBox.ps1"
-    config.vm.provider "vmware_workstation" do |vmware_workstation|
-      vmware_workstation.gui             = true
-      vmware_workstation.vmx["memsize"]  = "4096"  
-      vmware_workstation.vmx["numvcpus"] = "2"
-    end
   end
 
   config.vm.define "windows-2022-standard" do |config|
