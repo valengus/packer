@@ -22,10 +22,9 @@ variable "memory" {
   default = 4096
 }
 
-
 locals {
   # packerstarttime         = formatdate("YYYYMMDD", timestamp())
-  packerstarttime         = "20230212"
+  packerstarttime         = "20230501"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
@@ -68,8 +67,8 @@ locals {
     windows10-22h2-x64 = {
       vb_guest_os_type     = "Windows10_64"
       vmware_guest_os_type = "windows9-64"
-      iso_url              = "https://software-download.microsoft.com/download/sg/444969d5-f34g-4e03-ac9d-1f9786c69161/19044.1288.211006-0501.21h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
-      iso_checksum         = "69efac1df9ec8066341d8c9b62297ddece0e6b805533fdb6dd66bc8034fba27a"
+      iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66750/19045.2006.220908-0225.22h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+      iso_checksum         = "sha256:ef7312733a9f5d7d51cfa04ac497671995674ca5e1058d5164d6028f0938d668"
       autounattend        = {
         image_name              = "Windows 10 Enterprise Evaluation"
         administrator_password  = "${local.administrator_password}"
@@ -96,8 +95,8 @@ locals {
     windows-2022-standard = {
       vb_guest_os_type     = "Windows2019_64"
       vmware_guest_os_type = "windows9srv-64"
-      iso_url              = "https://software-download.microsoft.com/download/sg/20348.169.210806-2348.fe_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
-      iso_checksum         = "sha1:4e38d098d79f7281251ce61707f73b5e9185c509"
+      iso_url              = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
+      iso_checksum         = "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
       autounattend      = {
         image_name              = "Windows Server 2022 SERVERSTANDARD"
         administrator_password  = "${local.administrator_password}"
@@ -110,8 +109,8 @@ locals {
     windows-2022-standard-core = {
       vb_guest_os_type     = "Windows2019_64"
       vmware_guest_os_type = "windows9srv-64"
-      iso_url              = "https://software-download.microsoft.com/download/sg/20348.169.210806-2348.fe_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso"
-      iso_checksum         = "sha1:4e38d098d79f7281251ce61707f73b5e9185c509"
+      iso_url              = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
+      iso_checksum         = "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
       user                 = "${local.user}"
       user_password        = "${local.user_password}"
       autounattend      = {
@@ -301,7 +300,6 @@ build {
     source      = "scripts/ConfigureRemotingForAnsible.ps1"
   }
 
-
   provisioner "ansible" {
     playbook_file   = "ansible/windows/main.yml"
     use_proxy       = false
@@ -309,6 +307,7 @@ build {
     extra_arguments = [ "-e", "winrm_password=${build.Password}" ]
     except = [
       "hyperv-iso.windows10-22h2-x64",
+      "hyperv-iso.windows11-22h2-x64",
       "hyperv-iso.windows-2022-standard",
       "hyperv-iso.windows-2022-standard-core"
     ]
@@ -323,6 +322,7 @@ build {
   #   ]
   #   only   = [
   #     "hyperv-iso.windows10-22h2-x64",
+  #     "hyperv-iso.windows11-22h2-x64"
   #     "hyperv-iso.windows-2022-standard",
   #     "hyperv-iso.windows-2022-standard-core"
   #   ]
@@ -345,6 +345,7 @@ build {
     ]
     only   = [
       "hyperv-iso.windows10-22h2-x64",
+      "hyperv-iso.windows11-22h2-x64",
       "hyperv-iso.windows-2022-standard",
       "hyperv-iso.windows-2022-standard-core"
     ]
@@ -381,6 +382,7 @@ build {
       ]
       except = [
         "hyperv-iso.windows10-22h2-x64",
+        "hyperv-iso.windows11-22h2-x64",
         "hyperv-iso.windows-2022-standard",
         "hyperv-iso.windows-2022-standard-core"
       ]

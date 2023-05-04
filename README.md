@@ -24,7 +24,7 @@ packer build -force --only=windows.vmware-iso.windows-2022-standard ./windows.pk
 packer build -force --only=windows.vmware-iso.windows-2022-standard-core ./windows.pkr.hcl
 
 packer build -force --only=windows.virtualbox-iso.windows10-22h2-x64 ./windows.pkr.hcl
-packer build -force --only=windows.virtualbox-iso.windows10-22h2-x64 ./windows.pkr.hcl
+packer build -force --only=windows.virtualbox-iso.windows11-22h2-x64 ./windows.pkr.hcl
 packer build -force --only=windows.virtualbox-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.virtualbox-iso.windows-2022-standard-core ./windows.pkr.hcl
 
@@ -34,7 +34,7 @@ packer build -force --only=windows.qemu.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.qemu.windows-2022-standard-core ./windows.pkr.hcl
 
 packer build -force --only=windows.hyperv-iso.windows10-22h2-x64 ./windows.pkr.hcl
-packer build -force --only=windows.hyperv-iso.windows10-22h2-x64 ./windows.pkr.hcl
+packer build -force --only=windows.hyperv-iso.windows11-22h2-x64 ./windows.pkr.hcl
 packer build -force --only=windows.hyperv-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.hyperv-iso.windows-2022-standard-core ./windows.pkr.hcl
 
