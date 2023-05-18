@@ -9,11 +9,23 @@ Vagrant.configure("2") do |config|
   if ($sysprep -eq $null) { exit 0 } else { exit 1 }
   SCRIPT
 
-  # config.vm.define "windows10-22h2-x64-pro" do |config|
-  #   config.vm.box  = "windows10-22h2-x64-pro"
-  #   config.vm.synced_folder ".", "/vagrant", disabled: true
-  #   config.vm.provision "shell", privileged: "true", powershell_elevated_interactive: "true", inline: $testScript
-  # end
+  $testShellScript = <<-SCRIPT
+  sudo dnf update -y
+  SCRIPT
+
+  config.vm.define "fedora38" do |config|
+    config.vm.box  = "fedora38"
+    # config.ssh.username = 'vagrant'
+    # config.ssh.password = 'vagrant'
+    # config.ssh.insert_key = false
+    config.vm.provision "shell", inline: $testShellScript
+  end
+
+  config.vm.define "windows10-22h2-x64-pro" do |config|
+    config.vm.box  = "windows10-22h2-x64-pro"
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+    config.vm.provision "shell", privileged: "true", powershell_elevated_interactive: "true", inline: $testScript
+  end
 
   # config.vm.define "windows11-22h2-x64-pro" do |config|
   #   config.vm.box  = "windows11-22h2-x64-pro"

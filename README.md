@@ -1,6 +1,6 @@
 ```bash
-export TMPDIR=/var/tmp/
 export CLOUD_TOKEN="..."
+export TMPDIR=/var/tmp/
 
 export PKR_VAR_cpus=4
 export PKR_VAR_memory=8192

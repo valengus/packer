@@ -1,0 +1,39 @@
+Vagrant.configure("2") do |config|
+  
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.disk_bus       = "virtio"
+    libvirt.driver         = "kvm"
+    libvirt.graphics_type  = "spice"
+    libvirt.memory         = 2048
+    libvirt.nic_model_type = "virtio"
+    libvirt.sound_type     = "ich6"
+    libvirt.video_type     = "qxl"
+
+    libvirt.channel :type  => 'spicevmc', :target_name => 'com.redhat.spice.0',     :target_type => 'virtio'
+    libvirt.channel :type  => 'unix',     :target_name => 'org.qemu.guest_agent.0', :target_type => 'virtio'
+    libvirt.random  :model => 'random'
+  end
+
+  config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.customize ["modifyvm", :id, "--audioout", "on"]
+    virtualbox.customize ["modifyvm", :id, "--vram", 32]
+    virtualbox.customize ["modifyvm", :id, "--vrde", "off"]
+    virtualbox.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
+    virtualbox.gui = true
+
+    if RUBY_PLATFORM =~ /darwin/
+      virtualbox.customize ["modifyvm", :id, '--audio', 'coreaudio']
+    elsif RUBY_PLATFORM =~ /mingw|mswin|bccwin|cygwin|emx/
+      virtualbox.customize ["modifyvm", :id, '--audio', 'dsound']
+    elsif RUBY_PLATFORM =~ /linux/
+      virtualbox.customize ["modifyvm", :id, '--audio', 'alsa']
+    end
+  end
+
+  config.ssh.username   = 'vagrant'
+  config.ssh.password   = 'vagrant'
+  config.ssh.insert_key = false
+
+  # Disable NFS sharing (==> default: Mounting NFS shared folders...)
+  config.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
+end

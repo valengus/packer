@@ -36,19 +36,19 @@ locals {
 
   builds = {
 
-    # windows10-22h2-x64-pro = {
-    #   vb_guest_os_type     = "Windows10_64"
-    #   vmware_guest_os_type = "windows9-64"
-    #   iso_url              = "..."
-    #   iso_checksum         = "..."
-    #   autounattend        = {
-    #     image_name              = "Windows 10 Pro"
-    #     administrator_password  = "${local.administrator_password}"
-    #     user                    = "${local.user}"
-    #     user_password           = "${local.user_password}"
-    #     user_data_key           = "<Key />"
-    #   }
-    # }
+    windows10-22h2-x64-pro = {
+      vb_guest_os_type     = "Windows10_64"
+      vmware_guest_os_type = "windows9-64"
+      iso_url              = ".../en-us_windows_10_consumer_editions_version_22h2_x64_dvd_8da72ab3.iso"
+      iso_checksum         = "sha256:f41ba37aa02dcb552dc61cef5c644e55b5d35a8ebdfac346e70f80321343b506"
+      autounattend        = {
+        image_name              = "Windows 10 Pro"
+        administrator_password  = "${local.administrator_password}"
+        user                    = "${local.user}"
+        user_password           = "${local.user_password}"
+        user_data_key           = "<Key />"
+      }
+    }
 
     # windows11-22h2-x64-pro = {
     #   vb_guest_os_type     = "Windows10_64"
