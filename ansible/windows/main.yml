@@ -28,6 +28,10 @@
   - name: wait for system to become reachable
     wait_for_connection:
 
+  - name: Print all available facts
+    ansible.builtin.debug:
+      var: ansible_facts
+
   - name: Disable Hibernate Mode
     win_command: powercfg -h off
 
@@ -43,20 +47,18 @@
     when: ansible_virtualization_type == "VMware"
 
   - include_tasks: installUpdates.yml
+  - include_tasks: installUpdates.yml
+  - include_tasks: installUpdates.yml
 
   - include_tasks: appxPackages.yml
-    when: ansible_os_name == "Microsoft Windows 10 Pro" or 
-          ansible_os_name == "Microsoft Windows 11 Pro" or 
-          ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation" or 
-          ansible_os_name == "Microsoft Windows 11 Enterprise Evaluation"
+    when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation" or
+          ansible_os_name == "Microsoft Windows 11 Pro" or ansible_os_name == "Microsoft Windows 11 Enterprise Evaluation"
 
   - include_tasks: windows10.yml
-    when: ansible_os_name == "Microsoft Windows 10 Pro" or 
-          ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation"
+    when: ansible_os_name == "Microsoft Windows 10 Pro" or ansible_os_name == "Microsoft Windows 10 Enterprise Evaluation"
 
   - include_tasks: windows11.yml
-    when: ansible_os_name == "Microsoft Windows 11 Pro" or
-          ansible_os_name == "Microsoft Windows 11 Enterprise Evaluation"
+    when: ansible_os_name == "Microsoft Windows 11 Pro" or ansible_os_name == "Microsoft Windows 11 Enterprise Evaluation"
 
   - include_tasks: chocolatey.yml
 

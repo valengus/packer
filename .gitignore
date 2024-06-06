@@ -8,3 +8,4 @@ Dockerfile
 salt/*
 wim/*
 packer_cache/*
+.venvP312A216/*

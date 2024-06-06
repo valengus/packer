@@ -1,6 +1,19 @@
-/*
- * Windows Packer templates for building Vagrant boxes.
- */
+packer {
+  required_plugins {
+    vmware = {
+      version = "~> 1"
+      source = "github.com/hashicorp/vmware"
+    }
+    hyperv = {
+      version = "~> 1"
+      source  = "github.com/hashicorp/hyperv"
+    }
+    qemu = {
+      version = "~> 1.1.0"
+      source  = "github.com/hashicorp/qemu"
+    }
+  }
+}
 
 variable "cloud_token" {
   type    = string
@@ -24,39 +37,25 @@ variable "memory" {
 
 locals {
   # packerstarttime         = formatdate("YYYYMMDD", timestamp())
-  packerstarttime         = "20230501"
+  packerstarttime         = "20240520"
   administrator_password  = "vagrant"
   user                    = "vagrant"
   user_password           = "vagrant"
   cpus                    = "${var.cpus}"
   memory                  = "${var.memory}"
-  disk_size               = 61440
+  disk_size               = 60 * 1024
   headless                = "${var.headless}"
   shutdown_command        = "C:\\Windows\\Temp\\packerShutdown.bat"
 
   builds = {
 
-    windows10-22h2-x64-pro = {
-      vb_guest_os_type     = "Windows10_64"
-      vmware_guest_os_type = "windows9-64"
-      iso_url              = ".../en-us_windows_10_consumer_editions_version_22h2_x64_dvd_8da72ab3.iso"
-      iso_checksum         = "sha256:f41ba37aa02dcb552dc61cef5c644e55b5d35a8ebdfac346e70f80321343b506"
-      autounattend        = {
-        image_name              = "Windows 10 Pro"
-        administrator_password  = "${local.administrator_password}"
-        user                    = "${local.user}"
-        user_password           = "${local.user_password}"
-        user_data_key           = "<Key />"
-      }
-    }
-
-    # windows11-22h2-x64-pro = {
+    # windows10-22h2-x64-pro = {
     #   vb_guest_os_type     = "Windows10_64"
     #   vmware_guest_os_type = "windows9-64"
-    #   iso_url              = "..."
-    #   iso_checksum         = "..."
+    #   iso_url              = "./en-us_windows_10_consumer_editions_version_22h2_x64_dvd_8da72ab3.iso"
+    #   iso_checksum         = "sha256:f41ba37aa02dcb552dc61cef5c644e55b5d35a8ebdfac346e70f80321343b506"
     #   autounattend        = {
-    #     image_name              = "Windows 11 Pro"
+    #     image_name              = "Windows 10 Pro"
     #     administrator_password  = "${local.administrator_password}"
     #     user                    = "${local.user}"
     #     user_password           = "${local.user_password}"
@@ -79,8 +78,8 @@ locals {
     }
 
     windows11-22h2-x64 = {
-      vb_guest_os_type     = "Windows10_64"
-      vmware_guest_os_type = "windows9-64"
+      vb_guest_os_type     = "Windows11_64"
+      vmware_guest_os_type = "windows11-64"
       iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66751/22621.525.220925-0207.ni_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
       iso_checksum         = "sha256:ebbc79106715f44f5020f77bd90721b17c5a877cbc15a3535b99155493a1bb3f"
       autounattend        = {
@@ -156,9 +155,8 @@ source "qemu" "windows" {
   cpus                = "${local.cpus}"
   memory              = "${local.memory}"
   disk_size           = "${local.disk_size}"
-  disk_cache          = "writeback"
-  disk_discard        = "ignore"
-  disk_interface      = "virtio"
+  net_device          = "virtio-net"  
+  # disk_interface      = "virtio"
   format              = "qcow2"
   headless            = "${local.headless}"
   vnc_bind_address    = "0.0.0.0"
@@ -171,6 +169,7 @@ source "qemu" "windows" {
   winrm_use_ssl       = false
   winrm_password      = "${local.administrator_password}"
   winrm_username      = "Administrator"
+
 }
 
 source "vmware-iso" "windows" {
@@ -301,17 +300,27 @@ build {
   }
 
   provisioner "ansible" {
-    playbook_file   = "ansible/windows/main.yml"
-    use_proxy       = false
-    user            = "Administrator"
-    extra_arguments = [ "-e", "winrm_password=${build.Password}" ]
-    except = [
-      "hyperv-iso.windows10-22h2-x64",
-      "hyperv-iso.windows11-22h2-x64",
-      "hyperv-iso.windows-2022-standard",
-      "hyperv-iso.windows-2022-standard-core"
-    ]
+    # command         = ".venvP312A216/bin/ansible-playbook"
+    playbook_file    = "ansible/windows/main.yml"
+    use_proxy        = false
+    user             = "Administrator"
+    extra_arguments  = [ "-e", "winrm_password=${build.Password}" ]
+    # ansible_env_vars = [
+    #   "ANSIBLE_CONFIG=ansible/ansible.cfg",
+    # ]
   }
+
+  # provisioner "shell-local"{
+  #   environment_vars = [
+  #     "ANSIBLE_HOST=${build.Host}",
+  #     "ANSIBLE_PORT=${build.Port}",
+  #     "ANSIBLE_USER=${build.User}",
+  #     "ANSIBLE_PASSWORD=${build.Password}"
+  #   ]
+  #   inline           = [
+  #     "ansible-playbook -i \"$ANSIBLE_HOST,\" --extra-vars=\"ansible_user=$ANSIBLE_USER ansible_password=$ANSIBLE_PASSWORD ansible_port=$ANSIBLE_PORT\" ansible/windows/main.yml"
+  #   ]
+  # }
 
   # # for Debian WSL
   # provisioner "shell-local"{
@@ -330,27 +339,26 @@ build {
 
   # Set-ExecutionPolicy -ExecutionPolicy Bypass
 
-  provisioner "shell-local"{
-    environment_vars = [
-      "ANSIBLE_HOST=${build.Host}",
-      "ANSIBLE_PORT=${build.Port}",
-      "ANSIBLE_USER=${build.User}",
-      "ANSIBLE_PASSWORD=${build.Password}"
-    ]
-    tempfile_extension = ".ps1"
-    execute_command    = ["powershell.exe", "{{.Vars}} {{.Script}}"]
-    env_var_format     = "$env:%s=\"%s\"; "
-    inline             = [
-      "wsl -e ansible-playbook --extra-vars=\"ansible_user=$Env:ANSIBLE_USER ansible_password=$Env:ANSIBLE_PASSWORD ansible_port=$Env:ANSIBLE_PORT\" -i \"$Env:ANSIBLE_HOST,\"  ansible/windows/main.yml"
-    ]
-    only   = [
-      "hyperv-iso.windows10-22h2-x64",
-      "hyperv-iso.windows11-22h2-x64",
-      "hyperv-iso.windows-2022-standard",
-      "hyperv-iso.windows-2022-standard-core"
-    ]
-  }
-
+  # provisioner "shell-local"{
+  #   environment_vars = [
+  #     "ANSIBLE_HOST=${build.Host}",
+  #     "ANSIBLE_PORT=${build.Port}",
+  #     "ANSIBLE_USER=${build.User}",
+  #     "ANSIBLE_PASSWORD=${build.Password}"
+  #   ]
+  #   tempfile_extension = ".ps1"
+  #   execute_command    = ["powershell.exe", "{{.Vars}} {{.Script}}"]
+  #   env_var_format     = "$env:%s=\"%s\"; "
+  #   inline             = [
+  #     "wsl -e ansible-playbook --extra-vars=\"ansible_user=$Env:ANSIBLE_USER ansible_password=$Env:ANSIBLE_PASSWORD ansible_port=$Env:ANSIBLE_PORT\" -i \"$Env:ANSIBLE_HOST,\"  ansible/windows/main.yml"
+  #   ]
+  #   only   = [
+  #     "hyperv-iso.windows10-22h2-x64",
+  #     "hyperv-iso.windows11-22h2-x64",
+  #     "hyperv-iso.windows-2022-standard",
+  #     "hyperv-iso.windows-2022-standard-core"
+  #   ]
+  # }
 
   provisioner "windows-restart" {
     restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
@@ -392,15 +400,15 @@ build {
       inline = ["vagrant destroy -f"]
     }
 
-    post-processor "vagrant-cloud" {
-      access_token        = "${var.cloud_token}"
-      box_tag             = "valengus/${source.name}"
-      version             = "1.0.${local.packerstarttime}"
-      no_release          = false
-      version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
-        date = formatdate("DD.MM.YYYY", timestamp())
-      } )
-    }
+    # post-processor "vagrant-cloud" {
+    #   access_token        = "${var.cloud_token}"
+    #   box_tag             = "valengus/${source.name}"
+    #   version             = "1.0.${local.packerstarttime}"
+    #   no_release          = true
+    #   version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
+    #     date = formatdate("DD.MM.YYYY", timestamp())
+    #   } )
+    # }
 
   }
 

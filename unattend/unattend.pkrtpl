@@ -62,7 +62,7 @@
 
       <AutoLogon>
         <Enabled>true</Enabled>
-        <LogonCount>1</LogonCount>
+        <LogonCount>2</LogonCount>
         <Username>${autounattend.user}</Username>
         <Password>
           <Value>${autounattend.user_password}</Value>

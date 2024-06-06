@@ -1,7 +1,12 @@
 ```bash
+ansible-galaxy collection install ansible.windows --force
+```
+
+
+```bash
+packer init ./windows.pkr.hcl
 export CLOUD_TOKEN="..."
 export TMPDIR=/var/tmp/
-
 export PKR_VAR_cpus=4
 export PKR_VAR_memory=8192
 export PKR_VAR_headless=false
@@ -10,7 +15,6 @@ export PKR_VAR_headless=false
 
 ```powershell
 $Env:CLOUD_TOKEN = '...'
-
 $Env:PKR_VAR_cpus = 4
 $Env:PKR_VAR_memory = 8192
 $Env:PKR_VAR_headless = false
