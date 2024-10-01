@@ -1,11 +1,4 @@
-.vagrant/*
-ansible/osbuilder/*
-ansible/windows/tools
-osbuilder-do/*
-output/*
-Dockerfile
-*.box
-salt/*
-wim/*
-packer_cache/*
-.venvP312A216/*
+boxes\*
+builds\*
+packer_cache\*
+.vagrant\*

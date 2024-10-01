@@ -27,7 +27,7 @@
 
       <OOBE>
         <HideEULAPage>true</HideEULAPage>
-        <ProtectYourPC>1</ProtectYourPC>
+        <ProtectYourPC>3</ProtectYourPC>
         <NetworkLocation>Work</NetworkLocation>
         <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
         <SkipUserOOBE>true</SkipUserOOBE>
@@ -37,35 +37,18 @@
       <TimeZone>UTC</TimeZone>
 
       <UserAccounts>
-
-        <LocalAccounts>
-
-          <LocalAccount wcm:action="add">
-            <Name>${autounattend.user}</Name>
-            <Group>Administrators</Group>
-            <Description>${autounattend.user}</Description>
-            <DisplayName>${autounattend.user}</DisplayName>
-            <Password>
-                <Value>${autounattend.user_password}</Value>
-                <PlainText>true</PlainText>
-            </Password>
-          </LocalAccount>
-            
-        </LocalAccounts>
-
         <AdministratorPassword>
           <Value>${autounattend.administrator_password}</Value>
           <PlainText>true</PlainText>
         </AdministratorPassword>
-
       </UserAccounts>
 
       <AutoLogon>
         <Enabled>true</Enabled>
-        <LogonCount>2</LogonCount>
-        <Username>${autounattend.user}</Username>
+        <LogonCount>3</LogonCount>
+        <Username>Administrator</Username>
         <Password>
-          <Value>${autounattend.user_password}</Value>
+          <Value>${autounattend.administrator_password}</Value>
           <PlainText>true</PlainText>
         </Password>
       </AutoLogon>

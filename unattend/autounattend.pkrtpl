@@ -26,24 +26,36 @@
 
         <RunSynchronous>
           <RunSynchronousCommand wcm:action="add">
-              <Order>1</Order>
-              <Description>BypassTPMCheck</Description>
-              <Path>cmd /c reg add "HKLM\SYSTEM\Setup\LabConfig" /v "BypassTPMCheck" /t REG_DWORD /d 1</Path>
+            <Order>1</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassTPMCheck /t reg_dword /d 0x00000001 /f</Path>
           </RunSynchronousCommand>
           <RunSynchronousCommand wcm:action="add">
-              <Order>2</Order>
-              <Description>BypassSecureBootCheck</Description>
-              <Path>cmd /c reg add "HKLM\SYSTEM\Setup\LabConfig" /v "BypassSecureBootCheck" /t REG_DWORD /d 1</Path>
+            <Order>2</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassSecureBootCheck /t reg_dword /d 0x00000001 /f</Path>
           </RunSynchronousCommand>
           <RunSynchronousCommand wcm:action="add">
-              <Order>3</Order>
-              <Description>BypassRAMCheck</Description>
-              <Path>cmd /c reg add "HKLM\SYSTEM\Setup\LabConfig" /v "BypassRAMCheck" /t REG_DWORD /d 1</Path>
+            <Order>3</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassRAMCheck /t reg_dword /d 0x00000001 /f</Path>
           </RunSynchronousCommand>
+          <RunSynchronousCommand wcm:action="add">
+              <Order>4</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassCPUCheck /t reg_dword /d 0x00000001 /f</Path>
+          </RunSynchronousCommand>
+          <RunSynchronousCommand wcm:action="add">
+              <Order>5</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassStorageCheck /t reg_dword /d 0x00000001 /f</Path>
+          </RunSynchronousCommand>
+
         </RunSynchronous>
-        
+
+
+
+
         <DiskConfiguration>
           <Disk wcm:action="add">
+            <DiskID>0</DiskID>
+            <WillWipeDisk>true</WillWipeDisk>
+            
             <CreatePartitions>
               <CreatePartition wcm:action="add">
                 <Type>Primary</Type>
@@ -56,6 +68,7 @@
                 <Extend>true</Extend>
               </CreatePartition>
             </CreatePartitions>
+            
             <ModifyPartitions>
               <ModifyPartition wcm:action="add">
                 <Active>true</Active>
@@ -70,8 +83,7 @@
                 <PartitionID>2</PartitionID>
               </ModifyPartition>
             </ModifyPartitions>
-            <DiskID>0</DiskID>
-            <WillWipeDisk>true</WillWipeDisk>
+
           </Disk>
         </DiskConfiguration>
 
@@ -121,52 +133,73 @@
 
         <SynchronousCommand wcm:action="add">
           <Order>1</Order>
+          <CommandLine>cmd /c powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c</CommandLine>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>2</Order>
           <CommandLine>cmd /C wmic useraccount where "name='Administrator'" set PasswordExpires=FALSE</CommandLine>
           <Description>PasswordExpires=FALSE</Description>
         </SynchronousCommand>
 
         <SynchronousCommand wcm:action="add">
-          <Order>2</Order>
+          <Order>3</Order>
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Set-NetConnectionProfile -NetworkCategory Private -InputObject (Get-NetConnectionProfile)"</CommandLine>
           <Description>NetworkLocation</Description>
         </SynchronousCommand>
 
         <SynchronousCommand wcm:action="add">
-          <Order>3</Order>
+          <Order>4</Order>
           <CommandLine>winrm quickconfig -q</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
 
         <SynchronousCommand wcm:action="add">
-          <Order>4</Order>
+          <Order>5</Order>
           <CommandLine>winrm set winrm/config/service @{AllowUnencrypted="true"}</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
 
         <SynchronousCommand wcm:action="add">
-          <Order>5</Order>
+          <Order>6</Order>
           <CommandLine>winrm set winrm/config/service/auth @{Basic="true"}</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
 
         <SynchronousCommand wcm:action="add">
-          <Order>6</Order>
+          <Order>7</Order>
           <CommandLine>netsh advfirewall firewall set rule group="remote administration" new enable=yes</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
 
         <SynchronousCommand wcm:action="add">
-          <Order>7</Order>
+          <Order>8</Order>
           <CommandLine>net stop winrm</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
 
         <SynchronousCommand wcm:action="add">
-          <Order>8</Order>
+          <Order>9</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy Bypass -Scope Process -Force ; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"</CommandLine>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>10</Order>
+          <CommandLine>"C:\ProgramData\chocolatey\bin\choco.exe" install saltminion -y --version=3007.1.0 --params="'/MinionStart:0'"</CommandLine>
+        </SynchronousCommand>
+
+
+        <SynchronousCommand wcm:action="add">
+          <Order>98</Order>
           <CommandLine>net start winrm</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
-        
+
+        <SynchronousCommand wcm:action="add">
+          <Order>99</Order>
+          <CommandLine>"C:\Program Files\Salt Project\Salt\salt-call.exe" --local state.highstate --file-root=E:\salt</CommandLine>
+        </SynchronousCommand>
+
       </FirstLogonCommands>
 
     </component>
