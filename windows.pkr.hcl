@@ -80,6 +80,29 @@ locals {
   }
 }
 
+source "qemu" "windows" {
+  accelerator         = "kvm"
+  output_directory      = "builds/${source.type}-${source.name}"
+
+  cpus                  = 2
+  memory                = 4 * 1024
+  disk_size             = 60 * 1024
+  net_device          = "virtio-net"  
+  format              = "qcow2"
+  headless            = "${var.headless}"
+  vnc_bind_address    = "0.0.0.0"
+  shutdown_command      = "C:\\Windows\\Temp\\packerShutdown.bat"
+  shutdown_timeout    = "15m"
+  use_default_display = false
+  communicator          = "winrm"
+  winrm_timeout         = "60m"
+  winrm_insecure        = true
+  winrm_use_ssl         = false
+  winrm_username        = "Administrator"
+  winrm_password        = "vagrant"
+
+}
+
 source "hyperv-iso" "windows" {
   keep_registered       = true
   output_directory      = "builds/${source.type}-${source.name}"
@@ -152,6 +175,25 @@ build {
 
   dynamic "source" {
     for_each = local.builds
+    labels   = ["source.qemu.windows"]
+    content {
+      name              = source.key
+      vm_name           = source.key
+      boot_command      = ["<spacebar><wait><spacebar><wait><spacebar>"]
+      iso_url           = source.value.iso_url
+      iso_checksum      = source.value.iso_checksum
+      cd_files          = [
+        "salt", "drivers/qemu/*"
+      ]
+      cd_content        = {
+        "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
+        "/unattend.xml"     = templatefile("${path.root}/unattend/unattend.pkrtpl", source.value),
+      }
+    }
+  }
+
+  dynamic "source" {
+    for_each = local.builds
     labels   = ["source.hyperv-iso.windows"]
     content {
       name              = source.key
@@ -160,7 +202,7 @@ build {
       iso_url           = source.value.iso_url
       iso_checksum      = source.value.iso_checksum
       cd_files          = [
-        "salt",
+        "salt", "drivers/qemu/*"
       ]
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
@@ -180,7 +222,7 @@ build {
       iso_url           = source.value.iso_url
       iso_checksum      = source.value.iso_checksum
       cd_files          = [
-        "salt",
+        "salt", "drivers/qemu/*"
       ]
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
@@ -200,7 +242,7 @@ build {
       iso_url           = source.value.iso_url
       iso_checksum      = source.value.iso_checksum
       cd_files          = [
-        "salt",
+        "salt", "drivers/qemu/*"
       ]
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
