@@ -40,13 +40,15 @@ locals {
   builds          = {
 
     windows11 = {
-      iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
-      iso_checksum         = "sha256:755a90d43e826a74b9e1932a34788b898e028272439b777e5593dee8d53622ae"
+      iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66751/22621.525.220925-0207.ni_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+      iso_checksum         = "sha256:ebbc79106715f44f5020f77bd90721b17c5a877cbc15a3535b99155493a1bb3f"
+      # iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+      # iso_checksum         = "sha256:755a90d43e826a74b9e1932a34788b898e028272439b777e5593dee8d53622ae"
       vb_guest_os_type     = "Windows11_64"
       vmware_guest_os_type = "windows11-64"
       autounattend = {
         image_name              = "Windows 11 Enterprise Evaluation"
-        administrator_password  = "password"
+        administrator_password  = "vagrant"
         user_data_key           = ""
       }
     }
@@ -58,7 +60,7 @@ locals {
       vmware_guest_os_type = "windows2019srv_64Guest"
       autounattend      = {
         image_name              = "Windows Server 2022 SERVERSTANDARD"
-        administrator_password  = "password"
+        administrator_password  = "vagrant"
         user_data_key           = ""
       }
     }
@@ -70,7 +72,7 @@ locals {
       iso_checksum         = "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
       autounattend      = {
         image_name              = "Windows Server 2022 SERVERSTANDARDCORE"
-        administrator_password  = "password"
+        administrator_password  = "vagrant"
         user_data_key           = ""
       }
     }
@@ -91,7 +93,7 @@ source "hyperv-iso" "windows" {
   winrm_insecure        = true
   winrm_use_ssl         = false
   winrm_username        = "Administrator"
-  winrm_password        = "password"
+  winrm_password        = "vagrant"
   enable_dynamic_memory = false
   enable_secure_boot    = false
   guest_additions_mode  = "disable"
@@ -116,7 +118,7 @@ source "virtualbox-iso" "windows" {
   winrm_insecure        = true
   winrm_use_ssl         = false
   winrm_username        = "Administrator"
-  winrm_password        = "password"
+  winrm_password        = "vagrant"
   shutdown_command      = "C:\\Windows\\Temp\\packerShutdown.bat"
   post_shutdown_delay   = "15m"
 }
@@ -138,7 +140,7 @@ source "vmware-iso" "windows" {
   winrm_insecure                 = true
   winrm_use_ssl                  = false
   winrm_username                 = "Administrator"
-  winrm_password                 = "password"
+  winrm_password                 = "vagrant"
   disable_vnc                    = false
   disk_type_id                   = 0
   version                        = 14
@@ -272,14 +274,14 @@ build {
     #   inline = ["vagrant destroy -f"]
     # }
 
-    # post-processor "vagrant-registry" {
-    #   client_id     = "${var.client_id}"
-    #   client_secret = "${var.client_secret}"
-    #   box_tag       = "valengus/${source.name}"
-    #   version       = "1.1.${local.packerstarttime}"
-    #   architecture  = "amd64"
-    #   no_release    = true
-    # }
+    post-processor "vagrant-registry" {
+      client_id     = "${var.client_id}"
+      client_secret = "${var.client_secret}"
+      box_tag       = "valengus/${source.name}"
+      version       = "1.1.${local.packerstarttime}"
+      architecture  = "amd64"
+      no_release    = true
+    }
 
   }
 

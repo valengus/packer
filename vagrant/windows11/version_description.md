@@ -17,4 +17,4 @@
 ### Login Credentials
 Username: Administrator \ vagrant
 
-Password: password
+Password: vagrant

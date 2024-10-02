@@ -45,7 +45,6 @@
               <Order>5</Order>
             <Path>reg add HKLM\System\Setup\LabConfig /v BypassStorageCheck /t reg_dword /d 0x00000001 /f</Path>
           </RunSynchronousCommand>
-
         </RunSynchronous>
 
 
