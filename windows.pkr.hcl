@@ -40,10 +40,10 @@ locals {
   builds          = {
 
     windows11 = {
-      iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66751/22621.525.220925-0207.ni_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
-      iso_checksum         = "sha256:ebbc79106715f44f5020f77bd90721b17c5a877cbc15a3535b99155493a1bb3f"
-      # iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
-      # iso_checksum         = "sha256:755a90d43e826a74b9e1932a34788b898e028272439b777e5593dee8d53622ae"
+      # iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66751/22621.525.220925-0207.ni_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+      # iso_checksum         = "sha256:ebbc79106715f44f5020f77bd90721b17c5a877cbc15a3535b99155493a1bb3f"
+      iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+      iso_checksum         = "sha256:755a90d43e826a74b9e1932a34788b898e028272439b777e5593dee8d53622ae"
       vb_guest_os_type     = "Windows11_64"
       vmware_guest_os_type = "windows11-64"
       autounattend = {
@@ -82,25 +82,21 @@ locals {
 
 source "qemu" "windows" {
   accelerator         = "kvm"
-  output_directory      = "builds/${source.type}-${source.name}"
-
-  cpus                  = 2
-  memory                = 4 * 1024
-  disk_size             = 60 * 1024
-  net_device          = "virtio-net"  
-  format              = "qcow2"
+  output_directory    = "builds/${source.type}-${source.name}"
+  cpus                = 2
+  memory              = 4 * 1024
+  disk_size           = 60 * 1024
   headless            = "${var.headless}"
   vnc_bind_address    = "0.0.0.0"
-  shutdown_command      = "C:\\Windows\\Temp\\packerShutdown.bat"
+  shutdown_command    = "C:\\Windows\\Temp\\packerShutdown.bat"
   shutdown_timeout    = "15m"
   use_default_display = false
-  communicator          = "winrm"
-  winrm_timeout         = "60m"
-  winrm_insecure        = true
-  winrm_use_ssl         = false
-  winrm_username        = "Administrator"
-  winrm_password        = "vagrant"
-
+  communicator        = "winrm"
+  winrm_timeout       = "60m"
+  winrm_insecure      = true
+  winrm_use_ssl       = false
+  winrm_username      = "Administrator"
+  winrm_password      = "vagrant"
 }
 
 source "hyperv-iso" "windows" {

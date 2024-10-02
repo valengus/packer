@@ -18,6 +18,11 @@ Username: Administrator \ vagrant
 Password: vagrant
 
 
+```bash
+packer init ./windows.pkr.hcl
+packer plugins install github.com/hashicorp/qemu
+```
+
 ```powershell
 
 $Env:HCL_CLIENT_ID = "..."
