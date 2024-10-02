@@ -1,6 +1,6 @@
 ;/*++
 ;
-;Copyright (c) 2008-2020 Red Hat Inc.
+;Copyright (c) 2008-2021 Red Hat Inc.
 ;
 ;
 ;Module Name:
@@ -19,10 +19,11 @@ Signature="$Windows NT$"
 Class=SCSIAdapter
 ClassGUID={4D36E97B-E325-11CE-BFC1-08002BE10318}
 Provider=%VENDOR%
-DriverVer = 05/24/2020,100.82.104.18500
+DriverVer = 12/02/2021,100.90.104.21500
 CatalogFile=viostor.cat
 DriverPackageType = PlugAndPlay
 DriverPackageDisplayName = %VioStorScsi.DeviceDesc%
+PnpLockdown=1
 
 ;
 ; Source file information
