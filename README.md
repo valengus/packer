@@ -1,4 +1,4 @@
-### WINDOWS VAGRANT BOXS  :
+### WINDOWS VAGRANT BOXES  :
 
 - image prepared in "Audit Mode"
 - image was finalized using sysprep
