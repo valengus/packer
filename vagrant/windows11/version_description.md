@@ -1,4 +1,4 @@
-### WINDOWS VAGRANT BOXS  :
+### WINDOWS 11 24H2 Enterprise Evaluation x64  :
 
 [source](https://github.com/valengus/packer.git)
 
@@ -18,16 +18,3 @@
 Username: Administrator \ vagrant
 
 Password: password
-
-
-```powershell
-
-$Env:HCL_CLIENT_ID = "..."
-$Env:HCL_CLIENT_secret = "..."
-$Env:PKR_VAR_headless = false
-
-packer init ./windows.pkr.hcl
-packer build -force --only=windows.hyperv-iso.windows11 ./windows.pkr.hcl
-packer build -force --only=windows.hyperv-iso.windows-2022-standard ./windows.pkr.hcl
-packer build -force --only=windows.hyperv-iso.windows-2022-standard-core ./windows.pkr.hcl
-```

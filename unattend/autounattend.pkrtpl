@@ -189,17 +189,19 @@
         </SynchronousCommand>
 
 
-        <SynchronousCommand wcm:action="add">
+
+
+         <SynchronousCommand wcm:action="add">
           <Order>98</Order>
           <CommandLine>net start winrm</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
-
-        <SynchronousCommand wcm:action="add">
+ 
+         <SynchronousCommand wcm:action="add">
           <Order>99</Order>
-          <CommandLine>"C:\Program Files\Salt Project\Salt\salt-call.exe" --local state.highstate --file-root=E:\salt</CommandLine>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\Program Files\Salt Project\Salt\salt-call.exe' --local state.highstate --file-root=E:\salt"</CommandLine>
         </SynchronousCommand>
-
+ 
       </FirstLogonCommands>
 
     </component>

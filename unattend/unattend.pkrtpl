@@ -37,18 +37,33 @@
       <TimeZone>UTC</TimeZone>
 
       <UserAccounts>
+
+        <LocalAccounts>
+          <LocalAccount wcm:action="add">
+            <Name>vagrant</Name>
+            <Group>Administrators</Group>
+            <Description>vagrant</Description>
+            <DisplayName>vagrant</DisplayName>
+            <Password>
+                <Value>vagrant</Value>
+                <PlainText>true</PlainText>
+            </Password>
+          </LocalAccount>
+        </LocalAccounts>
+
         <AdministratorPassword>
           <Value>${autounattend.administrator_password}</Value>
           <PlainText>true</PlainText>
         </AdministratorPassword>
+
       </UserAccounts>
 
       <AutoLogon>
         <Enabled>true</Enabled>
         <LogonCount>3</LogonCount>
-        <Username>Administrator</Username>
+        <Username>vagrant</Username>
         <Password>
-          <Value>${autounattend.administrator_password}</Value>
+          <Value>vagrant</Value>
           <PlainText>true</PlainText>
         </Password>
       </AutoLogon>

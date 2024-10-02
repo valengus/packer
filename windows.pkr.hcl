@@ -19,22 +19,57 @@ packer {
   }
 }
 
+variable "client_id" {
+  type    = string
+  default = "${env("HCL_CLIENT_ID")}"
+}
+
+variable "client_secret" {
+  type    = string
+  default = "${env("HCL_CLIENT_secret")}"
+}
+
+variable "headless" {
+  type    = bool
+  default = true
+}
+
 locals {
-  packerstarttime = formatdate("YYYYMMDD", timestamp())
+  # packerstarttime = formatdate("YYYYMMDD", timestamp())
+  packerstarttime = "20241001"
   builds          = {
 
     windows11 = {
-      # 23H2:
-      # iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/22631.2428.231001-0608.23H2_NI_RELEASE_SVC_REFRESH_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
-      # iso_checksum         = "sha256:c8dbc96b61d04c8b01faf6ce0794fdf33965c7b350eaa3eb1e6697019902945c"
-      # 24H2:
       iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
       iso_checksum         = "sha256:755a90d43e826a74b9e1932a34788b898e028272439b777e5593dee8d53622ae"
-      
       vb_guest_os_type     = "Windows11_64"
       vmware_guest_os_type = "windows11-64"
       autounattend = {
         image_name              = "Windows 11 Enterprise Evaluation"
+        administrator_password  = "password"
+        user_data_key           = ""
+      }
+    }
+
+    windows-2022-standard = {
+      iso_url              = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
+      iso_checksum         = "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
+      vb_guest_os_type     = "Windows2022_64"
+      vmware_guest_os_type = "windows2019srv_64Guest"
+      autounattend      = {
+        image_name              = "Windows Server 2022 SERVERSTANDARD"
+        administrator_password  = "password"
+        user_data_key           = ""
+      }
+    }
+
+    windows-2022-standard-core = {
+      vb_guest_os_type     = "Windows2022_64"
+      vmware_guest_os_type = "windows2019srv_64Guest"
+      iso_url              = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
+      iso_checksum         = "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
+      autounattend      = {
+        image_name              = "Windows Server 2022 SERVERSTANDARDCORE"
         administrator_password  = "password"
         user_data_key           = ""
       }
@@ -50,7 +85,7 @@ source "hyperv-iso" "windows" {
   cpus                  = 2
   memory                = 4 * 1024
   disk_size             = 60 * 1024
-  headless              = true
+  headless              = "${var.headless}"
   communicator          = "winrm"
   winrm_timeout         = "60m"
   winrm_insecure        = true
@@ -69,7 +104,7 @@ source "hyperv-iso" "windows" {
 source "virtualbox-iso" "windows" {
   output_directory      = "builds/${source.type}-${source.name}"
   keep_registered       = true
-  headless              = true
+  headless              = "${var.headless}"
   guest_additions_mode  = "disable"
   cpus                  = 2
   memory                = 4 * 1024
@@ -87,12 +122,15 @@ source "virtualbox-iso" "windows" {
 }
 
 source "vmware-iso" "windows" {
+  output_directory               = "builds/${source.type}-${source.name}"
+  keep_registered                = true
+  boot_wait                      = "2s"
   cpus                           = 2
   memory                         = 4 * 1024
   disk_size                      = 60 * 1024
   disk_adapter_type              = "lsisas1068"
   vmx_remove_ethernet_interfaces = true
-  headless                       = false
+  headless                       = "${var.headless}"
   shutdown_command               = "C:\\Windows\\Temp\\packerShutdown.bat"
   shutdown_timeout               = "15m"
   communicator                   = "winrm"
@@ -169,12 +207,18 @@ build {
     }
   }
 
-  # wait salt-call process
+  # provisioner "salt" {
+  #   state_tree = "salt"
+  #   target_os  = "windows"
+  #   clean      = "true"
+  # }
+
+  # wait salt-call process exit code
   provisioner "powershell" {
     inline = [
-      "Start-Sleep -Seconds 5",
       "$saltProcess = Get-Process salt-call ; Wait-Process -InputObject $saltProcess ; if ($saltProcess.ExitCode -ne 0) { exit 1 }",
       "Get-Service salt-minion | Set-Service -StartupType Disabled",
+      "Start-Sleep -Seconds 30"
     ]
   }
 
@@ -211,31 +255,30 @@ build {
 
     post-processor "shell-local" {
       inline = [ "vagrant up ${source.name} --provider=hyperv" ]
-      only   = [ "hyperv-iso.windows11" ]
+      only   = [ "hyperv-iso.windows11", "hyperv-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
     }
 
     post-processor "shell-local" {
       inline = [ "vagrant up ${source.name} --provider=virtualbox" ]
-      only   = [ "virtualbox-iso.windows11" ]
+      only   = [ "virtualbox-iso.windows11", "virtualbox-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
     }
 
     post-processor "shell-local" {
       inline = [ "vagrant up ${source.name} --provider=vmware_desktop" ]
-      only   = [ "vmware-iso.windows11" ]
+      only   = [ "vmware-iso.windows11", "vmware-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
     }
 
     # post-processor "shell-local" {
     #   inline = ["vagrant destroy -f"]
     # }
 
-    # post-processor "vagrant-cloud" {
-    #   access_token        = "${var.cloud_token}"
-    #   box_tag             = "valengus/${source.name}"
-    #   version             = "1.1.${local.packerstarttime}"
-    #   no_release          = true
-    #   version_description = templatefile("${path.root}/vagrant/${source.name}/version_description.md", { 
-    #     date = formatdate("DD.MM.YYYY", timestamp())
-    #   } )
+    # post-processor "vagrant-registry" {
+    #   client_id     = "${var.client_id}"
+    #   client_secret = "${var.client_secret}"
+    #   box_tag       = "valengus/${source.name}"
+    #   version       = "1.1.${local.packerstarttime}"
+    #   architecture  = "amd64"
+    #   no_release    = true
     # }
 
   }
