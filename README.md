@@ -1,7 +1,5 @@
 ### WINDOWS VAGRANT BOXS  :
 
-[source](https://github.com/valengus/packer.git)
-
 - image prepared in "Audit Mode"
 - image was finalized using sysprep
 - system drive will be extended during first startup, you can use vagrant-disksize plugin
