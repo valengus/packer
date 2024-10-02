@@ -83,8 +83,8 @@ locals {
 source "qemu" "windows" {
   accelerator         = "kvm"
   output_directory    = "builds/${source.type}-${source.name}"
-  cpus                = 2
-  memory              = 4 * 1024
+  cpus                = 4
+  memory              = 8 * 1024
   disk_size           = 60 * 1024
   headless            = "${var.headless}"
   vnc_bind_address    = "0.0.0.0"
@@ -103,8 +103,8 @@ source "hyperv-iso" "windows" {
   keep_registered       = true
   output_directory      = "builds/${source.type}-${source.name}"
   boot_wait             = "2s"
-  cpus                  = 2
-  memory                = 4 * 1024
+  cpus                  = 4
+  memory                = 8 * 1024
   disk_size             = 60 * 1024
   headless              = "${var.headless}"
   communicator          = "winrm"
@@ -127,8 +127,8 @@ source "virtualbox-iso" "windows" {
   keep_registered       = true
   headless              = "${var.headless}"
   guest_additions_mode  = "disable"
-  cpus                  = 2
-  memory                = 4 * 1024
+  cpus                  = 4
+  memory                = 8 * 1024
   disk_size             = 60 * 1024
   boot_wait             = "2s"
   format                = "ovf"
@@ -146,8 +146,8 @@ source "vmware-iso" "windows" {
   output_directory               = "builds/${source.type}-${source.name}"
   keep_registered                = true
   boot_wait                      = "2s"
-  cpus                           = 2
-  memory                         = 4 * 1024
+  cpus                           = 4
+  memory                         = 8 * 1024
   disk_size                      = 60 * 1024
   disk_adapter_type              = "lsisas1068"
   vmx_remove_ethernet_interfaces = true
