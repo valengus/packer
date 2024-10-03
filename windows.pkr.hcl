@@ -270,7 +270,7 @@ build {
 
   provisioner "powershell" {
     inline = [
-      "Optimize-Volume -DriveLetter H -Defrag -Verbose"
+      "Optimize-Volume -DriveLetter C -Defrag -Verbose"
     ]
   }
 

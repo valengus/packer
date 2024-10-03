@@ -26,19 +26,27 @@ export PKR_VAR_headless=false
 packer init ./windows.pkr.hcl
 packer plugins install github.com/hashicorp/qemu
 
+packer build -force --only=windows.qemu.windows11 ./windows.pkr.hcl
+packer build -force --only=windows.qemu.windows-2022-standard ./windows.pkr.hcl
+packer build -force --only=windows.qemu.windows-2022-standard-core ./windows.pkr.hcl
+
 packer build -force --only=windows.virtualbox-iso.windows11 ./windows.pkr.hcl
 packer build -force --only=windows.virtualbox-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.virtualbox-iso.windows-2022-standard-core ./windows.pkr.hcl
 ```
 
 ```powershell
-
 $Env:HCL_CLIENT_ID = "..."
 $Env:HCL_CLIENT_secret = "..."
 $Env:PKR_VAR_headless = false
 
 packer init ./windows.pkr.hcl
+
 packer build -force --only=windows.hyperv-iso.windows11 ./windows.pkr.hcl
 packer build -force --only=windows.hyperv-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.hyperv-iso.windows-2022-standard-core ./windows.pkr.hcl
+
+packer build -force --only=windows.vmware-iso.windows11 ./windows.pkr.hcl
+packer build -force --only=windows.vmware-iso.windows-2022-standard ./windows.pkr.hcl
+packer build -force --only=windows.vmware-iso.windows-2022-standard-core ./windows.pkr.hcl
 ```
