@@ -7,9 +7,9 @@
 - updates ( 01.10.2024 )
 - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
 - qemu|virtualbox|vmware guest agent
-- winrm will be enabled over https during startup
-- remote desktop allowed
-- additional software ['salt-minion']
+- winrm will be enabled over https during first startup
+- remote desktop will be enabled over https during first startup
+- additional software ['salt-minion', 'chocolatey', 'sdelete']
 
 ### Login Credentials
 Username: Administrator \ vagrant

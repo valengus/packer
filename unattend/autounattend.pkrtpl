@@ -15,11 +15,37 @@
       </component>
 
       <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
-        <DriverPaths>
-          <PathAndCredentials wcm:action="add" wcm:keyValue="1">
-            <Path>E:\</Path>
-          </PathAndCredentials>
-        </DriverPaths>
+      
+      <DriverPaths>
+        <PathAndCredentials wcm:keyValue="1" wcm:action="add">
+          <Path>E:\Balloon</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="2" wcm:action="add">
+          <Path>E:\NetKVM</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="3" wcm:action="add">
+          <Path>E:\pvpanic</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="4" wcm:action="add">
+          <Path>E:\qxldod</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="5" wcm:action="add">
+          <Path>E:\vioinput</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="6" wcm:action="add">
+          <Path>E:\viorng</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="7" wcm:action="add">
+          <Path>E:\vioscsi</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="8" wcm:action="add">
+          <Path>E:\vioserial</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="9" wcm:action="add">
+          <Path>E:\viostor</Path>
+        </PathAndCredentials>
+      </DriverPaths>
+
       </component>
 
       <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">

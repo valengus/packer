@@ -269,6 +269,11 @@ build {
   }
 
   provisioner "powershell" {
+    script = "scripts/virtioDrivers.ps1"
+    only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
+  }
+
+  provisioner "powershell" {
     inline = [
       "Optimize-Volume -DriveLetter C -Defrag -Verbose"
     ]
@@ -330,14 +335,14 @@ build {
     #   inline = ["vagrant destroy -f"]
     # }
 
-    post-processor "vagrant-registry" {
-      client_id     = "${var.client_id}"
-      client_secret = "${var.client_secret}"
-      box_tag       = "valengus/${source.name}"
-      version       = "1.1.${local.packerstarttime}"
-      architecture  = "amd64"
-      no_release    = true
-    }
+    # post-processor "vagrant-registry" {
+    #   client_id     = "${var.client_id}"
+    #   client_secret = "${var.client_secret}"
+    #   box_tag       = "valengus/${source.name}"
+    #   version       = "1.1.${local.packerstarttime}"
+    #   architecture  = "amd64"
+    #   no_release    = true
+    # }
 
   }
 
