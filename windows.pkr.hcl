@@ -312,7 +312,7 @@ build {
     }
 
     post-processor "shell-local" {
-      inline = [ "vagrant up ${source.name}" ]
+      inline = [ "vagrant up ${source.name} --provider=libvirt" ]
       only   = [ 
         "qemu.windows11", 
         "qemu.windows-2022-standard", 
@@ -324,7 +324,7 @@ build {
     }
 
     post-processor "shell-local" {
-      inline = [ "vagrant up ${source.name}" ]
+      inline = [ "vagrant up ${source.name} --provider=hyperv" ]
       only   = [ 
         "hyperv-iso.windows11", 
         "hyperv-iso.windows-2022-standard", 
