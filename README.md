@@ -1,4 +1,4 @@
-### WINDOWS VAGRANT BOXES  :
+### WINDOWS VAGRANT BOXES
 
 - image prepared in "Audit Mode"
 - image was finalized using sysprep
@@ -11,7 +11,6 @@
 - remote desktop allowed
 - additional software ['salt-minion']
 
-
 ### Login Credentials
 Username: Administrator \ vagrant
 
@@ -19,8 +18,17 @@ Password: vagrant
 
 
 ```bash
+export HCL_CLIENT_ID="..." ; 
+export HCL_CLIENT_secret="..."
+export TMPDIR=/var/tmp/
+export PKR_VAR_headless=false
+
 packer init ./windows.pkr.hcl
 packer plugins install github.com/hashicorp/qemu
+
+packer build -force --only=windows.virtualbox-iso.windows11 ./windows.pkr.hcl
+packer build -force --only=windows.virtualbox-iso.windows-2022-standard ./windows.pkr.hcl
+packer build -force --only=windows.virtualbox-iso.windows-2022-standard-core ./windows.pkr.hcl
 ```
 
 ```powershell

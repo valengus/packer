@@ -60,7 +60,7 @@
 
       <AutoLogon>
         <Enabled>true</Enabled>
-        <LogonCount>3</LogonCount>
+        <LogonCount>4</LogonCount>
         <Username>vagrant</Username>
         <Password>
           <Value>vagrant</Value>

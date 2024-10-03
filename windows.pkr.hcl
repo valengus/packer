@@ -100,7 +100,6 @@ source "qemu" "windows" {
 }
 
 source "hyperv-iso" "windows" {
-  keep_registered       = true
   output_directory      = "builds/${source.type}-${source.name}"
   boot_wait             = "2s"
   cpus                  = 4
@@ -124,7 +123,6 @@ source "hyperv-iso" "windows" {
 
 source "virtualbox-iso" "windows" {
   output_directory      = "builds/${source.type}-${source.name}"
-  keep_registered       = true
   headless              = "${var.headless}"
   guest_additions_mode  = "disable"
   cpus                  = 4
@@ -144,7 +142,6 @@ source "virtualbox-iso" "windows" {
 
 source "vmware-iso" "windows" {
   output_directory               = "builds/${source.type}-${source.name}"
-  keep_registered                = true
   boot_wait                      = "2s"
   cpus                           = 4
   memory                         = 8 * 1024
@@ -268,6 +265,22 @@ build {
   }
 
   provisioner "powershell" {
+    script = "scripts/Clear-WindowsUpdateCache.ps1"
+  }
+
+  provisioner "powershell" {
+    inline = [
+      "Optimize-Volume -DriveLetter H -Defrag -Verbose"
+    ]
+  }
+
+  provisioner "powershell" {
+    inline = [
+      "sdelete -z C:"
+    ]
+  }
+
+  provisioner "powershell" {
     inline = [ "Get-Service salt-minion | Set-Service -StartupType Automatic" ]
   }
 
@@ -294,6 +307,11 @@ build {
     }
 
     post-processor "shell-local" {
+      inline = [ "vagrant up ${source.name} --provider=libvirt" ]
+      only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
+    }
+
+    post-processor "shell-local" {
       inline = [ "vagrant up ${source.name} --provider=hyperv" ]
       only   = [ "hyperv-iso.windows11", "hyperv-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
     }
@@ -312,14 +330,14 @@ build {
     #   inline = ["vagrant destroy -f"]
     # }
 
-    post-processor "vagrant-registry" {
-      client_id     = "${var.client_id}"
-      client_secret = "${var.client_secret}"
-      box_tag       = "valengus/${source.name}"
-      version       = "1.1.${local.packerstarttime}"
-      architecture  = "amd64"
-      no_release    = true
-    }
+    # post-processor "vagrant-registry" {
+    #   client_id     = "${var.client_id}"
+    #   client_secret = "${var.client_secret}"
+    #   box_tag       = "valengus/${source.name}"
+    #   version       = "1.1.${local.packerstarttime}"
+    #   architecture  = "amd64"
+    #   no_release    = true
+    # }
 
   }
 
