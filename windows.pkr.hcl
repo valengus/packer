@@ -265,13 +265,13 @@ build {
   }
 
   provisioner "powershell" {
-    script = "scripts/Clear-WindowsUpdateCache.ps1"
-  }
-
-  provisioner "powershell" {
     script = "scripts/virtioDrivers.ps1"
     only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
   }
+
+  # provisioner "powershell" {
+  #   script = "scripts/Invoke-WindowsDiskCleanup.ps1"
+  # }
 
   provisioner "powershell" {
     inline = [
@@ -312,23 +312,37 @@ build {
     }
 
     post-processor "shell-local" {
-      inline = [ "vagrant up ${source.name} --provider=libvirt" ]
-      only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
+      inline = [ "vagrant up ${source.name}" ]
+      only   = [ 
+        "qemu.windows11", 
+        "qemu.windows-2022-standard", 
+        "qemu.windows-2022-standard-core" 
+      ]
+      environment_vars  = [
+        "VAGRANT_DEFAULT_PROVIDER=libvirt"
+      ]
     }
 
     post-processor "shell-local" {
-      inline = [ "vagrant up ${source.name} --provider=hyperv" ]
-      only   = [ "hyperv-iso.windows11", "hyperv-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
+      inline = [ "vagrant up ${source.name}" ]
+      only   = [ 
+        "hyperv-iso.windows11", 
+        "hyperv-iso.windows-2022-standard", 
+        "hyperv-iso.windows-2022-standard-core" 
+      ]
+      environment_vars  = [
+        "VAGRANT_DEFAULT_PROVIDER=hyperv"
+      ]
     }
 
     post-processor "shell-local" {
       inline = [ "vagrant up ${source.name} --provider=virtualbox" ]
-      only   = [ "virtualbox-iso.windows11", "virtualbox-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
+      only   = [ "virtualbox-iso.windows11", "virtualbox-iso.windows-2022-standard", "virtualbox-iso.windows-2022-standard-core" ]
     }
 
     post-processor "shell-local" {
       inline = [ "vagrant up ${source.name} --provider=vmware_desktop" ]
-      only   = [ "vmware-iso.windows11", "vmware-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
+      only   = [ "vmware-iso.windows11", "vmware-iso.windows-2022-standard", "vmware-iso.windows-2022-standard-core" ]
     }
 
     # post-processor "shell-local" {
