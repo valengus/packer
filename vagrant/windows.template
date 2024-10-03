@@ -4,7 +4,7 @@ Vagrant.configure("2") do |config|
     libvirt.driver           = "kvm"
     libvirt.qemu_use_session = false
     libvirt.cpus             = 2
-    libvirt.memory           = 4096
+    libvirt.memory           = 2048
     libvirt.disk_bus         = "virtio"
     libvirt.graphics_type    = "spice"
     libvirt.nic_model_type   = "virtio"
@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :virtualbox do |virtualbox|
     virtualbox.cpus    = 2
-    virtualbox.memory  = 4096
+    virtualbox.memory  = 2048
     virtualbox.customize ["modifyvm", :id, "--vram", "32"]
     virtualbox.customize ["modifyvm", :id, "--audioout", "on"]
     virtualbox.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :vmware_desktop do |v, override|
     v.gui                         = true
-    v.vmx["memsize"]              = "4096"
+    v.vmx["memsize"]              = "2048"
     v.vmx["numvcpus"]             = "2"
     v.vmx["ethernet0.virtualDev"] = "vmxnet3"
     v.vmx["scsi0.virtualDev"]     = "lsisas1068"
@@ -47,8 +47,9 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider "hyperv" do |hyperv|
-    hyperv.cpus         = 2
-    hyperv.maxmemory    = 4096
+    hyperv.cpus         = 1
+    hyperv.memory       = 2048
+    hyperv.maxmemory    = 2048
     hyperv.linked_clone = true
   end
 
