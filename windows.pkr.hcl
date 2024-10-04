@@ -262,6 +262,7 @@ build {
   provisioner "windows-restart" {
     restart_check_command = "powershell -command \"& {Write-Output 'Restarted.'}\""
     restart_timeout       = "15m"
+    check_registry        = true
   }
 
   provisioner "powershell" {
@@ -269,18 +270,17 @@ build {
     only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
   }
 
-  # provisioner "powershell" {
-  #   script = "scripts/Invoke-WindowsDiskCleanup.ps1"
-  # }
-
   provisioner "powershell" {
     inline = [
-      "Optimize-Volume -DriveLetter C -Defrag -Verbose"
+      "Stop-Service -Name \"wuauserv\" -Force -Confirm:$False",
+      "Remove-Item C:\\Windows\\SoftwareDistribution\\Download\\* -Recurse -Force",
+      "Set-ItemProperty -Path HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU -Name NoAutoUpdate -Value 1"
     ]
   }
 
   provisioner "powershell" {
     inline = [
+      "Optimize-Volume -DriveLetter C -Defrag -Verbose",
       "sdelete -z C:"
     ]
   }
