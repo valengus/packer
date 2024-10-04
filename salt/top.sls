@@ -1,5 +1,5 @@
 {{ saltenv }}:
   '*':
-    # - installWindowsUpdates
+    - installWindowsUpdates
     - installVirtGuestAdditions
     - installSdelete
