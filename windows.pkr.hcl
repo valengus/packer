@@ -244,13 +244,7 @@ build {
     }
   }
 
-  # provisioner "salt" {
-  #   state_tree = "salt"
-  #   target_os  = "windows"
-  #   clean      = "true"
-  # }
-
-  # wait salt-call process exit code
+  # wait salt process exit code
   provisioner "powershell" {
     inline = [
       "$saltProcess = Get-Process salt-call ; Wait-Process -InputObject $saltProcess ; if ($saltProcess.ExitCode -ne 0) { exit 1 }",
