@@ -265,10 +265,10 @@ build {
     check_registry        = true
   }
 
-  # provisioner "powershell" {
-  #   script = "scripts/virtioDrivers.ps1"
-  #   only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
-  # }
+  provisioner "powershell" {
+    script = "scripts/virtioDrivers.ps1"
+    only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
+  }
 
   provisioner "powershell" {
     inline = [
