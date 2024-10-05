@@ -11,15 +11,6 @@ foreach ($driver in $drivers) {
   pnputil.exe /add-driver E:\$driver\*.inf /install
 }
 
-# Install Virtio Win
-Write-Output "Downloading virtio-win"
-$WebClient = New-Object System.Net.WebClient
-$WebClient.DownloadFile("https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.248-1/virtio-win-gt-x64.msi","$env:TEMP\virtio-win-gt-x64.msi")
-Write-Output "Installing virtio-win"
-Start-Process msiexec.exe -Wait -ArgumentList "/I $env:TEMP\virtio-win-gt-x64.msi /qn /norestart"
-Write-Output "Cleanup"
-Remove-Item -Path "$env:TEMP\virtio-win-gt-x64.msi" -Force
-
 # Install SPICE Guest Tools
 Write-Output "Downloading SPICE Guest Tools"
 $WebClient = New-Object System.Net.WebClient
