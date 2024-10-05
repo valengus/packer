@@ -4,4 +4,3 @@ if ($sysprep -ne $null) { exit 1 }
 
 # checking chocolatey
 choco install vscode -y
-

@@ -176,7 +176,7 @@ build {
       iso_url           = source.value.iso_url
       iso_checksum      = source.value.iso_checksum
       cd_files          = [
-        "salt", "drivers/qemu/*"
+        "salt", "drivers/qemu/*", "scripts" 
       ]
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
@@ -195,7 +195,7 @@ build {
       iso_url           = source.value.iso_url
       iso_checksum      = source.value.iso_checksum
       cd_files          = [
-        "salt", "drivers/qemu/*"
+        "salt", "drivers/qemu/*", "scripts" 
       ]
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
@@ -215,7 +215,7 @@ build {
       iso_url           = source.value.iso_url
       iso_checksum      = source.value.iso_checksum
       cd_files          = [
-        "salt", "drivers/qemu/*"
+        "salt", "drivers/qemu/*", "scripts" 
       ]
       cd_content        = {
         "/autounattend.xml" = templatefile("${path.root}/unattend/autounattend.pkrtpl", source.value),
@@ -265,15 +265,15 @@ build {
     check_registry        = true
   }
 
-  provisioner "powershell" {
-    script = "scripts/virtioDrivers.ps1"
-    only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
-  }
+  # provisioner "powershell" {
+  #   script = "scripts/virtioDrivers.ps1"
+  #   only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
+  # }
 
   provisioner "powershell" {
     inline = [
       "Stop-Service -Name \"wuauserv\" -Force -Confirm:$False",
-      "Remove-Item C:\\Windows\\SoftwareDistribution\\Download\\* -Recurse -Force",
+      "Remove-Item C:\\Windows\\SoftwareDistribution\\Download -Recurse -Force",
       "Set-ItemProperty -Path HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU -Name NoAutoUpdate -Value 1"
     ]
   }
