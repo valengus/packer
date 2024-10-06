@@ -329,18 +329,18 @@ build {
       environment_vars  = [ "VAGRANT_DEFAULT_PROVIDER=vmware_desktop" ]
     }
 
-    # post-processor "shell-local" {
-    #   inline = ["vagrant destroy -f"]
-    # }
+    post-processor "shell-local" {
+      inline = ["vagrant destroy -f"]
+    }
 
-    # post-processor "vagrant-registry" {
-    #   client_id     = "${var.client_id}"
-    #   client_secret = "${var.client_secret}"
-    #   box_tag       = "valengus/${source.name}"
-    #   version       = "1.1.${local.packerstarttime}"
-    #   architecture  = "amd64"
-    #   no_release    = true
-    # }
+    post-processor "vagrant-registry" {
+      client_id     = "${var.client_id}"
+      client_secret = "${var.client_secret}"
+      box_tag       = "valengus/${source.name}"
+      version       = "1.1.${local.packerstarttime}"
+      architecture  = "amd64"
+      no_release    = true
+    }
 
   }
 
