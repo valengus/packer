@@ -1,6 +1,21 @@
 pswindowsupdate:
   chocolatey.installed: []
 
+
+{% if grains['osfinger'] == 'Windows-11' %}
+
+install_updates:
+  wua.installed:
+   - updates:
+     - KB5012170
+     - KB4023057
+     - KB890830
+     - KB5043076
+     - KB2267602
+     - KB5042099
+
+{% else %}
+
 Install-WindowsUpdate:
   cmd.run:
     - name: >
@@ -10,3 +25,5 @@ Install-WindowsUpdate:
     - shell: powershell
     - require:
       - pswindowsupdate
+
+{% endif %}
