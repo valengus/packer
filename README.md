@@ -12,9 +12,9 @@
 - additional software ['salt-minion', 'chocolatey', 'sdelete']
 
 ### Login Credentials
-Username: Administrator \ vagrant
+Username: Administrator
 
-Password: vagrant
+Password: password
 
 
 ```bash

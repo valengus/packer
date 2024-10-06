@@ -48,7 +48,6 @@ locals {
       vmware_guest_os_type = "windows11-64"
       autounattend = {
         image_name              = "Windows 11 Enterprise Evaluation"
-        administrator_password  = "vagrant"
         user_data_key           = ""
       }
     }
@@ -60,7 +59,6 @@ locals {
       vmware_guest_os_type = "windows2019srv_64Guest"
       autounattend      = {
         image_name              = "Windows Server 2022 SERVERSTANDARD"
-        administrator_password  = "vagrant"
         user_data_key           = ""
       }
     }
@@ -72,7 +70,6 @@ locals {
       iso_checksum         = "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
       autounattend      = {
         image_name              = "Windows Server 2022 SERVERSTANDARDCORE"
-        administrator_password  = "vagrant"
         user_data_key           = ""
       }
     }
@@ -96,7 +93,7 @@ source "qemu" "windows" {
   winrm_insecure      = true
   winrm_use_ssl       = false
   winrm_username      = "Administrator"
-  winrm_password      = "vagrant"
+  winrm_password      = "password"
 }
 
 source "hyperv-iso" "windows" {
@@ -111,7 +108,7 @@ source "hyperv-iso" "windows" {
   winrm_insecure        = true
   winrm_use_ssl         = false
   winrm_username        = "Administrator"
-  winrm_password        = "vagrant"
+  winrm_password        = "password"
   enable_dynamic_memory = false
   enable_secure_boot    = false
   guest_additions_mode  = "disable"
@@ -135,7 +132,7 @@ source "virtualbox-iso" "windows" {
   winrm_insecure        = true
   winrm_use_ssl         = false
   winrm_username        = "Administrator"
-  winrm_password        = "vagrant"
+  winrm_password        = "password"
   shutdown_command      = "C:\\Windows\\Temp\\packerShutdown.bat"
   post_shutdown_delay   = "15m"
 }
@@ -156,7 +153,7 @@ source "vmware-iso" "windows" {
   winrm_insecure                 = true
   winrm_use_ssl                  = false
   winrm_username                 = "Administrator"
-  winrm_password                 = "vagrant"
+  winrm_password                 = "password"
   disable_vnc                    = false
   disk_type_id                   = 0
   version                        = 14

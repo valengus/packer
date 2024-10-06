@@ -38,21 +38,8 @@
 
       <UserAccounts>
 
-        <LocalAccounts>
-          <LocalAccount wcm:action="add">
-            <Name>vagrant</Name>
-            <Group>Administrators</Group>
-            <Description>vagrant</Description>
-            <DisplayName>vagrant</DisplayName>
-            <Password>
-                <Value>vagrant</Value>
-                <PlainText>true</PlainText>
-            </Password>
-          </LocalAccount>
-        </LocalAccounts>
-
         <AdministratorPassword>
-          <Value>${autounattend.administrator_password}</Value>
+          <Value>password</Value>
           <PlainText>true</PlainText>
         </AdministratorPassword>
 
@@ -61,9 +48,9 @@
       <AutoLogon>
         <Enabled>true</Enabled>
         <LogonCount>4</LogonCount>
-        <Username>vagrant</Username>
+        <Username>Administrator</Username>
         <Password>
-          <Value>vagrant</Value>
+          <Value>password</Value>
           <PlainText>true</PlainText>
         </Password>
       </AutoLogon>

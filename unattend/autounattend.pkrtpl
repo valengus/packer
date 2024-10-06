@@ -240,7 +240,7 @@
 
       <UserAccounts>
         <AdministratorPassword>
-          <Value>${autounattend.administrator_password}</Value>
+          <Value>password</Value>
           <PlainText>true</PlainText>
         </AdministratorPassword>
       </UserAccounts>
@@ -250,7 +250,7 @@
         <LogonCount>3</LogonCount>
         <Username>Administrator</Username>
         <Password>
-          <Value>${autounattend.administrator_password}</Value>
+          <Value>password</Value>
           <PlainText>true</PlainText>
         </Password>
       </AutoLogon>
