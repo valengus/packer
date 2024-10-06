@@ -15,10 +15,10 @@
       </component>
 
       <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
-      
+
       <DriverPaths>
         <PathAndCredentials wcm:keyValue="1" wcm:action="add">
-          <Path>E:\Balloon</Path>
+          <Path>E:\viostor</Path>
         </PathAndCredentials>
         <PathAndCredentials wcm:keyValue="2" wcm:action="add">
           <Path>E:\NetKVM</Path>
@@ -42,7 +42,7 @@
           <Path>E:\vioserial</Path>
         </PathAndCredentials>
         <PathAndCredentials wcm:keyValue="9" wcm:action="add">
-          <Path>E:\viostor</Path>
+          <Path>E:\Balloon</Path>
         </PathAndCredentials>
       </DriverPaths>
 
@@ -72,9 +72,6 @@
             <Path>reg add HKLM\System\Setup\LabConfig /v BypassStorageCheck /t reg_dword /d 0x00000001 /f</Path>
           </RunSynchronousCommand>
         </RunSynchronous>
-
-
-
 
         <DiskConfiguration>
           <Disk wcm:action="add">
@@ -193,13 +190,13 @@
 
         <SynchronousCommand wcm:action="add">
           <Order>7</Order>
-          <CommandLine>netsh advfirewall firewall set rule group="remote administration" new enable=yes</CommandLine>
+          <CommandLine>net stop winrm</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
 
-        <SynchronousCommand wcm:action="add">
+         <SynchronousCommand wcm:action="add">
           <Order>8</Order>
-          <CommandLine>net stop winrm</CommandLine>
+          <CommandLine>net start winrm</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
 
@@ -216,9 +213,9 @@
 
 
 
-         <SynchronousCommand wcm:action="add">
+        <SynchronousCommand wcm:action="add">
           <Order>98</Order>
-          <CommandLine>net start winrm</CommandLine>
+          <CommandLine>netsh advfirewall firewall set rule group="remote administration" new enable=yes</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
  
