@@ -34,6 +34,11 @@ variable "headless" {
   default = true
 }
 
+variable "keep_registered" {
+  type    = bool
+  default = false
+}
+
 locals {
   # packerstarttime = formatdate("YYYYMMDD", timestamp())
   packerstarttime = "20241001"
@@ -87,6 +92,7 @@ locals {
 }
 
 source "qemu" "windows" {
+  keep_registered     = "${var.keep_registered}"
   accelerator         = "kvm"
   output_directory    = "builds/${source.type}-${source.name}"
   cpus                = 4
@@ -106,6 +112,7 @@ source "qemu" "windows" {
 }
 
 source "hyperv-iso" "windows" {
+  keep_registered       = "${var.keep_registered}"
   output_directory      = "builds/${source.type}-${source.name}"
   boot_wait             = "2s"
   cpus                  = 4
@@ -128,6 +135,7 @@ source "hyperv-iso" "windows" {
 }
 
 source "virtualbox-iso" "windows" {
+  keep_registered       = "${var.keep_registered}"
   output_directory      = "builds/${source.type}-${source.name}"
   headless              = "${var.headless}"
   guest_additions_mode  = "disable"
@@ -147,6 +155,7 @@ source "virtualbox-iso" "windows" {
 }
 
 source "vmware-iso" "windows" {
+  keep_registered                = "${var.keep_registered}"
   output_directory               = "builds/${source.type}-${source.name}"
   boot_wait                      = "2s"
   cpus                           = 4
