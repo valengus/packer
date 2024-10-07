@@ -38,7 +38,7 @@ packer build -force --only=windows.virtualbox-iso.windows-2022-standard-core ./w
 ```powershell
 $Env:HCL_CLIENT_ID = "..."
 $Env:HCL_CLIENT_secret = "..."
-$Env:PKR_VAR_headless = false
+$Env:PKR_VAR_headless = "false"
 
 packer init ./windows.pkr.hcl
 
