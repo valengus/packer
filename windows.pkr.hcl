@@ -39,11 +39,9 @@ locals {
   packerstarttime = "20241001"
   builds          = {
 
-    windows11 = {
+    windows-11-22h2 = {
       iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66751/22621.525.220925-0207.ni_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
       iso_checksum         = "sha256:ebbc79106715f44f5020f77bd90721b17c5a877cbc15a3535b99155493a1bb3f"
-      # iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
-      # iso_checksum         = "sha256:755a90d43e826a74b9e1932a34788b898e028272439b777e5593dee8d53622ae"
       vb_guest_os_type     = "Windows11_64"
       vmware_guest_os_type = "windows11-64"
       autounattend = {
@@ -51,6 +49,17 @@ locals {
         user_data_key           = ""
       }
     }
+
+    # windows-11-24h2 = {
+    #   iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+    #   iso_checksum         = "sha256:755a90d43e826a74b9e1932a34788b898e028272439b777e5593dee8d53622ae"
+    #   vb_guest_os_type     = "Windows11_64"
+    #   vmware_guest_os_type = "windows11-64"
+    #   autounattend = {
+    #     image_name              = "Windows 11 Enterprise Evaluation"
+    #     user_data_key           = ""
+    #   }
+    # }
 
     windows-2022-standard = {
       iso_url              = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
@@ -155,10 +164,17 @@ source "vmware-iso" "windows" {
   winrm_username                 = "Administrator"
   winrm_password                 = "password"
   disable_vnc                    = false
+  vnc_port_max                   =  5980
+  vnc_port_min                   =  5900
   disk_type_id                   = 0
   version                        = 14
   network_adapter_type           = "e1000"
+  vmx_data                       = {
+    "RemoteDisplay.vnc.enabled"  = "false",
+    "RemoteDisplay.vnc.port"     = true
+  }
 }
+
 
 build {
   name = "windows"
@@ -261,7 +277,7 @@ build {
 
   provisioner "powershell" {
     script = "scripts/virtioDrivers.ps1"
-    only   = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
+    only   = [ "qemu.windows-11-22h2", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
   }
 
   provisioner "windows-restart" {
@@ -307,40 +323,40 @@ build {
 
     post-processor "shell-local" {
       inline            = [ "vagrant up ${source.name} --provider=libvirt" ]
-      only              = [ "qemu.windows11", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
+      only              = [ "qemu.windows-11-22h2", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
       environment_vars  = [ "VAGRANT_DEFAULT_PROVIDER=libvirt" ]
     }
 
     post-processor "shell-local" {
       inline            = [ "vagrant up ${source.name} --provider=hyperv" ]
-      only              = [ "hyperv-iso.windows11", "hyperv-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
+      only              = [ "hyperv-iso.windows-11-22h2", "hyperv-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
       environment_vars  = [ "VAGRANT_DEFAULT_PROVIDER=hyperv" ]
     }
 
     post-processor "shell-local" {
       inline            = [ "vagrant up ${source.name} --provider=virtualbox" ]
-      only              = [ "virtualbox-iso.windows11", "virtualbox-iso.windows-2022-standard", "virtualbox-iso.windows-2022-standard-core" ]
+      only              = [ "virtualbox-iso.windows-11-22h2", "virtualbox-iso.windows-2022-standard", "virtualbox-iso.windows-2022-standard-core" ]
       environment_vars  = [ "VAGRANT_DEFAULT_PROVIDER=virtualbox" ]
     }
 
     post-processor "shell-local" {
       inline            = [ "vagrant up ${source.name} --provider=vmware_desktop" ]
-      only              = [ "vmware-iso.windows11", "vmware-iso.windows-2022-standard", "vmware-iso.windows-2022-standard-core" ]
+      only              = [ "vmware-iso.windows-11-22h2", "vmware-iso.windows-2022-standard", "vmware-iso.windows-2022-standard-core" ]
       environment_vars  = [ "VAGRANT_DEFAULT_PROVIDER=vmware_desktop" ]
     }
 
-    # post-processor "shell-local" {
-    #   inline = ["vagrant destroy -f"]
-    # }
+    post-processor "shell-local" {
+      inline = ["vagrant destroy -f"]
+    }
 
-    # post-processor "vagrant-registry" {
-    #   client_id     = "${var.client_id}"
-    #   client_secret = "${var.client_secret}"
-    #   box_tag       = "valengus/${source.name}"
-    #   version       = "1.1.${local.packerstarttime}"
-    #   architecture  = "amd64"
-    #   no_release    = true
-    # }
+    post-processor "vagrant-registry" {
+      client_id     = "${var.client_id}"
+      client_secret = "${var.client_secret}"
+      box_tag       = "valengus/${source.name}"
+      version       = "1.1.${local.packerstarttime}"
+      architecture  = "amd64"
+      no_release    = true
+    }
 
   }
 

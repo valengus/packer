@@ -26,11 +26,11 @@ export PKR_VAR_headless=false
 packer init ./windows.pkr.hcl
 packer plugins install github.com/hashicorp/qemu
 
-packer build -force --only=windows.qemu.windows11 ./windows.pkr.hcl
+packer build -force --only=windows.qemu.windows-11-22h2 ./windows.pkr.hcl
 packer build -force --only=windows.qemu.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.qemu.windows-2022-standard-core ./windows.pkr.hcl
 
-packer build -force --only=windows.virtualbox-iso.windows11 ./windows.pkr.hcl
+packer build -force --only=windows.virtualbox-iso.windows-11-22h2 ./windows.pkr.hcl
 packer build -force --only=windows.virtualbox-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.virtualbox-iso.windows-2022-standard-core ./windows.pkr.hcl
 ```
@@ -42,11 +42,11 @@ $Env:PKR_VAR_headless = "false"
 
 packer init ./windows.pkr.hcl
 
-packer build -force --only=windows.hyperv-iso.windows11 ./windows.pkr.hcl
+packer build -force --only=windows.hyperv-iso.windows-11-22h2 ./windows.pkr.hcl
 packer build -force --only=windows.hyperv-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.hyperv-iso.windows-2022-standard-core ./windows.pkr.hcl
 
-packer build -force --only=windows.vmware-iso.windows11 ./windows.pkr.hcl
+packer build -force --only=windows.vmware-iso.windows-11-22h2 ./windows.pkr.hcl
 packer build -force --only=windows.vmware-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.vmware-iso.windows-2022-standard-core ./windows.pkr.hcl
 ```

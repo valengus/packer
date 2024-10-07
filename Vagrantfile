@@ -24,8 +24,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", privileged: "true", powershell_elevated_interactive: "true", path: "scripts/testVagrantBox.ps1"
   config.vm.synced_folder ".", "/vagrant", disabled: true
   
-  config.vm.define "windows11" do |config|
-    config.vm.box  = "windows11"
+  config.vm.define "windows-11-22h2" do |config|
+    config.vm.box  = "windows-11-22h2"
   end
 
   config.vm.define "windows-2022-standard" do |config|
