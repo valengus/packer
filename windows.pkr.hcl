@@ -179,11 +179,10 @@ source "vmware-iso" "windows" {
   version                        = 14
   network_adapter_type           = "e1000"
   vmx_data                       = {
-    "RemoteDisplay.vnc.enabled"  = "false",
-    "RemoteDisplay.vnc.port"     = true
+    "RemoteDisplay.vnc.enabled" = "false",
+    "RemoteDisplay.vnc.port"    = true
   }
 }
-
 
 build {
   name = "windows"
@@ -294,8 +293,6 @@ build {
     restart_timeout       = "15m"
     check_registry        = true
   }
-
-
 
   provisioner "powershell" {
     inline = [
