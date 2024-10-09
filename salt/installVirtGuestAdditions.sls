@@ -3,6 +3,11 @@
 virtualbox-guest-additions-guest.install:
   chocolatey.installed: []
 
+{% elif grains['virtual'] == 'VMware' %}
+
+vmware-tools:
+  chocolatey.installed: []
+
 {% elif 'QEMU' in  grains['cpu_model'] %}
 
 SPICE Guest Tools:

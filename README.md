@@ -4,7 +4,6 @@
 - image was finalized using sysprep
 - system drive will be extended during first startup, you can use vagrant-disksize plugin
 - hibernate mode disabled
-- updates ( 01.10.2024 )
 - drivers for kvm (viostor, netkvm, viorng, vioserial, qxldod, balloon)
 - qemu|virtualbox|vmware guest agent
 - winrm will be enabled over https during first startup
@@ -26,6 +25,10 @@ export PKR_VAR_headless=false
 packer init ./windows.pkr.hcl
 packer plugins install github.com/hashicorp/qemu
 
+vagrant plugin install winrm
+vagrant plugin install winrm-fs
+vagrant plugin install winrm-elevated
+
 packer build -force --only=windows.qemu.windows-11-22h2 ./windows.pkr.hcl
 packer build -force --only=windows.qemu.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.qemu.windows-2022-standard-core ./windows.pkr.hcl
@@ -41,6 +44,11 @@ $Env:HCL_CLIENT_secret = "..."
 $Env:PKR_VAR_headless = "false"
 
 packer init ./windows.pkr.hcl
+
+vagrant plugin install winrm
+vagrant plugin install winrm-fs
+vagrant plugin install winrm-elevated
+vagrant plugin install vagrant-vmware-desktop
 
 packer build -force --only=windows.hyperv-iso.windows-11-22h2 ./windows.pkr.hcl
 packer build -force --only=windows.hyperv-iso.windows-2022-standard ./windows.pkr.hcl

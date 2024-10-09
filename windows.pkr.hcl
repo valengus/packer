@@ -70,7 +70,7 @@ locals {
       iso_url              = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
       iso_checksum         = "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
       vb_guest_os_type     = "Windows2022_64"
-      vmware_guest_os_type = "windows2019srv_64Guest"
+      vmware_guest_os_type = "windows2019srv-64"
       autounattend      = {
         image_name              = "Windows Server 2022 SERVERSTANDARD"
         user_data_key           = ""
@@ -79,7 +79,7 @@ locals {
 
     windows-2022-standard-core = {
       vb_guest_os_type     = "Windows2022_64"
-      vmware_guest_os_type = "windows2019srv_64Guest"
+      vmware_guest_os_type = "windows2019srv-64"
       iso_url              = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
       iso_checksum         = "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
       autounattend      = {
@@ -178,10 +178,16 @@ source "vmware-iso" "windows" {
   disk_type_id                   = 0
   version                        = 14
   network_adapter_type           = "e1000"
-  vmx_data                       = {
-    "RemoteDisplay.vnc.enabled" = "false",
-    "RemoteDisplay.vnc.port"    = true
+  vmx_data = {
+    "gui.fitguestusingnativedisplayresolution" = "FALSE",
+    "virtualhw.productcompatibility"           = "esx",
+    "virtualHW.version"                        =  "10",
+    "ethernet0.virtualDev"                     =  "vmxnet3",
+    "ethernet0.present"                        =  "TRUE",
+    "ethernet0.connectionType"                 = "custom",
+    "ethernet0.vnet"                           = "vmnet8"
   }
+
 }
 
 build {
@@ -270,7 +276,7 @@ build {
     inline = [
       "$saltProcess = Get-Process salt-call ; Wait-Process -InputObject $saltProcess ; if ($saltProcess.ExitCode -ne 0) { exit 1 }",
       "Get-Service salt-minion | Set-Service -StartupType Disabled",
-      "Start-Sleep -Seconds 30"
+      "Start-Sleep -Seconds 10",
     ]
   }
 
