@@ -3,8 +3,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider :libvirt do |libvirt|
     libvirt.driver           = "kvm"
     libvirt.qemu_use_session = false
-    libvirt.cpus             = 2
-    libvirt.memory           = 4096
+    libvirt.cpus             = 1
+    libvirt.memory           = 2048
     libvirt.disk_bus         = "virtio"
     libvirt.graphics_type    = "spice"
     libvirt.nic_model_type   = "virtio"
@@ -20,8 +20,8 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider :virtualbox do |virtualbox|
-    virtualbox.cpus    = 2
-    virtualbox.memory  = 4096
+    virtualbox.cpus    = 1
+    virtualbox.memory  = 2048
     virtualbox.customize ["modifyvm", :id, "--vram", "32"]
     virtualbox.customize ["modifyvm", :id, "--audioout", "on"]
     virtualbox.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
@@ -37,18 +37,14 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :vmware_desktop do |v, override|
     v.gui                         = true
-    v.vmx["memsize"]              = "4096"
-    v.vmx["numvcpus"]             = "2"
-    v.vmx["ethernet0.virtualDev"] = "vmxnet3"
-    v.vmx["scsi0.virtualDev"]     = "lsisas1068"
-    v.enable_vmrun_ip_lookup      = false
-    v.whitelist_verified          = true
-    v.vmx["hgfs.linkRootShare"]   = "FALSE"
+    v.vmx["numvcpus"]             = "1"
+    v.vmx["memsize"]              = "2048"
   end
 
   config.vm.provider "hyperv" do |hyperv|
-    hyperv.cpus = 2
-    hyperv.maxmemory = 2048
+    hyperv.cpus         = 1
+    hyperv.memory       = 2048
+    hyperv.maxmemory    = 2048
     hyperv.linked_clone = true
   end
 
@@ -60,9 +56,9 @@ Vagrant.configure("2") do |config|
   config.windows.halt_timeout        = 15
   config.vm.communicator             = "winrm"
   config.winrm.max_tries             = 100
-  config.winrm.retry_delay           = 5
-  config.winrm.username              = "vagrant"
-  config.winrm.password              = "vagrant"
+  config.winrm.retry_delay           = 10
+  config.winrm.username              = "Administrator"
+  config.winrm.password              = "password"
   config.winrm.transport             = :ssl
   config.winrm.guest_port            = 5986
   config.winrm.ssl_peer_verification = false

@@ -1,7 +1,0 @@
----
-- name: Defragment all local volumes (in parallel)
-  community.windows.win_defrag:
-    parallel: yes
-
-- name: sdelete C drive
-  win_shell: 'sdelete -z C:'
