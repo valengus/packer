@@ -1,4 +1,4 @@
-### WINDOWS VAGRANT BOXES
+### WINDOWS VAGRANT BOXES [hashicorp registry](https://portal.cloud.hashicorp.com/vagrant/discover/valengus)
 
 - image prepared in "Audit Mode"
 - image was finalized using sysprep
