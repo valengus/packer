@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+
+  <settings pass="windowsPE">
+
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
+        <SetupUILanguage>
+            <UILanguage>en-US</UILanguage>
+        </SetupUILanguage>
+        <InputLocale>en-US</InputLocale>
+        <SystemLocale>en-US</SystemLocale>
+        <UILanguage>en-US</UILanguage>
+        <UILanguageFallback>en-US</UILanguageFallback>
+        <UserLocale>en-US</UserLocale>
+      </component>
+
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
+
+      <DriverPaths>
+        <PathAndCredentials wcm:keyValue="1" wcm:action="add">
+          <Path>E:\viostor</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="2" wcm:action="add">
+          <Path>E:\NetKVM</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="3" wcm:action="add">
+          <Path>E:\pvpanic</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="4" wcm:action="add">
+          <Path>E:\qxldod</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="5" wcm:action="add">
+          <Path>E:\vioinput</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="6" wcm:action="add">
+          <Path>E:\viorng</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="7" wcm:action="add">
+          <Path>E:\vioscsi</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="8" wcm:action="add">
+          <Path>E:\vioserial</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="9" wcm:action="add">
+          <Path>E:\Balloon</Path>
+        </PathAndCredentials>
+      </DriverPaths>
+
+      </component>
+
+      <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
+
+        <RunSynchronous>
+          <RunSynchronousCommand wcm:action="add">
+            <Order>1</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassTPMCheck /t reg_dword /d 0x00000001 /f</Path>
+          </RunSynchronousCommand>
+          <RunSynchronousCommand wcm:action="add">
+            <Order>2</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassSecureBootCheck /t reg_dword /d 0x00000001 /f</Path>
+          </RunSynchronousCommand>
+          <RunSynchronousCommand wcm:action="add">
+            <Order>3</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassRAMCheck /t reg_dword /d 0x00000001 /f</Path>
+          </RunSynchronousCommand>
+          <RunSynchronousCommand wcm:action="add">
+              <Order>4</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassCPUCheck /t reg_dword /d 0x00000001 /f</Path>
+          </RunSynchronousCommand>
+          <RunSynchronousCommand wcm:action="add">
+              <Order>5</Order>
+            <Path>reg add HKLM\System\Setup\LabConfig /v BypassStorageCheck /t reg_dword /d 0x00000001 /f</Path>
+          </RunSynchronousCommand>
+        </RunSynchronous>
+
+        <DiskConfiguration>
+          <Disk wcm:action="add">
+            <DiskID>0</DiskID>
+            <WillWipeDisk>true</WillWipeDisk>
+            
+            <CreatePartitions>
+              <CreatePartition wcm:action="add">
+                <Type>Primary</Type>
+                <Order>1</Order>
+                <Size>350</Size>
+              </CreatePartition>
+              <CreatePartition wcm:action="add">
+                <Order>2</Order>
+                <Type>Primary</Type>
+                <Extend>true</Extend>
+              </CreatePartition>
+            </CreatePartitions>
+            
+            <ModifyPartitions>
+              <ModifyPartition wcm:action="add">
+                <Active>true</Active>
+                <Format>NTFS</Format>
+                <Order>1</Order>
+                <PartitionID>1</PartitionID>
+              </ModifyPartition>
+              <ModifyPartition wcm:action="add">
+                <Format>NTFS</Format>
+                <Letter>C</Letter>
+                <Order>2</Order>
+                <PartitionID>2</PartitionID>
+              </ModifyPartition>
+            </ModifyPartitions>
+
+          </Disk>
+        </DiskConfiguration>
+
+      <ImageInstall>
+        <OSImage>
+
+          <InstallFrom> 
+            <MetaData wcm:action="add"> 
+              <Key>/IMAGE/NAME</Key> 
+              <Value>${autounattend.image_name}</Value> 
+            </MetaData> 
+          </InstallFrom>
+
+          <InstallTo>
+            <DiskID>0</DiskID>
+            <PartitionID>2</PartitionID>
+          </InstallTo>
+
+          <WillShowUI>OnError</WillShowUI>
+
+        </OSImage>
+      </ImageInstall>
+
+      <UserData>
+        <ProductKey>
+            ${autounattend.user_data_key}
+            <WillShowUI>OnError</WillShowUI>
+        </ProductKey>
+        <AcceptEula>true</AcceptEula>
+      </UserData>
+
+      </component>
+
+    </settings>
+
+   <settings pass="oobeSystem">
+
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Reseal>
+        <Mode>Audit</Mode>
+      </Reseal>
+    </component>
+
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+      <FirstLogonCommands>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Stop-Service -Name wuauserv -Force -Confirm:$False"</CommandLine>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <CommandLine>cmd /c powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c</CommandLine>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <CommandLine>cmd /C wmic useraccount where "name='Administrator'" set PasswordExpires=FALSE</CommandLine>
+          <Description>PasswordExpires=FALSE</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>4</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Set-NetConnectionProfile -NetworkCategory Private -InputObject (Get-NetConnectionProfile)"</CommandLine>
+          <Description>NetworkLocation</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>5</Order>
+          <CommandLine>winrm quickconfig -q</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>6</Order>
+          <CommandLine>winrm set winrm/config/service @{AllowUnencrypted="true"}</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>7</Order>
+          <CommandLine>winrm set winrm/config/service/auth @{Basic="true"}</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>8</Order>
+          <CommandLine>net stop winrm</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>9</Order>
+          <CommandLine>netsh advfirewall firewall set rule group="remote administration" new enable=yes</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>10</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy Bypass -Scope Process -Force ; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"</CommandLine>
+        </SynchronousCommand>
+
+        <SynchronousCommand wcm:action="add">
+          <Order>11</Order>
+          <CommandLine>"C:\ProgramData\chocolatey\bin\choco.exe" install saltminion -y --version=3007.1.0 --params="'/MinionStart:0'"</CommandLine>
+        </SynchronousCommand>
+
+
+
+
+
+         <SynchronousCommand wcm:action="add">
+          <Order>98</Order>
+          <CommandLine>net start winrm</CommandLine>
+          <Description>Configure WinRM</Description>
+        </SynchronousCommand>
+ 
+         <SynchronousCommand wcm:action="add">
+          <Order>99</Order>
+          <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\Program Files\Salt Project\Salt\salt-call.exe' --local state.highstate --file-root=E:\salt"</CommandLine>
+        </SynchronousCommand>
+ 
+      </FirstLogonCommands>
+
+    </component>
+
+  </settings>
+
+
+  <settings pass="auditSystem">
+
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+      <UserAccounts>
+        <AdministratorPassword>
+          <Value>password</Value>
+          <PlainText>true</PlainText>
+        </AdministratorPassword>
+      </UserAccounts>
+
+      <AutoLogon>
+        <Enabled>true</Enabled>
+        <LogonCount>3</LogonCount>
+        <Username>Administrator</Username>
+        <Password>
+          <Value>password</Value>
+          <PlainText>true</PlainText>
+        </Password>
+      </AutoLogon>
+
+    </component>
+
+  </settings>
+
+</unattend>

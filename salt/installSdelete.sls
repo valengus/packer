@@ -1,0 +1,2 @@
+sdelete:
+  chocolatey.installed: []
