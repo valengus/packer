@@ -59,7 +59,7 @@
             <Order>2</Order>
             <Path>reg add HKLM\System\Setup\LabConfig /v BypassSecureBootCheck /t reg_dword /d 0x00000001 /f</Path>
           </RunSynchronousCommand>
-          <RunSynchronousCommand wcm:action="add">
+          <!-- <RunSynchronousCommand wcm:action="add">
             <Order>3</Order>
             <Path>reg add HKLM\System\Setup\LabConfig /v BypassRAMCheck /t reg_dword /d 0x00000001 /f</Path>
           </RunSynchronousCommand>
@@ -70,7 +70,7 @@
           <RunSynchronousCommand wcm:action="add">
               <Order>5</Order>
             <Path>reg add HKLM\System\Setup\LabConfig /v BypassStorageCheck /t reg_dword /d 0x00000001 /f</Path>
-          </RunSynchronousCommand>
+          </RunSynchronousCommand> -->
         </RunSynchronous>
 
         <DiskConfiguration>
@@ -218,14 +218,13 @@
 
 
 
-
-         <SynchronousCommand wcm:action="add">
+        <SynchronousCommand wcm:action="add">
           <Order>98</Order>
           <CommandLine>net start winrm</CommandLine>
           <Description>Configure WinRM</Description>
         </SynchronousCommand>
  
-         <SynchronousCommand wcm:action="add">
+        <SynchronousCommand wcm:action="add">
           <Order>99</Order>
           <CommandLine>powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\Program Files\Salt Project\Salt\salt-call.exe' --local state.highstate --file-root=E:\salt"</CommandLine>
         </SynchronousCommand>

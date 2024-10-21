@@ -3,8 +3,12 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.define "windows-11-22h2" do |config|
-    config.vm.box  = "windows-11-22h2"
+  # config.vm.define "windows-11-22h2" do |config|
+  #   config.vm.box  = "windows-11-22h2"
+  # end
+
+  config.vm.define "windows-11-23h2" do |config|
+    config.vm.box  = "windows-11-23h2"
   end
 
   config.vm.define "windows-2022-standard" do |config|
@@ -14,8 +18,6 @@ Vagrant.configure("2") do |config|
   config.vm.define "windows-2022-standard-core" do |config|
     config.vm.box  = "windows-2022-standard-core"
   end
-
-
 
   config.vm.provider :libvirt do |libvirt|
     libvirt.cpus      = 2

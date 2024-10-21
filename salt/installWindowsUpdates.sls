@@ -17,9 +17,4 @@ Install-WindowsUpdate:
     - require:
       - pswindowsupdate
 
-# update_windows:
-#   wua.uptodate:
-#   - drivers: True
-#   - skip_reboot: False
-
 {% endif %}

@@ -40,13 +40,24 @@ variable "keep_registered" {
 }
 
 locals {
-  # packerstarttime = formatdate("YYYYMMDD", timestamp())
+  // packerstarttime = formatdate("YYYYMMDD", timestamp())
   packerstarttime = "20241001"
   builds          = {
 
-    windows-11-22h2 = {
-      iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66751/22621.525.220925-0207.ni_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
-      iso_checksum         = "sha256:ebbc79106715f44f5020f77bd90721b17c5a877cbc15a3535b99155493a1bb3f"
+    // windows-11-22h2 = {
+    //   iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66751/22621.525.220925-0207.ni_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+    //   iso_checksum         = "sha256:ebbc79106715f44f5020f77bd90721b17c5a877cbc15a3535b99155493a1bb3f"
+    //   vb_guest_os_type     = "Windows11_64"
+    //   vmware_guest_os_type = "windows11-64"
+    //   autounattend = {
+    //     image_name              = "Windows 11 Enterprise Evaluation"
+    //     user_data_key           = ""
+    //   }
+    // }
+
+    windows-11-23h2 = {
+      iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/22631.2428.231001-0608.23H2_NI_RELEASE_SVC_REFRESH_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+      iso_checksum         = "sha256:c8dbc96b61d04c8b01faf6ce0794fdf33965c7b350eaa3eb1e6697019902945c"
       vb_guest_os_type     = "Windows11_64"
       vmware_guest_os_type = "windows11-64"
       autounattend = {
@@ -54,17 +65,6 @@ locals {
         user_data_key           = ""
       }
     }
-
-    # windows-11-24h2 = {
-    #   iso_url              = "https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
-    #   iso_checksum         = "sha256:755a90d43e826a74b9e1932a34788b898e028272439b777e5593dee8d53622ae"
-    #   vb_guest_os_type     = "Windows11_64"
-    #   vmware_guest_os_type = "windows11-64"
-    #   autounattend = {
-    #     image_name              = "Windows 11 Enterprise Evaluation"
-    #     user_data_key           = ""
-    #   }
-    # }
 
     windows-2022-standard = {
       iso_url              = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
@@ -92,7 +92,6 @@ locals {
 }
 
 source "qemu" "windows" {
-  keep_registered     = "${var.keep_registered}"
   accelerator         = "kvm"
   output_directory    = "builds/${source.type}-${source.name}"
   cpus                = 4
@@ -151,7 +150,6 @@ source "virtualbox-iso" "windows" {
   winrm_username        = "Administrator"
   winrm_password        = "password"
   shutdown_command      = "C:\\Windows\\Temp\\packerShutdown.bat"
-  post_shutdown_delay   = "15m"
 }
 
 source "vmware-iso" "windows" {
@@ -280,6 +278,17 @@ build {
     ]
   }
 
+  provisioner "windows-restart" {
+    restart_check_command = "powershell -command \"& {Write-Output 'Restarted.'}\""
+    restart_timeout       = "15m"
+    check_registry        = true
+  }
+
+  provisioner "powershell" {
+    script = "scripts/virtioDrivers.ps1"
+    only   = [ "qemu.windows-11-23h2", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
+  }
+
   provisioner "powershell" {
     inline = [
       "Stop-Service -Name wuauserv -Force -Confirm:$False",
@@ -287,17 +296,6 @@ build {
       "New-Item -Path HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU -Force",
       "Set-ItemProperty -Path HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU -Name NoAutoUpdate -Value 1"
     ]
-  }
-
-  provisioner "powershell" {
-    script = "scripts/virtioDrivers.ps1"
-    only   = [ "qemu.windows-11-22h2", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
-  }
-
-  provisioner "windows-restart" {
-    restart_check_command = "powershell -command \"& {Write-Output 'Restarted.'}\""
-    restart_timeout       = "15m"
-    check_registry        = true
   }
 
   provisioner "powershell" {
@@ -335,25 +333,25 @@ build {
 
     post-processor "shell-local" {
       inline            = [ "vagrant up ${source.name} --provider=libvirt" ]
-      only              = [ "qemu.windows-11-22h2", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
+      only              = [ "qemu.windows-11-23h2", "qemu.windows-2022-standard", "qemu.windows-2022-standard-core" ]
       environment_vars  = [ "VAGRANT_DEFAULT_PROVIDER=libvirt" ]
     }
 
     post-processor "shell-local" {
       inline            = [ "vagrant up ${source.name} --provider=hyperv" ]
-      only              = [ "hyperv-iso.windows-11-22h2", "hyperv-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
+      only              = [ "hyperv-iso.windows-11-23h2", "hyperv-iso.windows-2022-standard", "hyperv-iso.windows-2022-standard-core" ]
       environment_vars  = [ "VAGRANT_DEFAULT_PROVIDER=hyperv" ]
     }
 
     post-processor "shell-local" {
       inline            = [ "vagrant up ${source.name} --provider=virtualbox" ]
-      only              = [ "virtualbox-iso.windows-11-22h2", "virtualbox-iso.windows-2022-standard", "virtualbox-iso.windows-2022-standard-core" ]
+      only              = [ "virtualbox-iso.windows-11-23h2", "virtualbox-iso.windows-2022-standard", "virtualbox-iso.windows-2022-standard-core" ]
       environment_vars  = [ "VAGRANT_DEFAULT_PROVIDER=virtualbox" ]
     }
 
     post-processor "shell-local" {
       inline            = [ "vagrant up ${source.name} --provider=vmware_desktop" ]
-      only              = [ "vmware-iso.windows-11-22h2", "vmware-iso.windows-2022-standard", "vmware-iso.windows-2022-standard-core" ]
+      only              = [ "vmware-iso.windows-11-23h2", "vmware-iso.windows-2022-standard", "vmware-iso.windows-2022-standard-core" ]
       environment_vars  = [ "VAGRANT_DEFAULT_PROVIDER=vmware_desktop" ]
     }
 
