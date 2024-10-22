@@ -29,11 +29,11 @@ vagrant plugin install winrm
 vagrant plugin install winrm-fs
 vagrant plugin install winrm-elevated
 
-packer build -force --only=windows.qemu.windows-11-22h2 ./windows.pkr.hcl
+packer build -force --only=windows.qemu.windows-11-23h2 ./windows.pkr.hcl
 packer build -force --only=windows.qemu.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.qemu.windows-2022-standard-core ./windows.pkr.hcl
 
-packer build -force --only=windows.virtualbox-iso.windows-11-22h2 ./windows.pkr.hcl
+packer build -force --only=windows.virtualbox-iso.windows-11-23h2 ./windows.pkr.hcl
 packer build -force --only=windows.virtualbox-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.virtualbox-iso.windows-2022-standard-core ./windows.pkr.hcl
 ```
@@ -50,11 +50,11 @@ vagrant plugin install winrm-fs
 vagrant plugin install winrm-elevated
 vagrant plugin install vagrant-vmware-desktop
 
-packer build -force --only=windows.hyperv-iso.windows-11-22h2 ./windows.pkr.hcl
+packer build -force --only=windows.hyperv-iso.windows-11-23h2 ./windows.pkr.hcl
 packer build -force --only=windows.hyperv-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.hyperv-iso.windows-2022-standard-core ./windows.pkr.hcl
 
-packer build -force --only=windows.vmware-iso.windows-11-22h2 ./windows.pkr.hcl
+packer build -force --only=windows.vmware-iso.windows-11-23h2 ./windows.pkr.hcl
 packer build -force --only=windows.vmware-iso.windows-2022-standard ./windows.pkr.hcl
 packer build -force --only=windows.vmware-iso.windows-2022-standard-core ./windows.pkr.hcl
 ```
