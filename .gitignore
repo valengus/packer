@@ -1,4 +1,3 @@
-boxes
-builds
-packer_cache
+output-*
+iso/*.iso
 .vagrant
